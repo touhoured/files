@@ -1,0 +1,274 @@
+mixed-port: 7890
+allow-lan: true
+mode: rule
+log-level: info
+ipv6: false
+geodata-mode: false # Meta
+tcp-concurrent: true # Meta
+external-controller: :9090
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+proxies:
+  - name: remote_geph
+    type: socks5
+    server: 192.168.1.9
+    port: 9901
+  - name: remote_geph_default
+    type: socks5
+    server: 192.168.1.9
+    port: 9909
+  - name: remote_geph_fallback
+    type: socks5
+    server: 192.168.1.9
+    port: 9902
+  - name: geph
+    type: socks5
+    server: 127.0.0.1
+    port: 9901
+  - name: geph_default
+    type: socks5
+    server: 127.0.0.1
+    port: 9909
+  - name: geph_fallback
+    type: socks5
+    server: 127.0.0.1
+    port: 9902
+
+proxy-groups:
+  - name: auto
+    type: fallback
+    proxies:
+      - geph
+      - geph_default
+      - geph_vpn
+      - geph_fallback
+      - remote_geph
+      - remote_geph_default
+      - remote_geph_fallback
+    url: "http://www.gstatic.com/generate_204"
+    interval: 100
+  - name: fallback
+    type: fallback
+    proxies:
+      - auto
+      - DIRECT
+    url: "http://www.gstatic.cn/generate_204"
+  - name: PROXY
+    type: select
+    proxies:
+      - fallback
+      - auto
+      - geph
+      - geph_default
+      - geph_vpn
+      - geph_fallback
+      - remote_geph
+      - remote_geph_default
+      - remote_geph_fallback
+      - DIRECT
+  - name: Bypass
+    type: select
+    proxies:
+      - DIRECT
+      - PROXY
+  - name: geph_vpn
+    type: select
+    interface-name: tun-geph
+    proxies:
+      - DIRECT
+
+  # Rule
+  - name: GoogleFCM
+    type: select
+    proxies:
+      - DIRECT
+      - PASS
+      - PROXY
+  - name: bilibili
+    type: select
+    proxies:
+      - PASS
+      - DIRECT
+      - PROXY
+  - name: Downloader
+    type: select
+    proxies:
+      - PASS
+      - DIRECT
+      - PROXY
+  - name: ip-attribution
+    type: select
+    proxies:
+      - PASS
+      - PROXY
+      - DIRECT
+      - REJECT
+  - name: Games
+    type: select
+    proxies:
+      - PASS
+      - DIRECT
+      - PROXY
+
+  - name: MATCH
+    type: select
+    proxies:
+      - PROXY
+      - DIRECT
+
+rules:
+  # Geph
+  - PROCESS-NAME,libgeph.so,DIRECT
+  - PROCESS-NAME,geph4-client,DIRECT
+  - PROCESS-NAME,geph4-client.exe,DIRECT
+  - PROCESS-NAME,geph4-client-vpn,DIRECT
+  - PROCESS-NAME,geph4-client-vpn.exe,DIRECT
+  - PROCESS-NAME,geph4-client-fallback,DIRECT
+  - PROCESS-NAME,geph4-client-fallback.exe,DIRECT
+
+  # App
+  - PROCESS-NAME,IDMan.exe,Downloader
+  - PROCESS-NAME,qbittorrent.exe,Downloader
+  - PROCESS-NAME,GenshinImpact.exe,Games
+  - PROCESS-NAME,SCPSL.exe,Games
+  - PROCESS-NAME,csgo.exe,Games
+  - RULE-SET,applications,Bypass
+
+  # Web site
+  - GEOSITE,bilibili,bilibili
+  - DOMAIN-SUFFIX,dockerproxy.com,Bypass
+  - DOMAIN-SUFFIX,metacubex.one,Bypass
+  - DOMAIN-SUFFIX,winos.me,Bypass
+  - DOMAIN-SUFFIX,kinh.cc,Bypass
+  - DOMAIN,yacd.haishan.me,Bypass
+  - DOMAIN,clash.razord.top,Bypass
+  - RULE-SET,ip-attribution,ip-attribution
+
+  # AD
+  - GEOSITE,category-ads-all,REJECT
+  - GEOSITE,win-spy,REJECT
+  - DOMAIN,ntp.msn.cn,REJECT
+
+  # China CDN/Direct
+  - GEOSITE,apple-cn,Bypass
+  - GEOSITE,apple@cn,Bypass
+  - GEOSITE,google-cn,Bypass
+  - GEOSITE,google@cn,Bypass
+  - GEOSITE,microsoft@cn,Bypass
+  - GEOSITE,tld-cn,Bypass
+  - GEOSITE,category-games@cn,Games
+  - GEOSITE,googlefcm,GoogleFCM
+
+  # Not China
+  - GEOSITE,geolocation-!cn,PROXY
+
+  # China
+  - GEOSITE,private,Bypass
+  - GEOSITE,cn,Bypass
+  - GEOIP,private,Bypass
+  - GEOIP,cn,Bypass
+
+  # Other
+  - MATCH,MATCH
+
+rule-providers:
+  applications:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/applications.txt"
+    path: ./ruleset/applications.yaml
+    interval: 86400
+
+  ip-attribution:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/lwd-temp/anti-ip-attribution/main/generated/rule-provider.yaml"
+    path: ./ruleset/ip-attribution.yaml
+    interval: 86400
+
+
+dns:
+  enable: true
+  ipv6: false
+  listen: :53
+  default-nameserver:
+    - 8.8.8.8
+    - 223.5.5.5
+  enhanced-mode: redir-host
+  use-hosts: true
+  nameserver:
+    - tls://dot.pub:853
+    - tls://dns.alidns.com:853
+  fallback:
+    - 192.168.1.9:9921
+    - 192.168.1.9:9922
+    - 192.168.1.9:15353
+    - 127.0.0.1:9921
+    - 127.0.0.1:9922
+    - 127.0.0.1:15353
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
+  fallback-filter:
+    geoip: true
+    geoip-code: CN  # Meta
+    geosite:  # Meta
+      - gfw
+    ipcidr:
+      - 0.0.0.0/8
+      - 10.0.0.0/8
+      - 100.64.0.0/10
+      - 127.0.0.0/8
+      - 169.254.0.0/16
+      - 172.16.0.0/12
+      - 192.0.0.0/24
+      - 192.0.2.0/24
+      - 192.88.99.0/24
+      - 192.168.0.0/16
+      - 198.18.0.0/15
+      - 198.51.100.0/24
+      - 203.0.113.0/24
+      - 224.0.0.0/4
+      - 240.0.0.0/4
+      - 255.255.255.255/32
+    domain:
+      - "+.google.com"
+      - "+.facebook.com"
+      - "+.youtube.com"
+      - "+.githubusercontent.com"
+      - "+.googlevideo.com"
+      - "+.msftconnecttest.com"
+      - "+.msftncsi.com"
+      - msftconnecttest.com
+      - msftncsi.com
+
+# Premium
+tun:
+  enable: true
+  stack: system
+  auto-route: true
+  auto-detect-interface: true
+  # dns-hijack:
+  #   - 198.18.0.2:53
+  #   - any:53
+  #   - tcp://any:53
+
+# Meta
+sniffer:
+  enable: true
+  sniffing:
+    - tls
+    - http
+  force-domain:
+    - "+.netflix.com"
+    - "+.nflxvideo.net"
+    - "+.amazonaws.com"
+    - "+.media.dssott.com"
+  skip-domain:
+    - "+.apple.com"
+    - Mijia Cloud
+    - "+.jd.com"
+  port-whitelist:
+    - 80
+    - 443
