@@ -86,14 +86,19 @@ proxy-groups:
     proxies:
       - fallback
       - auto
-      - local_9909
-      - geph_vpn
-      - remote_9909
-      - remote_9902
-      - remote_9901
-      - remote_9909
-      - remote_9902
       - DIRECT
+      - geph_vpn
+      - local_9909
+      - local_9901
+      - local_9902
+      - local_9903
+      - local_9904
+      - remote_9909
+      - remote_9900
+      - remote_9901
+      - remote_9902
+      - remote_9903
+      - remote_9904
   - name: Bypass
     type: select
     proxies:
