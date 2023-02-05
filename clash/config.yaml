@@ -4,29 +4,237 @@ external-controller: :9090
 ipv6: false
 profile:
   store-selected: true
-  # store-fake-ip: true
 hosts:
   'ntp.msn.cn': '0.0.0.0'
+
+script:
+  shortcuts:
+    quic: network == 'udp' and dst_port == 443
+    # bilibili-p2p: network == 'udp' and host.endswith('bilibili.com')
+    bilibili-p2p: network == 'udp' and match_provider('bilibili')
+    # genshin-asia-udp: network == 'udp' and in_cidr(dst_ip,'8.211.128.0/18')
+    genshin-udp: network == 'udp' and resolve_process_name() == 'GenshinImpact.exe'
+
+rules:
+  # Geph
+  - PROCESS-NAME,libgeph.so,DIRECT
+  - PROCESS-NAME,geph4-client,DIRECT
+  - PROCESS-NAME,geph4-client.exe,DIRECT
+
+  # Private address
+  - RULE-SET,private,DIRECT
+  - RULE-SET,lancidr,DIRECT
+  - GEOIP,LAN,DIRECT,no-resolve
+
+  # AD/Block
+  - RULE-SET,reject,REJECT
+  - DOMAIN,ntp.msn.cn,REJECT
+  - SCRIPT,bilibili-p2p,REJECT
+  # - SCRIPT,quic,REJECT
+
+  # App
+  - PROCESS-NAME,IDMan.exe,Downloader
+  - PROCESS-NAME,qbittorrent.exe,Downloader
+  # - PROCESS-NAME,GenshinImpact.exe,Games
+  - PROCESS-NAME,SCPSL.exe,Games
+  - PROCESS-NAME,csgo.exe,Games
+  - RULE-SET,applications,DIRECT
+
+  # Web site
+  - DOMAIN-SUFFIX,dockerproxy.com,DIRECT
+  - DOMAIN-SUFFIX,metacubex.one,DIRECT
+  - DOMAIN-SUFFIX,winos.me,DIRECT
+  - DOMAIN-SUFFIX,kinh.cc,DIRECT
+  - DOMAIN,yacd.haishan.me,DIRECT
+  - DOMAIN,clash.razord.top,DIRECT
+
+  # China CDN/Direct/Game
+  - RULE-SET,ip-attribution-reject,REJECT
+  - RULE-SET,ip-attribution-direct,DIRECT
+  - RULE-SET,ip-attribution-proxy,ip-attribution
+  - RULE-SET,bilibili,bilibili
+  # - SCRIPT,genshin-asia-udp,Games
+  - SCRIPT,genshin-udp,Games
+  # - IP-CIDR,8.211.128.0/18,Games # Genshin Asia
+  # - IP-CIDR,47.74.0.0/18,Games # Genshin Asia
+  - DOMAIN,dispatchosglobal.yuanshen.com,Games # Genshin global
+  - DOMAIN-SUFFIX,openai.com,OpenAI
+  - RULE-SET,icloud,DIRECT
+  - RULE-SET,apple,DIRECT
+  - RULE-SET,google,DIRECT
+
+  # Not China
+  - RULE-SET,proxy,PROXY
+  - RULE-SET,telegramcidr,PROXY
+
+  # China
+  - RULE-SET,direct,DIRECT
+  - RULE-SET,cncidr,DIRECT
+  - GEOIP,CN,DIRECT,no-resolve
+
+  # Other
+  - MATCH,MATCH
+
+proxies:
+  - name: local_9909
+    type: socks5
+    server: 127.0.0.1
+    port: 9909
+  - name: local_9901
+    type: socks5
+    server: 127.0.0.1
+    port: 9901
+  - name: local_9902
+    type: socks5
+    server: 127.0.0.1
+    port: 9902
+  - name: local_9903
+    type: socks5
+    server: 127.0.0.1
+    port: 9903
+  - name: local_9904
+    type: socks5
+    server: 127.0.0.1
+    port: 9904
+
+  - name: remote_9909
+    type: socks5
+    server: 192.168.1.1
+    port: 9909
+  - name: remote_9900
+    type: socks5
+    server: 192.168.1.1
+    port: 9900
+    udp: true
+  - name: remote_9901
+    type: socks5
+    server: 192.168.1.1
+    port: 9901
+  - name: remote_9902
+    type: socks5
+    server: 192.168.1.1
+    port: 9902
+  - name: remote_9903
+    type: socks5
+    server: 192.168.1.1
+    port: 9903
+  - name: remote_9904
+    type: socks5
+    server: 192.168.1.1
+    port: 9904
+
+
+proxy-groups:
+  - name: fallback
+    type: fallback
+    proxies:
+      - local_9909
+      - local_9901
+      - local_9902
+      - local_9903
+      - local_9904
+      - remote_9909
+      - remote_9901
+      - remote_9902
+      - remote_9903
+      - remote_9904
+      - remote_9900
+      - DIRECT
+    url: "http://www.v2ex.com/generate_204"
+    interval: 300
+  - name: PROXY
+    type: select
+    proxies:
+      - fallback
+      - DIRECT
+      - local_9909
+      - local_9901
+      - local_9902
+      - local_9903
+      - local_9904
+      - remote_9909
+      - remote_9901
+      - remote_9902
+      - remote_9903
+      - remote_9904
+      - remote_9900
+
+  # Rule
+  - name: OpenAI
+    type: select
+    proxies:
+      - DIRECT
+      - PASS
+      - PROXY
+  - name: GoogleFCM
+    type: select
+    proxies:
+      - DIRECT
+      - PASS
+      - PROXY
+  - name: bilibili
+    type: select
+    proxies:
+      - PASS
+      - DIRECT
+      - PROXY
+  - name: Downloader
+    type: select
+    proxies:
+      - PASS
+      - DIRECT
+      - PROXY
+  - name: ip-attribution
+    type: select
+    proxies:
+      - PASS
+      - PROXY
+      - DIRECT
+      - REJECT
+  - name: Games
+    type: select
+    proxies:
+      - PASS
+      - remote_9900
+      - DIRECT
+      - PROXY
+
+  - name: MATCH
+    type: select
+    proxies:
+      - PROXY
+      - DIRECT
+
+  # Meta compatible
+  - name: PASS
+    type: select
+    proxies:
+      - DIRECT
+      - PROXY
+
 dns:
   enable: true
   ipv6: false
   listen: :53
-  # enhanced-mode: fake-ip
+  default-nameserver:
+    - 8.8.8.8
+    - 223.5.5.5
   enhanced-mode: redir-host 
-  # fake-ip-range: 198.18.0.1/16
   use-hosts: true
-  # default-nameserver:
-  # - 114.114.114.114
-  # - 119.29.29.29
   nameserver:
-  # - 114.114.114.114
-  # - 119.29.29.29
-  - https://doh.pub/dns-query
-  - https://dns.alidns.com/dns-query
+    - tls://dot.pub:853
+    - tls://dns.alidns.com:853
   fallback:
+  - 127.0.0.1:15353
   - 127.0.0.1:9921
   - 127.0.0.1:9922
-  - 127.0.0.1:15353
+  - 127.0.0.1:9923
+  - 127.0.0.1:9924
+  - 192.168.1.1:15353
+  - 192.168.1.1:9921
+  - 192.168.1.1:9922
+  - 192.168.1.1:9923
+  - 192.168.1.1:9924
   - https://dns.google/dns-query
   - https://dns.twnic.tw/dns-query
   - https://cloudflare-dns.com/dns-query
@@ -66,172 +274,17 @@ dns:
     - "+.msftncsi.com"
     - msftconnecttest.com
     - msftncsi.com
+
+# Premium
 tun:
-  enable: false
-  # stack: gvisor
+  enable: true
   stack: system
   auto-route: true
+  auto-redir: true # Linux?
+  strict_route: true
   auto-detect-interface: true
-  # dns-hijack:
-  #   - 198.18.0.2:53
-  #   - any:53
-  #   - tcp://any:53
-
-proxies:
-  - name: geph
-    type: socks5
-    server: 127.0.0.1
-    port: 9901
-  - name: geph_default
-    type: socks5
-    server: 127.0.0.1
-    port: 9909
-  - name: geph_fallback
-    type: socks5
-    server: 127.0.0.1
-    port: 9902
-
-proxy-groups:
-  - name: auto
-    type: url-test
-    proxies:
-      - geph
-      - geph_default
-      - geph_vpn
-      - geph_fallback
-    url: "http://www.gstatic.com/generate_204"
-    interval: 300
-  - name: fallback
-    type: fallback
-    proxies:
-      - auto
-      - DIRECT
-    url: "http://www.gstatic.cn/generate_204"
-    interval: 300
-  - name: PROXY
-    type: select
-    proxies:
-      - fallback
-      - auto
-      - geph
-      - geph_default
-      - geph_vpn
-      - geph_fallback
-      - DIRECT
-  - name: Bypass
-    type: select
-    proxies:
-      - DIRECT
-      - PROXY
-  - name: geph_vpn
-    type: select
-    interface-name: tun-geph
-    proxies:
-      - DIRECT
-
-  # Rule
-  - name: GoogleFCM
-    type: select
-    proxies:
-      - DIRECT
-      - PROXY
-  - name: OpenAI
-    type: select
-    proxies:
-      - DIRECT
-      - PROXY
-  - name: google
-    type: select
-    proxies:
-      - PROXY
-      - geph_fallback
-      - DIRECT
-  - name: bilibili
-    type: select
-    proxies:
-      - DIRECT
-      - PROXY
-  - name: Downloader
-    type: select
-    proxies:
-      - DIRECT
-      - PROXY
-  - name: ip-attribution
-    type: select
-    proxies:
-      - DIRECT
-      - PROXY
-      - REJECT
-  - name: Games
-    type: select
-    proxies:
-      - DIRECT
-      - PROXY
-
-  - name: MATCH
-    type: select
-    proxies:
-      - DIRECT
-      - PROXY
-
-
-rules:
-# Geph
-  - PROCESS-NAME,libgeph.so,DIRECT
-  - PROCESS-NAME,geph4-client,DIRECT
-  - PROCESS-NAME,geph4-client.exe,DIRECT
-  - PROCESS-NAME,geph4-client-vpn,DIRECT
-  - PROCESS-NAME,geph4-client-vpn.exe,DIRECT
-  - PROCESS-NAME,geph4-client-fallback,DIRECT
-  - PROCESS-NAME,geph4-client-fallback.exe,DIRECT
-
-  - PROCESS-NAME,IDMan.exe,Downloader
-  - PROCESS-NAME,qbittorrent.exe,Downloader
-  - PROCESS-NAME,GenshinImpact.exe,Games
-  - PROCESS-NAME,SCPSL.exe,Games
-  - PROCESS-NAME,csgo.exe,Games
-  
-  - DOMAIN-SUFFIX,ntp.msn.cn,REJECT
-  - DOMAIN-SUFFIX,translate.googleapis.com,PROXY
-  - DOMAIN-SUFFIX,scpslgame.com,PROXY
-  - DOMAIN-SUFFIX,tiktok.com,PROXY
-  - DOMAIN-SUFFIX,metacubex.one,DIRECT
-  - DOMAIN-SUFFIX,sspai.com,DIRECT
-  - DOMAIN-SUFFIX,winos.me,DIRECT
-  - DOMAIN-SUFFIX,kinh.cc,DIRECT
-  - DOMAIN-SUFFIX,openai.com,OpenAI
-  # ip-attribution
-  - RULE-SET,ip-attribution,ip-attribution
-
-  # black list
-  # - RULE-SET,applications,DIRECT
-  # - DOMAIN,clash.razord.top,DIRECT
-  # - DOMAIN,yacd.haishan.me,DIRECT
-  # - RULE-SET,private,DIRECT
-  # - RULE-SET,reject,REJECT
-  # - RULE-SET,tld-not-cn,PROXY
-  # - RULE-SET,gfw,PROXY
-  # - RULE-SET,greatfire,PROXY
-  # - RULE-SET,telegramcidr,PROXY
-
-  # while list
-  - RULE-SET,applications,DIRECT
-  - DOMAIN,clash.razord.top,DIRECT
-  - DOMAIN,yacd.haishan.me,DIRECT
-  - RULE-SET,private,DIRECT
-  - RULE-SET,reject,REJECT
-  - RULE-SET,icloud,DIRECT
-  - RULE-SET,apple,DIRECT
-  - RULE-SET,google,DIRECT
-  - RULE-SET,proxy,PROXY
-  - RULE-SET,direct,DIRECT
-  - RULE-SET,lancidr,DIRECT
-  - RULE-SET,cncidr,DIRECT
-  - RULE-SET,telegramcidr,PROXY
-  - GEOIP,LAN,DIRECT
-  - GEOIP,CN,DIRECT
-
-  - MATCH,MATCH
+  dns-hijack:
+    - any:53
 
 rule-providers:
   reject:
@@ -332,9 +385,28 @@ rule-providers:
     path: ./ruleset/applications.yaml
     interval: 86400
 
-  ip-attribution:
+  ip-attribution-direct:
     type: http
     behavior: classical
-    url: "https://raw.githubusercontent.com/lwd-temp/anti-ip-attribution/main/generated/rule-provider.yaml"
-    path: ./ruleset/ip-attribution.yaml
+    url: "https://cdn.jsdelivr.net/gh/lwd-temp/anti-ip-attribution@main/generated/rule-provider-direct.yaml"
+    path: ./ruleset/ip-attribution-direct.yaml
+    interval: 86400
+  ip-attribution-reject:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/lwd-temp/anti-ip-attribution@main/generated/rule-provider-reject.yaml"
+    path: ./ruleset/ip-attribution-reject.yaml
+    interval: 86400
+  ip-attribution-proxy:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/lwd-temp/anti-ip-attribution@main/generated/rule-provider-proxy.yaml"
+    path: ./ruleset/ip-attribution-proxy.yaml
+    interval: 86400
+
+  bilibili:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/BiliBili/BiliBili.yaml"
+    path: ./ruleset/bilibili.yaml
     interval: 86400

@@ -24,7 +24,6 @@ proxy-groups:
   - name: auto
     type: fallback
     proxies:
-      - geph_vpn
       - local_9909
       - local_9901
       - local_9902
@@ -45,7 +44,6 @@ proxy-groups:
       - auto
       - DIRECT
       - local_9909
-      - geph_vpn
       - local_9901
       - local_9902
       - local_9903
