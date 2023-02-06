@@ -249,7 +249,7 @@ rule-providers:
     interval: 86400
 
 dns:
-  enable: true
+  enable: false
   ipv6: true
   listen: 0.0.0.0:53
   prefer-h3: false
@@ -274,10 +274,9 @@ dns:
     - 192.168.1.1:9924
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
-    - https://dns-unfiltered.adguard.com/dns-query
   fallback-filter:
     geoip: true
-    geoip-code: CN  # Meta
+    geoip-code: CN  # Meta # unnecessary
     geosite:  # Meta
       - gfw
     ipcidr:
@@ -308,6 +307,7 @@ dns:
       - msftconnecttest.com
       - msftncsi.com
 
+
 # Premium
 tun:
   enable: true
@@ -322,24 +322,17 @@ tun:
 
 # Meta
 sniffer:
-  enable: true
-  force-dns-mapping: false
-  parse-pure-ip: false
+  enable: false
+  force-dns-mapping: true
+  parse-pure-ip: true
   # Whether to use sniffing results as actual access, default false
-  override-destination: false
+  override-destination: true
   sniff:
     TLS:
       ports: [443, 8443]
     HTTP:
       ports: [80, 8080-8880]
-      override-destination: true
   force-domain:
     - '+.v2ex.com'
   skip-domain:
-    - '+.google.com'
-  sniffing:
-    - tls
-    - http
-  port-whitelist:
-    - 80
-    - 443
+    - Mijia Cloud
