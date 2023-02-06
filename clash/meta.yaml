@@ -249,7 +249,7 @@ rule-providers:
     interval: 86400
 
 dns:
-  enable: false
+  enable: true
   ipv6: true
   listen: 0.0.0.0:53
   prefer-h3: false
