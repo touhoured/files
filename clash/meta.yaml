@@ -1,21 +1,3 @@
-mixed-port: 7890
-allow-lan: true
-mode: rule
-log-level: debug
-ipv6: true
-external-controller: :9090
-profile:
-  store-selected: false
-# Meta
-inbound-tfo: true # TCP Fast Open
-geodata-mode: true
-tcp-concurrent: true
-unified-delay: true # Real delay check?
-geox-url:
-  geoip: "https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat"
-  geosite: "https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat"
-  mmdb: "https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country.mmdb"
-
 rules:
   # Geph
   - PROCESS-NAME,libgeph.so,DIRECT
@@ -50,7 +32,7 @@ rules:
   # China CDN/Direct
   - RULE-SET,ip-attribution-reject,REJECT
   - RULE-SET,ip-attribution-direct,DIRECT
-  - RULE-SET,ip-attribution-proxy,ip-attribution
+  - RULE-SET,ip-attribution-proxy,IP-Attribution
   - GEOSITE,bilibili,Bilibili
   - GEOSITE,apple-cn,DIRECT
   - GEOSITE,google-cn,DIRECT
@@ -58,7 +40,7 @@ rules:
   - GEOSITE,tld-cn,DIRECT
   - GEOSITE,googlefcm,GoogleFCM
   - GEOSITE,openai,OpenAI
-  - GEOSITE,category-games@cn,Games
+  - GEOSITE,category-games@cn,DIRECT
   - SUB-RULE,(PROCESS-NAME,GenshinImpact.exe),genshin
 
   # Not China
@@ -75,56 +57,8 @@ sub-rules:
   genshin:
     # - IP-CIDR,8.211.128.0/18,Games,udp # Genshin Asia
     # - IP-CIDR,47.74.0.0/18,Games,udp # Genshin Asia
-    - NETWORK,UDP,Games
+    - NETWORK,UDP,Games-UDP
     - DOMAIN,dispatchosglobal.yuanshen.com,Games # Genshin global
-
-proxies:
-  - name: local_9909
-    type: socks5
-    server: 127.0.0.1
-    port: 9909
-  - name: local_9901
-    type: socks5
-    server: 127.0.0.1
-    port: 9901
-  - name: local_9902
-    type: socks5
-    server: 127.0.0.1
-    port: 9902
-  - name: local_9903
-    type: socks5
-    server: 127.0.0.1
-    port: 9903
-  - name: local_9904
-    type: socks5
-    server: 127.0.0.1
-    port: 9904
-
-  - name: remote_9909
-    type: socks5
-    server: 192.168.1.1
-    port: 9909
-  - name: remote_9900
-    type: socks5
-    server: 192.168.1.1
-    port: 9900
-    udp: true
-  - name: remote_9901
-    type: socks5
-    server: 192.168.1.1
-    port: 9901
-  - name: remote_9902
-    type: socks5
-    server: 192.168.1.1
-    port: 9902
-  - name: remote_9903
-    type: socks5
-    server: 192.168.1.1
-    port: 9903
-  - name: remote_9904
-    type: socks5
-    server: 192.168.1.1
-    port: 9904
 
 proxy-groups:
   - name: Auto
@@ -199,20 +133,25 @@ proxy-groups:
       - PASS
       - DIRECT
       - PROXY
-  - name: ip-attribution
+  - name: IP-Attribution
     type: select
     proxies:
       - PASS
       - PROXY
       - DIRECT
       - REJECT
-  - name: Games
+  - name: Game
     type: select
     proxies:
+      - PROXY
       - PASS
-      - UDP-Fallback
-      - remote_9900
       - DIRECT
+  - name: Game-UDP
+    type: select
+    proxies:
+      - DIRECT
+      - remote_9900
+      - PASS
       - PROXY
 
   - name: MATCH
@@ -336,3 +275,70 @@ sniffer:
     - '+.v2ex.com'
   skip-domain:
     - Mijia Cloud
+
+
+proxies:
+  - name: local_9909
+    type: socks5
+    server: 127.0.0.1
+    port: 9909
+  - name: local_9901
+    type: socks5
+    server: 127.0.0.1
+    port: 9901
+  - name: local_9902
+    type: socks5
+    server: 127.0.0.1
+    port: 9902
+  - name: local_9903
+    type: socks5
+    server: 127.0.0.1
+    port: 9903
+  - name: local_9904
+    type: socks5
+    server: 127.0.0.1
+    port: 9904
+
+  - name: remote_9909
+    type: socks5
+    server: 192.168.1.1
+    port: 9909
+  - name: remote_9900
+    type: socks5
+    server: 192.168.1.1
+    port: 9900
+    udp: true
+  - name: remote_9901
+    type: socks5
+    server: 192.168.1.1
+    port: 9901
+  - name: remote_9902
+    type: socks5
+    server: 192.168.1.1
+    port: 9902
+  - name: remote_9903
+    type: socks5
+    server: 192.168.1.1
+    port: 9903
+  - name: remote_9904
+    type: socks5
+    server: 192.168.1.1
+    port: 9904
+
+mixed-port: 7890
+allow-lan: true
+mode: rule
+log-level: debug
+ipv6: true
+external-controller: :9090
+profile:
+  store-selected: false
+# Meta
+inbound-tfo: true # TCP Fast Open
+geodata-mode: true
+tcp-concurrent: true
+unified-delay: true # Real delay check?
+geox-url:
+  geoip: "https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat"
+  geosite: "https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat"
+  mmdb: "https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country.mmdb"

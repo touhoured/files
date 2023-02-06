@@ -1,19 +1,3 @@
-mixed-port: 7890
-allow-lan: true
-mode: rule
-log-level: debug
-ipv6: true
-external-controller: 0.0.0.0:9090
-profile:
-  store-selected: false
-
-script:
-  shortcuts:
-    quic: network == 'udp' and dst_port == 443
-    # bilibili-p2p: network == 'udp' and host.endswith('bilibili.com')
-    bilibili-p2p: network == 'udp' and match_provider('bilibili')
-    # genshin-asia-udp: network == 'udp' and in_cidr(dst_ip,'8.211.128.0/18')
-    genshin-udp: network == 'udp' and resolve_process_name() == 'GenshinImpact.exe'
 
 rules:
   # Geph
@@ -35,9 +19,8 @@ rules:
   # App
   - PROCESS-NAME,IDMan.exe,Downloader
   - PROCESS-NAME,qbittorrent.exe,Downloader
-  # - PROCESS-NAME,GenshinImpact.exe,Games
-  - PROCESS-NAME,SCPSL.exe,Games
-  - PROCESS-NAME,csgo.exe,Games
+  # - PROCESS-NAME,SCPSL.exe,Game
+  # - PROCESS-NAME,csgo.exe,Game
   - RULE-SET,applications,DIRECT
 
   # Web site
@@ -51,13 +34,10 @@ rules:
   # China CDN/Direct/Game
   - RULE-SET,ip-attribution-reject,REJECT
   - RULE-SET,ip-attribution-direct,DIRECT
-  - RULE-SET,ip-attribution-proxy,ip-attribution
-  - RULE-SET,bilibili,bilibili
-  # - SCRIPT,genshin-asia-udp,Games
-  - SCRIPT,genshin-udp,Games
-  # - IP-CIDR,8.211.128.0/18,Games # Genshin Asia
-  # - IP-CIDR,47.74.0.0/18,Games # Genshin Asia
-  - DOMAIN,dispatchosglobal.yuanshen.com,Games # Genshin global
+  - RULE-SET,ip-attribution-proxy,IP-Attribution
+  - RULE-SET,bilibili,Bilibili
+  - SCRIPT,genshin-udp,Game-UDP
+  - DOMAIN,dispatchosglobal.yuanshen.com,Game # Genshin global
   - DOMAIN-SUFFIX,openai.com,OpenAI
   - RULE-SET,icloud,DIRECT
   - RULE-SET,apple,DIRECT
@@ -75,54 +55,13 @@ rules:
   # Other
   - MATCH,MATCH
 
-proxies:
-  - name: local_9909
-    type: socks5
-    server: 127.0.0.1
-    port: 9909
-  - name: local_9901
-    type: socks5
-    server: 127.0.0.1
-    port: 9901
-  - name: local_9902
-    type: socks5
-    server: 127.0.0.1
-    port: 9902
-  - name: local_9903
-    type: socks5
-    server: 127.0.0.1
-    port: 9903
-  - name: local_9904
-    type: socks5
-    server: 127.0.0.1
-    port: 9904
-
-  - name: remote_9909
-    type: socks5
-    server: 192.168.1.1
-    port: 9909
-  - name: remote_9900
-    type: socks5
-    server: 192.168.1.1
-    port: 9900
-    udp: true
-  - name: remote_9901
-    type: socks5
-    server: 192.168.1.1
-    port: 9901
-  - name: remote_9902
-    type: socks5
-    server: 192.168.1.1
-    port: 9902
-  - name: remote_9903
-    type: socks5
-    server: 192.168.1.1
-    port: 9903
-  - name: remote_9904
-    type: socks5
-    server: 192.168.1.1
-    port: 9904
-
+script:
+  shortcuts:
+    quic: network == 'udp' and dst_port == 443
+    # bilibili-p2p: network == 'udp' and host.endswith('bilibili.com')
+    bilibili-p2p: network == 'udp' and match_provider('bilibili')
+    # genshin-asia-udp: network == 'udp' and in_cidr(dst_ip,'8.211.128.0/18')
+    genshin-udp: network == 'udp' and resolve_process_name() == 'GenshinImpact.exe'
 
 proxy-groups:
   - name: Auto
@@ -177,37 +116,36 @@ proxy-groups:
     type: select
     proxies:
       - DIRECT
-      - PASS
       - PROXY
   - name: GoogleFCM
     type: select
     proxies:
       - DIRECT
-      - PASS
       - PROXY
-  - name: bilibili
+  - name: Bilibili
     type: select
     proxies:
-      - PASS
       - DIRECT
       - PROXY
   - name: Downloader
     type: select
     proxies:
-      - PASS
       - DIRECT
       - PROXY
-  - name: ip-attribution
+  - name: IP-Attribution
     type: select
     proxies:
-      - PASS
-      - PROXY
       - DIRECT
+      - PROXY
       - REJECT
-  - name: Games
+  - name: Game
     type: select
     proxies:
-      - PASS
+      - PROXY
+      - DIRECT
+  - name: Game-UDP
+    type: select
+    proxies:
       - remote_9900
       - DIRECT
       - PROXY
@@ -218,12 +156,6 @@ proxy-groups:
       - PROXY
       - DIRECT
 
-  # Meta compatible
-  - name: PASS
-    type: select
-    proxies:
-      - DIRECT
-      - PROXY
 
 dns:
   enable: true
@@ -249,14 +181,8 @@ dns:
   # - 192.168.1.1:9923
   # - 192.168.1.1:9924
   - https://dns.google/dns-query
-  - https://dns.twnic.tw/dns-query
   - https://cloudflare-dns.com/dns-query
 
-  - https://dns.cloudflare.com/dns-query
-  - https://public.dns.iij.jp/dns-query
-  - https://jp.tiar.app/dns-query
-  - https://jp.tiarap.org/dns-query
-  - tls://dot.tiar.app
   fallback-filter:
     geoip: true
     geoip-code: CN
@@ -298,6 +224,64 @@ tun:
   auto-detect-interface: true
   dns-hijack:
     - any:53
+
+proxies:
+  - name: local_9909
+    type: socks5
+    server: 127.0.0.1
+    port: 9909
+  - name: local_9901
+    type: socks5
+    server: 127.0.0.1
+    port: 9901
+  - name: local_9902
+    type: socks5
+    server: 127.0.0.1
+    port: 9902
+  - name: local_9903
+    type: socks5
+    server: 127.0.0.1
+    port: 9903
+  - name: local_9904
+    type: socks5
+    server: 127.0.0.1
+    port: 9904
+
+  - name: remote_9909
+    type: socks5
+    server: 192.168.1.1
+    port: 9909
+  - name: remote_9900
+    type: socks5
+    server: 192.168.1.1
+    port: 9900
+    udp: true
+  - name: remote_9901
+    type: socks5
+    server: 192.168.1.1
+    port: 9901
+  - name: remote_9902
+    type: socks5
+    server: 192.168.1.1
+    port: 9902
+  - name: remote_9903
+    type: socks5
+    server: 192.168.1.1
+    port: 9903
+  - name: remote_9904
+    type: socks5
+    server: 192.168.1.1
+    port: 9904
+
+mixed-port: 7890
+allow-lan: true
+mode: rule
+log-level: debug
+ipv6: true
+external-controller: 0.0.0.0:9090
+profile:
+  store-selected: false
+
 
 rule-providers:
   reject:
