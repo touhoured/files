@@ -3,7 +3,7 @@ allow-lan: true
 mode: rule
 log-level: debug
 ipv6: true
-external-controller: :9090
+external-controller: 0.0.0.0:9090
 profile:
   store-selected: false
 
@@ -153,7 +153,7 @@ proxy-groups:
     proxies:
       - Auto
       - DIRECT
-    url: "http://www.v2ex.com/generate_204"
+    url: "http://theahreahwaqerhea.com/generate_204"
     interval: 100
   - name: PROXY
     type: select
@@ -238,16 +238,16 @@ dns:
     - tls://dot.pub:853
     - tls://dns.alidns.com:853
   fallback:
-  - 127.0.0.1:15353
-  - 127.0.0.1:9921
-  - 127.0.0.1:9922
-  - 127.0.0.1:9923
-  - 127.0.0.1:9924
-  - 192.168.1.1:15353
-  - 192.168.1.1:9921
-  - 192.168.1.1:9922
-  - 192.168.1.1:9923
-  - 192.168.1.1:9924
+  # - 127.0.0.1:15353
+  # - 127.0.0.1:9921
+  # - 127.0.0.1:9922
+  # - 127.0.0.1:9923
+  # - 127.0.0.1:9924
+  # - 192.168.1.1:15353
+  # - 192.168.1.1:9921
+  # - 192.168.1.1:9922
+  # - 192.168.1.1:9923
+  # - 192.168.1.1:9924
   - https://dns.google/dns-query
   - https://dns.twnic.tw/dns-query
   - https://cloudflare-dns.com/dns-query
