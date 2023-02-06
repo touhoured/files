@@ -1,11 +1,11 @@
 mixed-port: 7890
 allow-lan: true
+mode: rule
+log-level: debug
+ipv6: true
 external-controller: :9090
-ipv6: false
 profile:
-  store-selected: true
-hosts:
-  'ntp.msn.cn': '0.0.0.0'
+  store-selected: false
 
 script:
   shortcuts:
@@ -23,7 +23,7 @@ rules:
 
   # Private address
   - RULE-SET,private,DIRECT
-  - RULE-SET,lancidr,DIRECT
+  - RULE-SET,lancidr,DIRECT,no-resolve
   - GEOIP,LAN,DIRECT,no-resolve
 
   # AD/Block
@@ -65,11 +65,11 @@ rules:
 
   # Not China
   - RULE-SET,proxy,PROXY
-  - RULE-SET,telegramcidr,PROXY
+  - RULE-SET,telegramcidr,PROXY,no-resolve
 
   # China
   - RULE-SET,direct,DIRECT
-  - RULE-SET,cncidr,DIRECT
+  - RULE-SET,cncidr,DIRECT,no-resolve
   - GEOIP,CN,DIRECT,no-resolve
 
   # Other
@@ -125,8 +125,8 @@ proxies:
 
 
 proxy-groups:
-  - name: fallback
-    type: fallback
+  - name: auto
+    type: url-test
     proxies:
       - local_9909
       - local_9901
@@ -139,9 +139,22 @@ proxy-groups:
       - remote_9903
       - remote_9904
       - remote_9900
+    url: "http://www.v2ex.com/generate_204"
+    interval: 150
+  - name: fallback
+    type: fallback
+    proxies:
+      - auto
+      - DIRECT
+    url: "http://www.apple.com/library/test/success.html"
+    interval: 300
+  - name: test
+    type: url-test
+    proxies:
+      - auto
       - DIRECT
     url: "http://www.v2ex.com/generate_204"
-    interval: 300
+    interval: 100
   - name: PROXY
     type: select
     proxies:
@@ -214,7 +227,7 @@ proxy-groups:
 
 dns:
   enable: true
-  ipv6: false
+  ipv6: true
   listen: :53
   default-nameserver:
     - 8.8.8.8
@@ -277,7 +290,7 @@ dns:
 
 # Premium
 tun:
-  enable: true
+  enable: false
   stack: system
   auto-route: true
   auto-redir: true # Linux?

@@ -1,9 +1,36 @@
 {
+  "log": {
+    "disabled": false,
+    "level": "debug",
+    "timestamp": true
+  },
+  "experimental": {
+    "clash_api": {
+      "external_controller": "127.0.0.1:9090",
+      "store_selected": false
+    }
+  },
   "dns": {
     "servers": [
       {
-        "tag": "local",
-        "address": "223.5.5.5",
+        "tag": "proxy",
+        "address": "https://1.1.1.1/dns-query",
+        "detour": "proxy"
+      },
+      {
+        "tag": "test",
+        "address": "tcp://8.8.8.8",
+        "detour": "game"
+      },
+      {
+        "tag": "bypass",
+        "address": "tls://1.12.12.12",
+        "strategy": "prefer_ipv6",
+        "detour": "direct"
+      },
+      {
+        "tag": "direct",
+        "address": "tls://1.12.12.12",
         "detour": "direct"
       },
       {
@@ -13,55 +40,378 @@
     ],
     "rules": [
       {
+        "clash_mode": "global",
+        "server": "proxy"
+      },
+      {
+        "geosite": [
+          "private"
+        ],
+        "server": "direct"
+      },
+      {
         "geosite": "category-ads-all",
-        "server": "block",
-        "disable_cache": true
+        "disable_cache": true,
+        "server": "block"
+      },
+      {
+        "domain_suffix": [
+          "winos.me",
+          "kinh.cc",
+          "dandanplay.net",
+          "geilijiasu.com",
+          "metacubex.one",
+          "dl.google.com",
+          "yacd.haishan.me"
+        ],
+        "server": "bypass"
+      },
+      {
+        "geosite": [
+          "category-games@cn"
+        ],
+        "server": "game"
+      },
+      {
+        "geosite": "geolocation-!cn",
+        "server": "proxy"
+      },
+      {
+        "geosite": [
+          "cn"
+        ],
+        "server": "bypass"
       }
-    ],
-    "strategy": "ipv4_only"
+    ]
   },
   "inbounds": [
     {
-      "type": "tun",
+      "tag": "tun-in",
       "inet4_address": "172.19.0.1/30",
+      "inet6_address": "fdfe:dcba:9876::1/126",
       "auto_route": true,
       "strict_route": true,
-      "sniff": true
+      "sniff": true,
+      "sniff_override_destination": true,
+      "type": "tun"
+    },
+    {
+      "tag": "mixed-in",
+      "listen": "0.0.0.0",
+      "listen_port": 7890,
+      "set_system_proxy": true,
+      "sniff": true,
+      "sniff_override_destination": true,
+      "type": "mixed"
     }
   ],
   "outbounds": [
     {
-      "type": "direct",
-      "tag": "direct"
+      "outbounds": [
+        "local_9909",
+        "local_9901",
+        "local_9902",
+        "local_9903",
+        "local_9904",
+        "openwrt_9909",
+        "openwrt_9901",
+        "openwrt_9902",
+        "openwrt_9903",
+        "openwrt_9904",
+        "openwrt_9900"
+      ],
+      "url": "http://www.v2ex.com/generate_204",
+      "interval": "1m",
+      "tolerance": 1000,
+      "tag": "urltest",
+      "type": "urltest"
     },
     {
-      "type": "block",
-      "tag": "block"
+      "outbounds": [
+        "urltest",
+        "bypass"
+      ],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "1m",
+      "tolerance": 9999,
+      "tag": "fallback",
+      "type": "urltest"
     },
     {
-      "type": "dns",
-      "tag": "dns-out"
+      "outbounds": [
+        "fallback",
+        "urltest",
+        "local_9909",
+        "local_9901",
+        "local_9902",
+        "local_9903",
+        "local_9904",
+        "openwrt_9909",
+        "openwrt_9901",
+        "openwrt_9902",
+        "openwrt_9903",
+        "openwrt_9904",
+        "openwrt_9900"
+      ],
+      "tag": "proxy",
+      "type": "selector"
+    },
+    {
+      "outbounds": [
+        "bypass",
+        "proxy"
+      ],
+      "tag": "game",
+      "type": "selector"
+    },
+    {
+      "outbounds": [
+        "bypass",
+        "proxy"
+      ],
+      "tag": "game-udp",
+      "type": "selector"
+    },
+    {
+      "outbounds": [
+        "bypass",
+        "proxy"
+      ],
+      "tag": "bilibili",
+      "type": "selector"
+    },
+    {
+      "outbounds": [
+        "bypass",
+        "proxy"
+      ],
+      "tag": "openai",
+      "type": "selector"
+    },
+    {
+      "tag": "openwrt_9900",
+      "server": "192.168.1.1",
+      "server_port": 9900,
+      "version": "5",
+      "type": "socks"
+    },
+    {
+      "tag": "openwrt_9901",
+      "server": "192.168.1.1",
+      "server_port": 9901,
+      "version": "5",
+      "type": "socks"
+    },
+    {
+      "tag": "openwrt_9902",
+      "server": "192.168.1.1",
+      "server_port": 9902,
+      "version": "5",
+      "type": "socks"
+    },
+    {
+      "tag": "openwrt_9903",
+      "server": "192.168.1.1",
+      "server_port": 9903,
+      "version": "5",
+      "type": "socks"
+    },
+    {
+      "tag": "openwrt_9904",
+      "server": "192.168.1.1",
+      "server_port": 9904,
+      "version": "5",
+      "type": "socks"
+    },
+    {
+      "tag": "openwrt_9909",
+      "server": "192.168.1.1",
+      "server_port": 9909,
+      "version": "5",
+      "type": "socks"
+    },
+    {
+      "tag": "local_9901",
+      "server": "127.0.0.1",
+      "server_port": 9901,
+      "version": "5",
+      "type": "socks"
+    },
+    {
+      "tag": "local_9902",
+      "server": "127.0.0.1",
+      "server_port": 9902,
+      "version": "5",
+      "type": "socks"
+    },
+    {
+      "tag": "local_9903",
+      "server": "127.0.0.1",
+      "server_port": 9903,
+      "version": "5",
+      "type": "socks"
+    },
+    {
+      "tag": "local_9904",
+      "server": "127.0.0.1",
+      "server_port": 9904,
+      "version": "5",
+      "type": "socks"
+    },
+    {
+      "tag": "local_9909",
+      "server": "127.0.0.1",
+      "server_port": 9909,
+      "version": "5",
+      "type": "socks"
+    },
+    {
+      "tag": "direct",
+      "type": "direct"
+    },
+    {
+      "tag": "bypass",
+      "domain_strategy": "prefer_ipv6",
+      "type": "direct"
+    },
+    {
+      "tag": "block",
+      "type": "block"
+    },
+    {
+      "tag": "dns-out",
+      "type": "dns"
     }
   ],
   "route": {
+    "auto_detect_interface": true,
     "rules": [
       {
-        "protocol": "dns",
-        "outbound": "dns-out"
-      },
-      {
-        "geosite": "cn",
-        "geoip": [
-          "private",
-          "cn"
+        "process_name": [
+          "libgeph.so",
+          "geph4-client",
+          "geph4-client.exe"
         ],
         "outbound": "direct"
       },
       {
+        "outbound": "direct",
+        "clash_mode": "direct"
+      },
+      {
+        "outbound": "dns-out",
+        "protocol": "dns"
+      },
+      {
+        "port": 53,
+        "outbound": "dns-out"
+      },
+      {
+        "geosite": [
+          "private"
+        ],
+        "geoip": [
+          "private"
+        ],
+        "outbound": "direct"
+      },
+      {
+        "clash_mode": "global",
+        "outbound": "proxy"
+      },
+      {
         "geosite": "category-ads-all",
         "outbound": "block"
+      },
+      {
+        "process_name": [
+          "aria2c.exe",
+          "IDMan.exe"
+        ],
+        "outbound": "bypass"
+      },
+      {
+        "geosite": [
+          "bilibili",
+          "douyu"
+        ],
+        "network": "udp",
+        "outbound": "bypass"
+      },
+      {
+        "domain_suffix": [
+          "winos.me",
+          "kinh.cc",
+          "dandanplay.net",
+          "geilijiasu.com",
+          "metacubex.one",
+          "dl.google.com",
+          "yacd.haishan.me"
+        ],
+        "outbound": "bypass"
+      },
+      {
+        "process_name": [
+          "GenshinImpact.exe"
+        ],
+        "network": "udp",
+        "outbound": "game-udp"
+      },
+      {
+        "geosite": [
+          "category-games@cn"
+        ],
+        "network": "udp",
+        "outbound": "game-udp"
+      },
+      {
+        "geosite": [
+          "category-games@cn"
+        ],
+        "outbound": "game"
+      },
+      {
+        "geosite": [
+          "bilibili"
+        ],
+        "network": "udp",
+        "outbound": "block"
+      },
+      {
+        "geosite": [
+          "bilibili"
+        ],
+        "outbound": "bilibili"
+      },
+      {
+        "geosite": [
+          "openai"
+        ],
+        "outbound": "openai"
+      },
+      {
+        "geosite": "geolocation-!cn",
+        "outbound": "proxy"
+      },
+      {
+        "geosite": [
+          "cn"
+        ],
+        "geoip": [
+          "cn"
+        ],
+        "outbound": "bypass"
       }
     ],
-    "auto_detect_interface": true
+    "geoip": {
+      "path": "geoip-Loyalsoldier.db",
+      "download_url": "https://github.com/1715173329/sing-geoip/releases/latest/download/geoip.db",
+      "download_detour": "proxy"
+    },
+    "geosite": {
+      "path": "geosite-Loyalsoldier.db",
+      "download_url": "https://github.com/1715173329/sing-geosite/releases/latest/download/geosite.db",
+      "download_detour": "proxy"
+    }
   }
 }
