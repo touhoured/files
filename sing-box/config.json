@@ -107,6 +107,7 @@
   ],
   "outbounds": [
     {
+      "tag": "fallback",
       "outbounds": [
         "local_9909",
         "local_9901",
@@ -123,24 +124,12 @@
       "url": "http://www.v2ex.com/generate_204",
       "interval": "1m",
       "tolerance": 1000,
-      "tag": "urltest",
       "type": "urltest"
     },
     {
-      "outbounds": [
-        "urltest",
-        "bypass"
-      ],
-      "url": "http://www.gstatic.com/generate_204",
-      "interval": "1m",
-      "tolerance": 9999,
-      "tag": "fallback",
-      "type": "urltest"
-    },
-    {
+      "tag": "proxy",
       "outbounds": [
         "fallback",
-        "urltest",
         "local_9909",
         "local_9901",
         "local_9902",
@@ -153,39 +142,38 @@
         "remote_9904",
         "remote_9900"
       ],
-      "tag": "proxy",
       "type": "selector"
     },
     {
-      "outbounds": [
-        "bypass",
-        "proxy"
-      ],
       "tag": "game",
-      "type": "selector"
-    },
-    {
       "outbounds": [
         "bypass",
         "proxy"
       ],
+      "type": "selector"
+    },
+    {
       "tag": "game-udp",
-      "type": "selector"
-    },
-    {
       "outbounds": [
         "bypass",
         "proxy"
       ],
+      "type": "selector"
+    },
+    {
       "tag": "bilibili",
-      "type": "selector"
-    },
-    {
       "outbounds": [
         "bypass",
         "proxy"
       ],
+      "type": "selector"
+    },
+    {
       "tag": "openai",
+      "outbounds": [
+        "bypass",
+        "proxy"
+      ],
       "type": "selector"
     },
     {
