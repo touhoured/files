@@ -252,7 +252,7 @@ dns:
   enable: true
   ipv6: true
   listen: 0.0.0.0:53
-  prefer-h3: true
+  prefer-h3: false
   default-nameserver:
     - 8.8.8.8
     - 223.5.5.5
@@ -274,6 +274,7 @@ dns:
     - 192.168.1.1:9924
     - https://dns.google/dns-query
     - https://cloudflare-dns.com/dns-query
+    - https://dns-unfiltered.adguard.com/dns-query
   fallback-filter:
     geoip: true
     geoip-code: CN  # Meta

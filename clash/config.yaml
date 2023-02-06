@@ -125,7 +125,7 @@ proxies:
 
 
 proxy-groups:
-  - name: auto
+  - name: Auto
     type: url-test
     proxies:
       - local_9909
@@ -141,24 +141,24 @@ proxy-groups:
       - remote_9900
     url: "http://www.v2ex.com/generate_204"
     interval: 150
-  - name: fallback
+  - name: Fallback
     type: fallback
     proxies:
-      - auto
+      - Auto
       - DIRECT
     url: "http://www.apple.com/library/test/success.html"
     interval: 300
   - name: test
     type: url-test
     proxies:
-      - auto
+      - Auto
       - DIRECT
     url: "http://www.v2ex.com/generate_204"
     interval: 100
   - name: PROXY
     type: select
     proxies:
-      - fallback
+      - Fallback
       - DIRECT
       - local_9909
       - local_9901
