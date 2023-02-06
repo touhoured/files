@@ -113,12 +113,12 @@
         "local_9902",
         "local_9903",
         "local_9904",
-        "openwrt_9909",
-        "openwrt_9901",
-        "openwrt_9902",
-        "openwrt_9903",
-        "openwrt_9904",
-        "openwrt_9900"
+        "remote_9909",
+        "remote_9901",
+        "remote_9902",
+        "remote_9903",
+        "remote_9904",
+        "remote_9900"
       ],
       "url": "http://www.v2ex.com/generate_204",
       "interval": "1m",
@@ -146,12 +146,12 @@
         "local_9902",
         "local_9903",
         "local_9904",
-        "openwrt_9909",
-        "openwrt_9901",
-        "openwrt_9902",
-        "openwrt_9903",
-        "openwrt_9904",
-        "openwrt_9900"
+        "remote_9909",
+        "remote_9901",
+        "remote_9902",
+        "remote_9903",
+        "remote_9904",
+        "remote_9900"
       ],
       "tag": "proxy",
       "type": "selector"
@@ -189,42 +189,42 @@
       "type": "selector"
     },
     {
-      "tag": "openwrt_9900",
+      "tag": "remote_9900",
       "server": "192.168.1.1",
       "server_port": 9900,
       "version": "5",
       "type": "socks"
     },
     {
-      "tag": "openwrt_9901",
+      "tag": "remote_9901",
       "server": "192.168.1.1",
       "server_port": 9901,
       "version": "5",
       "type": "socks"
     },
     {
-      "tag": "openwrt_9902",
+      "tag": "remote_9902",
       "server": "192.168.1.1",
       "server_port": 9902,
       "version": "5",
       "type": "socks"
     },
     {
-      "tag": "openwrt_9903",
+      "tag": "remote_9903",
       "server": "192.168.1.1",
       "server_port": 9903,
       "version": "5",
       "type": "socks"
     },
     {
-      "tag": "openwrt_9904",
+      "tag": "remote_9904",
       "server": "192.168.1.1",
       "server_port": 9904,
       "version": "5",
       "type": "socks"
     },
     {
-      "tag": "openwrt_9909",
+      "tag": "remote_9909",
       "server": "192.168.1.1",
       "server_port": 9909,
       "version": "5",
@@ -361,14 +361,7 @@
         "geosite": [
           "category-games@cn"
         ],
-        "network": "udp",
-        "outbound": "game-udp"
-      },
-      {
-        "geosite": [
-          "category-games@cn"
-        ],
-        "outbound": "game"
+        "outbound": "bypass"
       },
       {
         "geosite": [

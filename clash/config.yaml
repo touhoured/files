@@ -37,7 +37,7 @@ rules:
   - RULE-SET,ip-attribution-proxy,IP-Attribution
   - RULE-SET,bilibili,Bilibili
   - SCRIPT,genshin-udp,Game-UDP
-  - DOMAIN,dispatchosglobal.yuanshen.com,Game # Genshin global
+  - DOMAIN,dispatchosglobal.yuanshen.com,PROXY # Genshin global
   - DOMAIN-SUFFIX,openai.com,OpenAI
   - RULE-SET,icloud,DIRECT
   - RULE-SET,apple,DIRECT
@@ -64,8 +64,8 @@ script:
     genshin-udp: network == 'udp' and resolve_process_name() == 'GenshinImpact.exe'
 
 proxy-groups:
-  - name: Auto
-    type: url-test
+  - name: Fallback
+    type: fallback
     proxies:
       - local_9909
       - local_9901
@@ -78,22 +78,9 @@ proxy-groups:
       - remote_9903
       - remote_9904
       - remote_9900
-    url: "http://www.v2ex.com/generate_204"
-    interval: 150
-  - name: Fallback
-    type: fallback
-    proxies:
-      - Auto
       - DIRECT
     url: "http://www.apple.com/library/test/success.html"
     interval: 300
-  - name: test
-    type: url-test
-    proxies:
-      - Auto
-      - DIRECT
-    url: "http://theahreahwaqerhea.com/generate_204"
-    interval: 100
   - name: PROXY
     type: select
     proxies:
@@ -281,7 +268,6 @@ ipv6: true
 external-controller: 0.0.0.0:9090
 profile:
   store-selected: false
-
 
 rule-providers:
   reject:

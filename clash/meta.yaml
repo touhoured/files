@@ -40,8 +40,8 @@ rules:
   - GEOSITE,tld-cn,DIRECT
   - GEOSITE,googlefcm,GoogleFCM
   - GEOSITE,openai,OpenAI
-  - GEOSITE,category-games@cn,DIRECT
   - SUB-RULE,(PROCESS-NAME,GenshinImpact.exe),genshin
+  - GEOSITE,category-games@cn,DIRECT
 
   # Not China
   - GEOSITE,geolocation-!cn,PROXY
@@ -58,10 +58,10 @@ sub-rules:
     # - IP-CIDR,8.211.128.0/18,Games,udp # Genshin Asia
     # - IP-CIDR,47.74.0.0/18,Games,udp # Genshin Asia
     - NETWORK,UDP,Game-UDP
-    - DOMAIN,dispatchosglobal.yuanshen.com,Game # Genshin global
+    - DOMAIN,dispatchosglobal.yuanshen.com,PROXY # Genshin global
 
 proxy-groups:
-  - name: Auto
+  - name: Fallback
     type: fallback
     proxies:
       - local_9909
@@ -75,12 +75,6 @@ proxy-groups:
       - remote_9903
       - remote_9904
       - remote_9900
-    url: "http://www.v2ex.com/generate_204"
-    interval: 300
-  - name: Fallback
-    type: fallback
-    proxies:
-      - Auto
       - DIRECT
     url: "http://www.apple.com/library/test/success.html"
     interval: 300
@@ -201,23 +195,11 @@ dns:
     - tls://dns.pub:853
     - tls://dns.alidns.com:853
   fallback:
-    # - 127.0.0.1:15353
-    # - 127.0.0.1:9921
-    # - 127.0.0.1:9922
-    # - 127.0.0.1:9923
-    # - 127.0.0.1:9924
-    # - 192.168.1.1:15353
-    # - 192.168.1.1:9921
-    # - 192.168.1.1:9922
-    # - 192.168.1.1:9923
-    # - 192.168.1.1:9924
-    - https://dns.google/dns-query
-    - https://cloudflare-dns.com/dns-query
+    - https://dns.google/dns-query&h3=false
+    - https://cloudflare-dns.com/dns-query&h3=false
   fallback-filter:
     geoip: true
-    geoip-code: CN  # Meta # unnecessary
-    geosite:  # Meta
-      - gfw
+    geoip-code: CN
     ipcidr:
       - 0.0.0.0/8
       - 10.0.0.0/8
@@ -259,23 +241,21 @@ tun:
     # - 0.0.0.0:53
     - any:53
 
-# Meta
 sniffer:
-  enable: false
-  force-dns-mapping: true
-  parse-pure-ip: true
-  # Whether to use sniffing results as actual access, default false
-  override-destination: true
+  enable: true
+  ForceDnsMapping: true
+  ParsePureIp: true
+  skip-domain:
+  - "+.apple.com"
+  - Mijia Cloud
+  - "+.jd.com"
   sniff:
     TLS:
-      ports: [443, 8443]
     HTTP:
-      ports: [80, 8080-8880]
-  force-domain:
-    - '+.v2ex.com'
-  skip-domain:
-    - Mijia Cloud
-
+      ports:
+      - 80
+      - 8080-8880
+      override-destination: true
 
 proxies:
   - name: local_9909
