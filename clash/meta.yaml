@@ -142,12 +142,14 @@ proxy-groups:
       - remote_9904
       - remote_9900
     url: "http://www.v2ex.com/generate_204"
+    interval: 300
   - name: Fallback
     type: fallback
     proxies:
       - Auto
       - DIRECT
     url: "http://www.apple.com/library/test/success.html"
+    interval: 300
   - name: UDP-Fallback
     type: fallback
     proxies:
