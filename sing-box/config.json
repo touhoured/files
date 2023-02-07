@@ -14,23 +14,20 @@
     "servers": [
       {
         "tag": "proxy",
-        "address": "https://1.1.1.1/dns-query",
+        "address": "tcp://1.1.1.1",
+        // "strategy": "prefer_ipv4",
         "detour": "proxy"
       },
       {
-        "tag": "test",
-        "address": "tcp://8.8.8.8",
-        "detour": "game"
-      },
-      {
         "tag": "bypass",
-        "address": "tls://1.12.12.12",
-        "strategy": "prefer_ipv6",
+        "address": "tls://dns.pub",
+        // "strategy": "prefer_ipv6",
+        "address_resolver": "direct",
         "detour": "direct"
       },
       {
         "tag": "direct",
-        "address": "tls://1.12.12.12",
+        "address": "223.5.5.5",
         "detour": "direct"
       },
       {
@@ -39,10 +36,6 @@
       }
     ],
     "rules": [
-      {
-        "clash_mode": "global",
-        "server": "proxy"
-      },
       {
         "geosite": [
           "private"
@@ -67,10 +60,26 @@
         "server": "bypass"
       },
       {
+        "process_name": [
+          "GenshinImpact.exe"
+        ],
+        "domain_suffix": [
+          "dispatchosglobal.yuanshen.com"
+        ],
+        "server": "proxy"
+      },
+      {
+        "process_name": [
+          "GenshinImpact.exe"
+        ],
+        "network": "udp",
+        "server": "proxy"
+      },
+      {
         "geosite": [
           "category-games@cn"
         ],
-        "server": "game"
+        "server": "bypass"
       },
       {
         "geosite": "geolocation-!cn",
@@ -92,7 +101,7 @@
       "auto_route": true,
       "strict_route": true,
       "sniff": true,
-      "sniff_override_destination": true,
+      // "sniff_override_destination": true,
       "type": "tun"
     },
     {
@@ -101,7 +110,7 @@
       "listen_port": 7890,
       "set_system_proxy": true,
       "sniff": true,
-      "sniff_override_destination": true,
+      // "sniff_override_destination": true,
       "type": "mixed"
     }
   ],
@@ -121,9 +130,9 @@
         "remote_9904",
         "remote_9900"
       ],
-      "url": "http://www.v2ex.com/generate_204",
-      "interval": "1m",
-      "tolerance": 1000,
+      "url": "http://www.apple.com/library/test/success.html",
+      "interval": "30s",
+      "tolerance": 300,
       "type": "urltest"
     },
     {
@@ -259,7 +268,7 @@
     },
     {
       "tag": "bypass",
-      "domain_strategy": "prefer_ipv6",
+      // "domain_strategy": "prefer_ipv6",
       "type": "direct"
     },
     {
@@ -281,6 +290,10 @@
           "geph4-client.exe"
         ],
         "outbound": "direct"
+      },
+      {
+        "outbound": "proxy",
+        "clash_mode": "global"
       },
       {
         "outbound": "direct",
@@ -342,6 +355,15 @@
         "process_name": [
           "GenshinImpact.exe"
         ],
+        "domain_suffix": [
+          "dispatchosglobal.yuanshen.com"
+        ],
+        "outbound": "proxy"
+      },
+      {
+        "process_name": [
+          "GenshinImpact.exe"
+        ],
         "network": "udp",
         "outbound": "game-udp"
       },
@@ -386,13 +408,13 @@
     ],
     "geoip": {
       "path": "geoip-Loyalsoldier.db",
-      "download_url": "https://github.com/1715173329/sing-geoip/releases/latest/download/geoip.db",
-      "download_detour": "proxy"
+      "download_url": "https://ghproxy.com/https://github.com/1715173329/sing-geoip/releases/latest/download/geoip.db",
+      "download_detour": "bypass"
     },
     "geosite": {
       "path": "geosite-Loyalsoldier.db",
-      "download_url": "https://github.com/1715173329/sing-geosite/releases/latest/download/geosite.db",
-      "download_detour": "proxy"
+      "download_url": "https://ghproxy.com/https://github.com/1715173329/sing-geosite/releases/latest/download/geosite.db",
+      "download_detour": "bypass"
     }
   }
 }

@@ -1,3 +1,4 @@
+ipv6: false
 
 rules:
   # Geph
@@ -78,7 +79,7 @@ proxy-groups:
       - remote_9903
       - remote_9904
       - remote_9900
-      - DIRECT
+      # - DIRECT
     url: "http://www.apple.com/library/test/success.html"
     interval: 300
   - name: PROXY
@@ -133,7 +134,6 @@ proxy-groups:
   - name: Game-UDP
     type: select
     proxies:
-      - remote_9900
       - DIRECT
       - PROXY
 
@@ -146,30 +146,19 @@ proxy-groups:
 
 dns:
   enable: true
-  ipv6: true
+  # ipv6: true
   listen: :53
   default-nameserver:
-    - 8.8.8.8
     - 223.5.5.5
+    - 8.8.8.8
   enhanced-mode: redir-host 
   use-hosts: true
   nameserver:
     - tls://dot.pub:853
     - tls://dns.alidns.com:853
   fallback:
-  # - 127.0.0.1:15353
-  # - 127.0.0.1:9921
-  # - 127.0.0.1:9922
-  # - 127.0.0.1:9923
-  # - 127.0.0.1:9924
-  # - 192.168.1.1:15353
-  # - 192.168.1.1:9921
-  # - 192.168.1.1:9922
-  # - 192.168.1.1:9923
-  # - 192.168.1.1:9924
-  - https://dns.google/dns-query
-  - https://cloudflare-dns.com/dns-query
-
+  - tcp://dns.google
+  - tcp://cloudflare-dns.com
   fallback-filter:
     geoip: true
     geoip-code: CN
@@ -264,7 +253,6 @@ mixed-port: 7890
 allow-lan: true
 mode: rule
 log-level: debug
-ipv6: true
 external-controller: 0.0.0.0:9090
 profile:
   store-selected: false

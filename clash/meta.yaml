@@ -75,14 +75,7 @@ proxy-groups:
       - remote_9903
       - remote_9904
       - remote_9900
-      - DIRECT
-    url: "http://www.apple.com/library/test/success.html"
-    interval: 300
-  - name: UDP-Fallback
-    type: fallback
-    proxies:
-      - remote_9900
-      - DIRECT
+      # - DIRECT
     url: "http://www.apple.com/library/test/success.html"
     interval: 300
   - name: PROXY
@@ -144,8 +137,6 @@ proxy-groups:
     type: select
     proxies:
       - DIRECT
-      - remote_9900
-      - PASS
       - PROXY
 
   - name: MATCH
@@ -195,8 +186,10 @@ dns:
     - tls://dns.pub:853
     - tls://dns.alidns.com:853
   fallback:
-    - https://dns.google/dns-query&h3=false
-    - https://cloudflare-dns.com/dns-query&h3=false
+    # - https://dns.google/dns-query&h3=false
+    # - https://cloudflare-dns.com/dns-query&h3=false
+    - tcp://dns.google
+    - tcp://cloudflare-dns.com
   fallback-filter:
     geoip: true
     geoip-code: CN
