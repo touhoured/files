@@ -308,12 +308,8 @@
         "outbound": "dns-out"
       },
       {
-        "geosite": [
-          "private"
-        ],
-        "geoip": [
-          "private"
-        ],
+        "geosite": "private",
+        "geoip": "private",
         "outbound": "direct"
       },
       {
@@ -341,6 +337,7 @@
       },
       {
         "domain_suffix": [
+          "cjjd20.com",
           "winos.me",
           "kinh.cc",
           "dandanplay.net",
@@ -348,48 +345,38 @@
           "metacubex.one",
           "dl.google.com",
           "yacd.haishan.me"
+          
         ],
         "outbound": "bypass"
       },
       {
-        "process_name": [
-          "GenshinImpact.exe"
-        ],
+        "process_name": "GenshinImpact.exe",
         "domain_suffix": [
           "dispatchosglobal.yuanshen.com"
         ],
         "outbound": "proxy"
       },
       {
-        "process_name": [
-          "GenshinImpact.exe"
-        ],
+        "process_name": "GenshinImpact.exe",
         "network": "udp",
         "outbound": "game-udp"
       },
       {
-        "geosite": [
-          "category-games@cn"
-        ],
+        "geosite": "category-games@cn",
+        "geoip": "cn",
         "outbound": "bypass"
       },
       {
-        "geosite": [
-          "bilibili"
-        ],
+        "geosite": "bilibili",
         "network": "udp",
         "outbound": "block"
       },
       {
-        "geosite": [
-          "bilibili"
-        ],
+        "geosite": "bilibili",
         "outbound": "bilibili"
       },
       {
-        "geosite": [
-          "openai"
-        ],
+        "geosite": "openai",
         "outbound": "openai"
       },
       {
@@ -397,12 +384,8 @@
         "outbound": "proxy"
       },
       {
-        "geosite": [
-          "cn"
-        ],
-        "geoip": [
-          "cn"
-        ],
+        "geosite": "cn",
+        "geoip": "cn",
         "outbound": "bypass"
       }
     ],
