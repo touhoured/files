@@ -21,7 +21,7 @@ proxies:
     port: 9904
 
 proxy-groups:
-  - name: auto
+  - name: Fallback
     type: fallback
     proxies:
       - local_9909
@@ -29,35 +29,19 @@ proxy-groups:
       - local_9902
       - local_9903
       - local_9904
-    url: "http://www.apple.com/library/test/success.html"
-    interval: 100
-  - name: fallback
-    type: fallback
-    proxies:
-      - auto
       - DIRECT
     url: "http://www.apple.com/library/test/success.html"
+    interval: 300
   - name: PROXY
     type: select
     proxies:
-      - fallback
-      - auto
+      - Fallback
       - DIRECT
       - local_9909
       - local_9901
       - local_9902
       - local_9903
       - local_9904
-  - name: Bypass
-    type: select
-    proxies:
-      - DIRECT
-      - PROXY
-  - name: geph_vpn
-    type: select
-    interface-name: tun-geph
-    proxies:
-      - DIRECT
 
   # Rule
   - name: OpenAI
@@ -72,7 +56,7 @@ proxy-groups:
       - DIRECT
       - PASS
       - PROXY
-  - name: bilibili
+  - name: Bilibili
     type: select
     proxies:
       - PASS
@@ -84,21 +68,25 @@ proxy-groups:
       - PASS
       - DIRECT
       - PROXY
-  - name: ip-attribution
+  - name: IP-Attribution
     type: select
     proxies:
       - PASS
       - PROXY
       - DIRECT
       - REJECT
-  - name: Games
+  - name: Game
     type: select
     proxies:
+      - PROXY
       - PASS
+      - DIRECT
+  - name: Game-UDP
+    type: select
+    proxies:
       - DIRECT
       - PROXY
 
-  # Other
   - name: MATCH
     type: select
     proxies:
@@ -111,51 +99,61 @@ rules:
   - PROCESS-NAME,geph4-client,DIRECT
   - PROCESS-NAME,geph4-client.exe,DIRECT
 
-  # App
-  - PROCESS-NAME,IDMan.exe,Downloader
-  - PROCESS-NAME,qbittorrent.exe,Downloader
-  - PROCESS-NAME,GenshinImpact.exe,Games
-  - PROCESS-NAME,SCPSL.exe,Games
-  - PROCESS-NAME,csgo.exe,Games
-  - RULE-SET,applications,Bypass
-
-  # Web site
-  - GEOSITE,bilibili,bilibili
-  - DOMAIN-SUFFIX,dockerproxy.com,Bypass
-  - DOMAIN-SUFFIX,metacubex.one,Bypass
-  - DOMAIN-SUFFIX,winos.me,Bypass
-  - DOMAIN-SUFFIX,kinh.cc,Bypass
-  - DOMAIN,yacd.haishan.me,Bypass
-  - DOMAIN,clash.razord.top,Bypass
-  - RULE-SET,ip-attribution,ip-attribution
-
-  # AD
+  # AD/Block
   - GEOSITE,category-ads-all,REJECT
   - GEOSITE,win-spy,REJECT
   - DOMAIN,ntp.msn.cn,REJECT
+  - AND,((OR,((DOMAIN-KEYWORD,bilibili),(DOMAIN-KEYWORD,douyu))),(NETWORK,UDP)),REJECT
+
+  # Private address
+  - GEOSITE,private,DIRECT
+  - GEOIP,private,DIRECT,no-resolve
+
+  # App
+  - RULE-SET,applications,DIRECT
+  - PROCESS-NAME,IDMan.exe,Downloader
+  - PROCESS-NAME,qbittorrent.exe,Downloader
+  # - PROCESS-NAME,SCPSL.exe,Game
+  # - PROCESS-NAME,csgo.exe,Game
+
+  # Web site
+  - DOMAIN-SUFFIX,dockerproxy.com,DIRECT
+  - DOMAIN-SUFFIX,metacubex.one,DIRECT
+  - DOMAIN-SUFFIX,winos.me,DIRECT
+  - DOMAIN-SUFFIX,kinh.cc,DIRECT
+  - DOMAIN,yacd.haishan.me,DIRECT
+  - DOMAIN,clash.razord.top,DIRECT
 
   # China CDN/Direct
-  - GEOSITE,apple-cn,Bypass
-  - GEOSITE,apple@cn,Bypass
-  - GEOSITE,google-cn,Bypass
-  - GEOSITE,google@cn,Bypass
-  - GEOSITE,microsoft@cn,Bypass
-  - GEOSITE,tld-cn,Bypass
-  - GEOSITE,category-games@cn,Games
+  - RULE-SET,ip-attribution-reject,REJECT
+  - RULE-SET,ip-attribution-direct,DIRECT
+  - RULE-SET,ip-attribution-proxy,IP-Attribution
+  - GEOSITE,bilibili,Bilibili
+  - GEOSITE,apple-cn,DIRECT
+  - GEOSITE,google-cn,DIRECT
+  - GEOSITE,microsoft@cn,DIRECT
+  - GEOSITE,tld-cn,DIRECT
   - GEOSITE,googlefcm,GoogleFCM
   - GEOSITE,openai,OpenAI
+  - SUB-RULE,(PROCESS-NAME,GenshinImpact.exe),genshin
+  - GEOSITE,category-games@cn,DIRECT
 
   # Not China
   - GEOSITE,geolocation-!cn,PROXY
 
   # China
-  - GEOSITE,private,Bypass
-  - GEOSITE,cn,Bypass
-  - GEOIP,private,Bypass
-  - GEOIP,cn,Bypass
+  - GEOSITE,cn,DIRECT
+  - GEOIP,cn,DIRECT,no-resolve
 
   # Other
   - MATCH,MATCH
+
+sub-rules:
+  genshin:
+    # - IP-CIDR,8.211.128.0/18,Games,udp # Genshin Asia
+    # - IP-CIDR,47.74.0.0/18,Games,udp # Genshin Asia
+    - NETWORK,UDP,Game-UDP
+    - DOMAIN,dispatchosglobal.yuanshen.com,PROXY # Genshin global
 
 rule-providers:
   applications:
