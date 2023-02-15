@@ -22,6 +22,7 @@ rules:
   # - PROCESS-NAME,csgo.exe,Game
 
   # Web site
+  - DOMAIN-SUFFIX,ghproxy.com,DIRECT
   - DOMAIN-SUFFIX,dockerproxy.com,DIRECT
   - DOMAIN-SUFFIX,metacubex.one,DIRECT
   - DOMAIN-SUFFIX,winos.me,DIRECT
@@ -32,7 +33,7 @@ rules:
   # China CDN/Direct
   - RULE-SET,ip-attribution-reject,REJECT
   - RULE-SET,ip-attribution-direct,DIRECT
-  - RULE-SET,ip-attribution-proxy,IP-Attribution
+  - RULE-SET,ip-attribution-proxy,IPAttribution
   - GEOSITE,bilibili,Bilibili
   - GEOSITE,apple-cn,DIRECT
   - GEOSITE,google-cn,DIRECT
@@ -70,13 +71,13 @@ proxy-groups:
       - local_9903
       - local_9904
       - remote_9909
+      - remote_9900
       - remote_9901
       - remote_9902
       - remote_9903
       - remote_9904
-      - remote_9900
       # - DIRECT
-    url: "http://www.apple.com/library/test/success.html"
+    url: "http://captive.apple.com/generate_204"
     interval: 300
   - name: PROXY
     type: select
@@ -89,12 +90,11 @@ proxy-groups:
       - local_9903
       - local_9904
       - remote_9909
+      - remote_9900
       - remote_9901
       - remote_9902
       - remote_9903
       - remote_9904
-      - remote_9900
-
   # Rule
   - name: OpenAI
     type: select
@@ -120,7 +120,7 @@ proxy-groups:
       - PASS
       - DIRECT
       - PROXY
-  - name: IP-Attribution
+  - name: IPAttribution
     type: select
     proxies:
       - PASS
@@ -138,7 +138,6 @@ proxy-groups:
     proxies:
       - DIRECT
       - PROXY
-
   - name: MATCH
     type: select
     proxies:
@@ -149,26 +148,25 @@ rule-providers:
   applications:
     type: http
     behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/applications.txt"
+    url: "https://ghproxy.com/https:/raw.githubusercontent.com/Loyalsoldier/clash-rules/release/applications.txt"
     path: ./ruleset/applications.yaml
     interval: 86400
-
   ip-attribution-direct:
     type: http
     behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/lwd-temp/anti-ip-attribution@main/generated/rule-provider-direct.yaml"
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/lwd-temp/anti-ip-attribution/main/generated/rule-provider-direct.yaml"
     path: ./ruleset/ip-attribution-direct.yaml
     interval: 86400
   ip-attribution-reject:
     type: http
     behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/lwd-temp/anti-ip-attribution@main/generated/rule-provider-reject.yaml"
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/lwd-temp/anti-ip-attribution/main/generated/rule-provider-reject.yaml"
     path: ./ruleset/ip-attribution-reject.yaml
     interval: 86400
   ip-attribution-proxy:
     type: http
     behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/lwd-temp/anti-ip-attribution@main/generated/rule-provider-proxy.yaml"
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/lwd-temp/anti-ip-attribution/main/generated/rule-provider-proxy.yaml"
     path: ./ruleset/ip-attribution-proxy.yaml
     interval: 86400
 
@@ -177,11 +175,11 @@ dns:
   ipv6: true
   listen: 0.0.0.0:53
   prefer-h3: false
-  default-nameserver:
-    - 8.8.8.8
-    - 223.5.5.5
+  # default-nameserver:
+  #   - 8.8.8.8
+  #   - 223.5.5.5
   enhanced-mode: redir-host
-  use-hosts: true
+  # use-hosts: true
   nameserver:
     - tls://dns.pub:853
     - tls://dns.alidns.com:853
@@ -193,6 +191,8 @@ dns:
   fallback-filter:
     geoip: true
     geoip-code: CN
+    geosite:
+      - "geolocation-!cn"
     ipcidr:
       - 0.0.0.0/8
       - 10.0.0.0/8
@@ -218,9 +218,6 @@ dns:
       - "+.googlevideo.com"
       - "+.msftconnecttest.com"
       - "+.msftncsi.com"
-      - msftconnecttest.com
-      - msftncsi.com
-
 
 # Premium
 tun:
@@ -236,12 +233,9 @@ tun:
 
 sniffer:
   enable: true
-  ForceDnsMapping: true
-  ParsePureIp: true
-  skip-domain:
-  - "+.apple.com"
-  - Mijia Cloud
-  - "+.jd.com"
+  force-dns-mapping: true
+  parse-pure-ip: false
+  override-destination: false
   sniff:
     TLS:
     HTTP:
@@ -249,6 +243,12 @@ sniffer:
       - 80
       - 8080-8880
       override-destination: true
+  force-domain:
+    - "+.v2ex.com"
+  skip-domain:
+  - "+.apple.com"
+  - Mijia Cloud
+  - "+.jd.com"
 
 proxies:
   - name: local_9909
@@ -271,7 +271,6 @@ proxies:
     type: socks5
     server: 127.0.0.1
     port: 9904
-
   - name: remote_9909
     type: socks5
     server: 192.168.1.1
@@ -312,6 +311,6 @@ geodata-mode: true
 tcp-concurrent: true
 unified-delay: true # Real delay check?
 geox-url:
-  geoip: "https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat"
-  geosite: "https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat"
-  mmdb: "https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country.mmdb"
+  geoip: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat@release/geoip.dat"
+  geosite: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat@release/geosite.dat"
+  mmdb: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/geoip@release/Country.mmdb"
