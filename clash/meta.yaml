@@ -311,6 +311,6 @@ geodata-mode: true
 tcp-concurrent: true
 unified-delay: true # Real delay check?
 geox-url:
-  geoip: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat@release/geoip.dat"
-  geosite: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat@release/geosite.dat"
-  mmdb: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/geoip@release/Country.mmdb"
+  geoip: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/geoip.dat"
+  geosite: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/geosite.dat"
+  mmdb: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country.mmdb"
