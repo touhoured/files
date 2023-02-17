@@ -132,7 +132,7 @@
       ],
       "url": "http://www.apple.com/library/test/success.html",
       "interval": "30s",
-      "tolerance": 300,
+      "tolerance": 9999,
       "type": "urltest"
     },
     {

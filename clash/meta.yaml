@@ -15,11 +15,11 @@ rules:
   - GEOIP,private,DIRECT,no-resolve
 
   # App
-  - RULE-SET,applications,DIRECT
   - PROCESS-NAME,IDMan.exe,Downloader
   - PROCESS-NAME,qbittorrent.exe,Downloader
   # - PROCESS-NAME,SCPSL.exe,Game
   # - PROCESS-NAME,csgo.exe,Game
+  - RULE-SET,applications,DIRECT
 
   # Web site
   - DOMAIN-SUFFIX,ghproxy.com,DIRECT
@@ -127,12 +127,12 @@ proxy-groups:
       - PROXY
       - DIRECT
       - REJECT
-  - name: Game
-    type: select
-    proxies:
-      - PROXY
-      - PASS
-      - DIRECT
+  # - name: Game
+  #   type: select
+  #   proxies:
+  #     - PROXY
+  #     - PASS
+  #     - DIRECT
   - name: Game-UDP
     type: select
     proxies:
