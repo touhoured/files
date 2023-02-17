@@ -46,11 +46,11 @@ proxy-groups:
     type: fallback
     proxies:
       - local_9909
-      - tun-geph
       - local_9901
       - local_9902
       - local_9903
       - local_9904
+      - tun-geph
       - DIRECT
     url: "http://captive.apple.com/generate_204"
     interval: 300
