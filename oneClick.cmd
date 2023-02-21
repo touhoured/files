@@ -4,5 +4,4 @@ git add *
 git commit -m "update"
 git push
 
-pause
-:: ping -n 2 127.1
+ping -n 2 127.1

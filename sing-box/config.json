@@ -37,6 +37,14 @@
     ],
     "rules": [
       {
+        "clash_mode": "global",
+        "server": "proxy"
+      },
+      {
+        "clash_mode": "direct",
+        "server": "direct"
+      },
+      {
         "geosite": [
           "private"
         ],
@@ -281,6 +289,7 @@
     }
   ],
   "route": {
+    "final": "proxy",
     "auto_detect_interface": true,
     "rules": [
       {
@@ -292,20 +301,20 @@
         "outbound": "direct"
       },
       {
-        "outbound": "proxy",
-        "clash_mode": "global"
-      },
-      {
-        "outbound": "direct",
-        "clash_mode": "direct"
-      },
-      {
-        "outbound": "dns-out",
-        "protocol": "dns"
+        "protocol": "dns",
+        "outbound": "dns-out"
       },
       {
         "port": 53,
         "outbound": "dns-out"
+      },
+      {
+        "clash_mode": "global",
+        "outbound": "proxy"
+      },
+      {
+        "clash_mode": "direct",
+        "outbound": "direct"
       },
       {
         "geosite": "private",
@@ -352,9 +361,10 @@
       },
       {
         "process_name": "GenshinImpact.exe",
-        "domain_suffix": [
-          "dispatchosglobal.yuanshen.com"
-        ],
+        // "domain_suffix": [
+        //   "dispatchosglobal.yuanshen.com"
+        // ],
+        "network": "tcp",
         "outbound": "proxy"
       },
       {
