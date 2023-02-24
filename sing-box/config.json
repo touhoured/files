@@ -45,9 +45,7 @@
         "server": "direct"
       },
       {
-        "geosite": [
-          "private"
-        ],
+        "geosite": "private",
         "server": "direct"
       },
       {
@@ -68,25 +66,12 @@
         "server": "bypass"
       },
       {
-        "process_name": [
-          "GenshinImpact.exe"
-        ],
-        "domain_suffix": [
-          "dispatchosglobal.yuanshen.com"
-        ],
+        "process_name": "GenshinImpact.exe",
+        "domain_suffix": "dispatchosglobal.yuanshen.com",
         "server": "proxy"
       },
       {
-        "process_name": [
-          "GenshinImpact.exe"
-        ],
-        "network": "udp",
-        "server": "proxy"
-      },
-      {
-        "geosite": [
-          "category-games@cn"
-        ],
+        "geosite": "category-games@cn",
         "server": "bypass"
       },
       {
@@ -94,9 +79,7 @@
         "server": "proxy"
       },
       {
-        "geosite": [
-          "cn"
-        ],
+        "geosite": "cn",
         "server": "bypass"
       }
     ]
@@ -331,6 +314,7 @@
       },
       {
         "process_name": [
+          "MiniThunderPlatform.exe",
           "aria2c.exe",
           "IDMan.exe"
         ],
@@ -374,7 +358,7 @@
       },
       {
         "geosite": "category-games@cn",
-        "geoip": "cn",
+        // "geoip": "cn",
         "outbound": "bypass"
       },
       {
