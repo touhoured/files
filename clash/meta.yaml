@@ -172,7 +172,7 @@ rule-providers:
 
 dns:
   enable: true
-  ipv6: true
+  # ipv6: true
   listen: 0.0.0.0:53
   prefer-h3: false
   # default-nameserver:
