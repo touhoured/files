@@ -25,7 +25,6 @@ rules:
   - RULE-SET,applications,DIRECT
 
   # Web site
-  - DOMAIN-SUFFIX,freechatgpt.lol,DIRECT
   - DOMAIN-SUFFIX,ghproxy.com,DIRECT
   - DOMAIN-SUFFIX,dockerproxy.com,DIRECT
   - DOMAIN-SUFFIX,metacubex.one,DIRECT
