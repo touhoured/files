@@ -273,8 +273,16 @@
   ],
   "route": {
     "final": "proxy",
-    "auto_detect_interface": true,
+    // "auto_detect_interface": true,
+    "default_interface": "WLAN",
     "rules": [
+      {
+        "process_name": [
+          "sing-box",
+          "sing-box.exe"
+        ],
+        "outbound": "block"
+      },
       {
         "process_name": [
           "libgeph.so",
