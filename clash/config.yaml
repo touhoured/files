@@ -25,6 +25,9 @@ rules:
   - RULE-SET,applications,DIRECT
 
   # Web site
+  - DOMAIN-SUFFIX,bing.com,PROXY
+  - DOMAIN-SUFFIX,dl.sourceforge.net,DIRECT
+  - DOMAIN-SUFFIX,asmr-100.com,DIRECT
   - DOMAIN-SUFFIX,ghproxy.com,DIRECT
   - DOMAIN-SUFFIX,dockerproxy.com,DIRECT
   - DOMAIN-SUFFIX,metacubex.one,DIRECT
@@ -104,8 +107,8 @@ proxy-groups:
   - name: OpenAI
     type: select
     proxies:
-      - DIRECT
       - PROXY
+      - DIRECT
   - name: GoogleFCM
     type: select
     proxies:

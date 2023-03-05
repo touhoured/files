@@ -26,6 +26,12 @@
         "detour": "direct"
       },
       {
+        "tag": "bypass-google",
+        "address": "tls://dns.google",
+        "address_resolver": "direct",
+        "detour": "direct"
+      },
+      {
         "tag": "direct",
         "address": "223.5.5.5",
         "detour": "direct"
@@ -55,13 +61,19 @@
       },
       {
         "domain_suffix": [
+          // "openai.com",
           "winos.me",
           "kinh.cc",
           "dandanplay.net",
-          "geilijiasu.com",
           "metacubex.one",
           "dl.google.com",
           "yacd.haishan.me"
+        ],
+        "server": "bypass-google"
+      },
+      {
+        "domain_suffix": [
+          "geilijiasu.com"
         ],
         "server": "bypass"
       },
@@ -171,8 +183,8 @@
     {
       "tag": "openai",
       "outbounds": [
-        "bypass",
-        "proxy"
+        "proxy",
+        "bypass"
       ],
       "type": "selector"
     },
@@ -338,6 +350,8 @@
       },
       {
         "domain_suffix": [
+          "dl.sourceforge.net",
+          "asmr-100.com",
           "ghporxy.com",
           "dockerproxy.com",
           "winos.me",
@@ -350,6 +364,13 @@
           
         ],
         "outbound": "bypass"
+      },
+      {
+        "domain_suffix": [
+          "bing.com"
+          
+        ],
+        "outbound": "proxy"
       },
       {
         "process_name": "GenshinImpact.exe",
