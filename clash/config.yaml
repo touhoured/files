@@ -17,15 +17,12 @@ rules:
   - SCRIPT,bilibili-p2p,REJECT
   # - SCRIPT,quic,REJECT
 
-  # App
+  # Custom
   - PROCESS-NAME,IDMan.exe,Downloader
   - PROCESS-NAME,qbittorrent.exe,Downloader
-  # - PROCESS-NAME,SCPSL.exe,Game
-  # - PROCESS-NAME,csgo.exe,Game
   - RULE-SET,applications,DIRECT
-
-  # Web site
-  - DOMAIN-SUFFIX,bing.com,PROXY
+  - DOMAIN-SUFFIX,bing.com,Bing
+  - DOMAIN-SUFFIX,bingapis.com,Bing
   - DOMAIN-SUFFIX,dl.sourceforge.net,DIRECT
   - DOMAIN-SUFFIX,asmr-100.com,DIRECT
   - DOMAIN-SUFFIX,ghproxy.com,DIRECT
@@ -35,28 +32,25 @@ rules:
   - DOMAIN-SUFFIX,kinh.cc,DIRECT
   - DOMAIN,yacd.haishan.me,DIRECT
   - DOMAIN,clash.razord.top,DIRECT
+  - RULE-SET,bilibili,Bilibili
+  - SCRIPT,genshin-udp,Game-UDP
+  - DOMAIN,dispatchosglobal.yuanshen.com,PROXY # Genshin global
+  # - DOMAIN-SUFFIX,openai.com,OpenAI
 
   # China CDN/Direct/Game
   - RULE-SET,ip-attribution-reject,REJECT
   - RULE-SET,ip-attribution-direct,DIRECT
   - RULE-SET,ip-attribution-proxy,IPAttribution
-  - RULE-SET,bilibili,Bilibili
-  - SCRIPT,genshin-udp,Game-UDP
-  - DOMAIN,dispatchosglobal.yuanshen.com,PROXY # Genshin global
-  - DOMAIN-SUFFIX,openai.com,OpenAI
   - RULE-SET,icloud,DIRECT
   - RULE-SET,apple,DIRECT
   - RULE-SET,google,DIRECT
-
   # Not China
   - RULE-SET,proxy,PROXY
   - RULE-SET,telegramcidr,PROXY,no-resolve
-
   # China
   - RULE-SET,direct,DIRECT
   - RULE-SET,cncidr,DIRECT,no-resolve
   - GEOIP,CN,DIRECT,no-resolve
-
   # Other
   - MATCH,MATCH
 
@@ -104,6 +98,11 @@ proxy-groups:
       - remote_9904
 
   # Rule
+  - name: Bing
+    type: select
+    proxies:
+      - DIRECT
+      - PROXY
   - name: OpenAI
     type: select
     proxies:

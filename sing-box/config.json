@@ -365,13 +365,13 @@
         ],
         "outbound": "bypass"
       },
-      {
-        "domain_suffix": [
-          "bing.com"
+      // {
+      //   "domain_suffix": [
+      //     "bing.com"
           
-        ],
-        "outbound": "proxy"
-      },
+      //   ],
+      //   "outbound": "proxy"
+      // },
       {
         "process_name": "GenshinImpact.exe",
         // "domain_suffix": [

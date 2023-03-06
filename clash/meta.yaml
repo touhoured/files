@@ -14,15 +14,13 @@ rules:
   - GEOSITE,private,DIRECT
   - GEOIP,private,DIRECT,no-resolve
 
-  # App
+  # Custom
   - PROCESS-NAME,IDMan.exe,Downloader
   - PROCESS-NAME,qbittorrent.exe,Downloader
-  # - PROCESS-NAME,SCPSL.exe,Game
-  # - PROCESS-NAME,csgo.exe,Game
   - RULE-SET,applications,DIRECT
-
-  # Web site
-  - DOMAIN-SUFFIX,bing.com,PROXY
+  # - GEOSITE,openai,OpenAI
+  - GEOSITE,bing,Bing
+  - GEOSITE,bilibili,Bilibili
   - DOMAIN-SUFFIX,dl.sourceforge.net,DIRECT
   - DOMAIN-SUFFIX,asmr-100.com,DIRECT
   - DOMAIN-SUFFIX,ghproxy.com,DIRECT
@@ -32,24 +30,20 @@ rules:
   - DOMAIN-SUFFIX,kinh.cc,DIRECT
   - DOMAIN,yacd.haishan.me,DIRECT
   - DOMAIN,clash.razord.top,DIRECT
+  - SUB-RULE,(PROCESS-NAME,GenshinImpact.exe),genshin
 
   # China CDN/Direct
   - RULE-SET,ip-attribution-reject,REJECT
   - RULE-SET,ip-attribution-direct,DIRECT
   - RULE-SET,ip-attribution-proxy,IPAttribution
-  - GEOSITE,bilibili,Bilibili
   - GEOSITE,apple-cn,DIRECT
   - GEOSITE,google-cn,DIRECT
   - GEOSITE,microsoft@cn,DIRECT
   - GEOSITE,tld-cn,DIRECT
   - GEOSITE,googlefcm,GoogleFCM
-  - GEOSITE,openai,OpenAI
-  - SUB-RULE,(PROCESS-NAME,GenshinImpact.exe),genshin
   - GEOSITE,category-games@cn,DIRECT
-
   # Not China
   - GEOSITE,geolocation-!cn,PROXY
-
   # China
   - GEOSITE,cn,DIRECT
   - GEOIP,cn,DIRECT,no-resolve
@@ -99,6 +93,12 @@ proxy-groups:
       - remote_9903
       - remote_9904
   # Rule
+  - name: Bing
+    type: select
+    proxies:
+      - PASS
+      - DIRECT
+      - PROXY
   - name: OpenAI
     type: select
     proxies:

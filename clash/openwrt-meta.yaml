@@ -14,7 +14,8 @@ rules:
   # App
   # - RULE-SET,applications,DIRECT
   # Web site
-  - DOMAIN-SUFFIX,bing.com,PROXY
+  - DOMAIN-SUFFIX,bing.com,Bing
+  - DOMAIN-SUFFIX,bingapis.com,Bing
   - DOMAIN-SUFFIX,dl.sourceforge.net,DIRECT
   - DOMAIN-SUFFIX,asmr-100.com,DIRECT
   - DOMAIN-SUFFIX,ghproxy.com,DIRECT
@@ -74,6 +75,11 @@ proxy-groups:
       - DIRECT
     interface-name: tun-geph
   # Rule
+  - name: Bing
+    type: select
+    proxies:
+      - DIRECT
+      - PROXY
   - name: OpenAI
     type: select
     proxies:
