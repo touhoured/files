@@ -1,0 +1,412 @@
+{
+  "log": {
+    "disabled": false,
+    "level": "debug",
+    "timestamp": true
+  },
+  "experimental": {
+    "clash_api": {
+      "external_controller": "127.0.0.1:9090",
+      "external_ui": "yacd",
+      "store_selected": false
+    }
+  },
+  "dns": {
+    "servers": [
+      {
+        "tag": "proxy",
+        "address": "tcp://cloudflare-dns.com",
+        "address_resolver": "proxy-ip",
+        // "strategy": "prefer_ipv4",
+        "detour": "proxy"
+      },
+      {
+        "tag": "proxy-ip",
+        "address": "tcp://1.1.1.1",
+        "detour": "proxy"
+      },
+      {
+        "tag": "bypass",
+        "address": "tls://dns.pub",
+        "address_resolver": "bypass-ip",
+        // "strategy": "prefer_ipv6",
+        "detour": "direct"
+      },
+      {
+        "tag": "bypass-ip",
+        "address": "tls://223.5.5.5",
+        "detour": "direct"
+      },
+      {
+        "tag": "bypass-google",
+        "address": "tls://dns.google",
+        "address_resolver": "direct",
+        "detour": "direct"
+      },
+      {
+        "tag": "direct",
+        "address": "tls://223.5.5.5",
+        "detour": "direct"
+      },
+      {
+        "tag": "block",
+        "address": "rcode://success"
+      }
+    ],
+    "rules": [
+      {
+        "clash_mode": "global",
+        "server": "proxy"
+      },
+      {
+        "clash_mode": "direct",
+        "server": "direct"
+      },
+      {
+        "geosite": "private",
+        "server": "direct"
+      },
+      {
+        "geosite": "category-ads-all",
+        "disable_cache": true,
+        "server": "block"
+      },
+      {
+        "domain_suffix": [
+          "winos.me",
+          "kinh.cc",
+          "dandanplay.net",
+          "metacubex.one",
+          "dl.google.com",
+          "yacd.haishan.me"
+        ],
+        "server": "bypass-google"
+      },
+      {
+        "domain_suffix": [
+          "geilijiasu.com"
+        ],
+        "server": "bypass"
+      },
+      {
+        "process_name": "GenshinImpact.exe",
+        "domain_suffix": "dispatchosglobal.yuanshen.com",
+        "server": "proxy"
+      },
+      {
+        "geosite": "category-games@cn",
+        "server": "bypass"
+      },
+      {
+        "geosite": "geolocation-!cn",
+        "server": "proxy"
+      },
+      {
+        "geosite": "cn",
+        "server": "bypass"
+      }
+    ]
+  },
+  "inbounds": [
+    {
+      "tag": "tun-in",
+      "inet4_address": "172.19.0.1/30",
+      "inet6_address": "fdfe:dcba:9876::1/126",
+      "auto_route": true,
+      "strict_route": true,
+      "sniff": true,
+      // "sniff_override_destination": true,
+      "type": "tun"
+    },
+    {
+      "tag": "mixed-in",
+      "listen": "0.0.0.0",
+      "listen_port": 7890,
+      "set_system_proxy": false,
+      "sniff": true,
+      // "sniff_override_destination": true,
+      "type": "mixed"
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "fallback",
+      "outbounds": [
+        "local_9909",
+        "local_9901",
+        "local_9902",
+        "local_9903",
+        "local_9904",
+        "local_2080",
+        "local_2090"
+      ],
+      "url": "http://www.apple.com/library/test/success.html",
+      "interval": "30s",
+      "tolerance": 9999,
+      "type": "urltest"
+    },
+    {
+      "tag": "proxy",
+      "outbounds": [
+        "fallback",
+        "local_9909",
+        "local_9901",
+        "local_9902",
+        "local_9903",
+        "local_9904",
+        "local_2080",
+        "local_2090"
+      ],
+      "type": "selector"
+    },
+    {
+      "tag": "game",
+      "outbounds": [
+        "bypass",
+        "proxy"
+      ],
+      "type": "selector"
+    },
+    {
+      "tag": "game-udp",
+      "outbounds": [
+        "bypass",
+        "proxy"
+      ],
+      "type": "selector"
+    },
+    {
+      "tag": "bilibili",
+      "outbounds": [
+        "bypass",
+        "proxy"
+      ],
+      "type": "selector"
+    },
+    // {
+    //   "tag": "openai",
+    //   "outbounds": [
+    //     "proxy",
+    //     "bypass"
+    //   ],
+    //   "type": "selector"
+    // },
+    {
+      "tag": "local_9901",
+      "server": "127.0.0.1",
+      "server_port": 9901,
+      "version": "5",
+      "type": "socks"
+    },
+    {
+      "tag": "local_9902",
+      "server": "127.0.0.1",
+      "server_port": 9902,
+      "version": "5",
+      "type": "socks"
+    },
+    {
+      "tag": "local_9903",
+      "server": "127.0.0.1",
+      "server_port": 9903,
+      "version": "5",
+      "type": "socks"
+    },
+    {
+      "tag": "local_9904",
+      "server": "127.0.0.1",
+      "server_port": 9904,
+      "version": "5",
+      "type": "socks"
+    },
+    {
+      "tag": "local_9909",
+      "server": "127.0.0.1",
+      "server_port": 9909,
+      "version": "5",
+      "type": "socks"
+    },
+    {
+      "tag": "local_2080",
+      "server": "127.0.0.1",
+      "server_port": 2080,
+      "version": "5",
+      "type": "socks"
+    },
+    {
+      "tag": "local_2090",
+      "server": "127.0.0.1",
+      "server_port": 2090,
+      "version": "5",
+      "type": "socks"
+    },
+    {
+      "tag": "direct",
+      "type": "direct"
+    },
+    {
+      "tag": "bypass",
+      // "domain_strategy": "prefer_ipv6",
+      "type": "direct"
+    },
+    {
+      "tag": "block",
+      "type": "block"
+    },
+    {
+      "tag": "dns-out",
+      "type": "dns"
+    }
+  ],
+  "route": {
+    // "geoip": {
+    //   "path": "geoip.db",
+    //   "download_url": "https://ghproxy.com/https://github.com/1715173329/sing-geoip/releases/latest/download/geoip.db",
+    //   "download_detour": "bypass"
+    // },
+    // "geosite": {
+    //   "path": "geosite.db",
+    //   "download_url": "https://ghproxy.com/https://github.com/1715173329/sing-geosite/releases/latest/download/geosite.db",
+    //   "download_detour": "bypass"
+    // },
+    "final": "proxy",
+    // "auto_detect_interface": true,
+    // "default_interface": "WLAN",
+    "rules": [
+      {
+        "process_name": [
+          "sing-box",
+          "sing-box.exe"
+        ],
+        "outbound": "block"
+      },
+      {
+        "process_name": [
+          "libgeph.so",
+          "geph4-client",
+          "geph4-client.exe"
+        ],
+        "outbound": "direct"
+      },
+      {
+        "package_name": [
+          "io.nekohasekai.sfa"
+        ],
+        "outbound": "direct"
+      },
+      {
+        "protocol": "dns",
+        "outbound": "dns-out"
+      },
+      {
+        "port": 53,
+        "outbound": "dns-out"
+      },
+      {
+        "clash_mode": "global",
+        "outbound": "proxy"
+      },
+      {
+        "clash_mode": "direct",
+        "outbound": "direct"
+      },
+      {
+        "geosite": "private",
+        "geoip": "private",
+        "outbound": "direct"
+      },
+      {
+        "clash_mode": "global",
+        "outbound": "proxy"
+      },
+      {
+        "geosite": "category-ads-all",
+        "outbound": "block"
+      },
+      {
+        "process_name": [
+          "MiniThunderPlatform.exe",
+          "aria2c.exe",
+          "IDMan.exe"
+        ],
+        "outbound": "bypass"
+      },
+      {
+        "geosite": [
+          "bilibili",
+          "douyu"
+        ],
+        "network": "udp",
+        "outbound": "block"
+      },
+      {
+        "port": 443,
+        "network": "udp",
+        "outbound": "block"
+      },
+      {
+        "domain_suffix": [
+          "cjjd20.com",
+          "dl.sourceforge.net",
+          "asmr-100.com",
+          "ghporxy.com",
+          "dockerproxy.com",
+          "winos.me",
+          "kinh.cc",
+          "dandanplay.net",
+          "geilijiasu.com",
+          "metacubex.one",
+          "dl.google.com",
+          "yacd.haishan.me"
+        ],
+        "outbound": "bypass"
+      },
+      // {
+      //   "domain_suffix": [
+      //     "bing.com"
+      //   ],
+      //   "outbound": "proxy"
+      // },
+      {
+        "process_name": "GenshinImpact.exe",
+        // "domain_suffix": [
+        //   "dispatchosglobal.yuanshen.com"
+        // ],
+        "network": "tcp",
+        "outbound": "proxy"
+      },
+      {
+        "process_name": "GenshinImpact.exe",
+        "network": "udp",
+        "outbound": "game-udp"
+      },
+      {
+        "geosite": "category-games@cn",
+        // "geoip": "cn",
+        "outbound": "bypass"
+      },
+      // {
+      //   "geosite": "bilibili",
+      //   "network": "udp",
+      //   "outbound": "block"
+      // },
+      {
+        "geosite": "bilibili",
+        "outbound": "bilibili"
+      },
+      // {
+      //   "geosite": "openai",
+      //   "outbound": "openai"
+      // },
+      {
+        "geosite": "geolocation-!cn",
+        "outbound": "proxy"
+      },
+      {
+        "geosite": "cn",
+        "geoip": "cn",
+        "outbound": "bypass"
+      }
+    ]
+  }
+}

@@ -1,0 +1,343 @@
+ipv6: true
+
+rules:
+  # Geph
+  - PROCESS-NAME,libgeph.so,DIRECT
+  - PROCESS-NAME,geph4-client,DIRECT
+  - PROCESS-NAME,geph4-client.exe,DIRECT
+
+  # Private address
+  - RULE-SET,private,DIRECT
+  - RULE-SET,lancidr,DIRECT,no-resolve
+  - GEOIP,LAN,DIRECT,no-resolve
+
+  # AD/Block
+  - RULE-SET,reject,REJECT
+  - RULE-SET,custom-reject,REJECT
+  - SCRIPT,bilibili-p2p,REJECT
+  # - SCRIPT,quic,REJECT
+
+  # Custom
+  - RULE-SET,custom-proxy,PROXY
+  - RULE-SET,custom-direct,DIRECT
+  - PROCESS-NAME,IDMan.exe,Downloader
+  - PROCESS-NAME,qbittorrent.exe,Downloader
+  - RULE-SET,applications,DIRECT
+  - DOMAIN-SUFFIX,bing.com,Bing
+  - DOMAIN-SUFFIX,bingapis.com,Bing
+  - RULE-SET,bilibili,Bilibili
+  - SCRIPT,genshin-udp,Game-UDP
+  - DOMAIN,dispatchosglobal.yuanshen.com,PROXY # Genshin global
+  # - DOMAIN-SUFFIX,openai.com,OpenAI
+
+  # China CDN/Direct/Game
+  - RULE-SET,ip-attribution-reject,REJECT
+  - RULE-SET,ip-attribution-direct,DIRECT
+  - RULE-SET,ip-attribution-proxy,IPAttribution
+  - RULE-SET,icloud,DIRECT
+  - RULE-SET,apple,DIRECT
+  - RULE-SET,google,DIRECT
+  # Not China
+  - RULE-SET,proxy,PROXY
+  - RULE-SET,telegramcidr,PROXY,no-resolve
+  # China
+  - RULE-SET,direct,DIRECT
+  - RULE-SET,cncidr,DIRECT,no-resolve
+  - GEOIP,CN,DIRECT,no-resolve
+  # Other
+  - MATCH,MATCH
+
+script:
+  shortcuts:
+    quic: network == 'udp' and dst_port == 443
+    # bilibili-p2p: network == 'udp' and host.endswith('bilibili.com')
+    bilibili-p2p: network == 'udp' and match_provider('bilibili')
+    # genshin-asia-udp: network == 'udp' and in_cidr(dst_ip,'8.211.128.0/18')
+    genshin-udp: network == 'udp' and resolve_process_name() == 'GenshinImpact.exe'
+
+proxy-groups:
+  - name: Fallback
+    type: fallback
+    proxies:
+      - local_9909
+      - local_9901
+      - local_9902
+      - local_9903
+      - local_9904
+      # - DIRECT
+    url: "http://captive.apple.com/generate_204"
+    interval: 300
+  - name: PROXY
+    type: select
+    proxies:
+      - Fallback
+      - DIRECT
+      - local_9909
+      - local_9901
+      - local_9902
+      - local_9903
+      - local_9904
+      - local_9900
+
+  # Rule
+  - name: Bing
+    type: select
+    proxies:
+      - PROXY
+      - DIRECT
+  - name: OpenAI
+    type: select
+    proxies:
+      - PROXY
+      - DIRECT
+  - name: GoogleFCM
+    type: select
+    proxies:
+      - DIRECT
+      - PROXY
+  - name: Bilibili
+    type: select
+    proxies:
+      - DIRECT
+      - PROXY
+  - name: Downloader
+    type: select
+    proxies:
+      - DIRECT
+      - PROXY
+  - name: IPAttribution
+    type: select
+    proxies:
+      - PROXY
+      - DIRECT
+      - REJECT
+  # - name: Game
+  #   type: select
+  #   proxies:
+  #     - PROXY
+  #     - DIRECT
+  - name: Game-UDP
+    type: select
+    proxies:
+      - DIRECT
+      - PROXY
+  - name: MATCH
+    type: select
+    proxies:
+      - PROXY
+      - DIRECT
+
+
+dns:
+  enable: true
+  # ipv6: true
+  listen: :53
+  # default-nameserver:
+  #   - 223.5.5.5
+  #   - 8.8.8.8
+  # enhanced-mode: fake-ip
+  # use-hosts: true
+  nameserver:
+    - tls://dot.pub:853
+    - tls://dns.alidns.com:853
+  fallback:
+  - tcp://dns.google
+  - tcp://cloudflare-dns.com
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
+    ipcidr:
+      - 0.0.0.0/8
+      - 10.0.0.0/8
+      - 100.64.0.0/10
+      - 127.0.0.0/8
+      - 169.254.0.0/16
+      - 172.16.0.0/12
+      - 192.0.0.0/24
+      - 192.0.2.0/24
+      - 192.88.99.0/24
+      - 192.168.0.0/16
+      - 198.18.0.0/15
+      - 198.51.100.0/24
+      - 203.0.113.0/24
+      - 224.0.0.0/4
+      - 240.0.0.0/4
+      - 255.255.255.255/32
+    domain:
+      - "+.google.com"
+      - "+.facebook.com"
+      - "+.youtube.com"
+      - "+.githubusercontent.com"
+      - "+.googlevideo.com"
+      - "+.msftconnecttest.com"
+      - "+.msftncsi.com"
+
+# Premium
+tun:
+  enable: false
+  stack: system
+  auto-route: true
+  auto-redir: true # Linux?
+  # strict_route: true
+  auto-detect-interface: true
+  dns-hijack:
+    - any:53
+
+proxies:
+  - name: local_9909
+    type: socks5
+    server: 127.0.0.1
+    port: 9909
+  - name: local_9901
+    type: socks5
+    server: 127.0.0.1
+    port: 9901
+  - name: local_9902
+    type: socks5
+    server: 127.0.0.1
+    port: 9902
+  - name: local_9903
+    type: socks5
+    server: 127.0.0.1
+    port: 9903
+  - name: local_9904
+    type: socks5
+    server: 127.0.0.1
+    port: 9904
+  - name: local_9900
+    type: socks5
+    server: 127.0.0.1
+    port: 9900
+
+mixed-port: 7890
+allow-lan: true
+mode: rule
+log-level: debug
+external-controller: 0.0.0.0:9090
+profile:
+  store-selected: true
+
+rule-providers:
+  reject:
+    type: http
+    behavior: domain
+    url: "https://ghproxy.com/https:/raw.githubusercontent.com/Loyalsoldier/clash-rules/release/reject.txt"
+    path: ./ruleset/reject.yaml
+    interval: 86400
+  icloud:
+    type: http
+    behavior: domain
+    url: "https://ghproxy.com/https:/raw.githubusercontent.com/Loyalsoldier/clash-rules/release/icloud.txt"
+    path: ./ruleset/icloud.yaml
+    interval: 86400
+  apple:
+    type: http
+    behavior: domain
+    url: "https://ghproxy.com/https:/raw.githubusercontent.com/Loyalsoldier/clash-rules/release/apple.txt"
+    path: ./ruleset/apple.yaml
+    interval: 86400
+  google:
+    type: http
+    behavior: domain
+    url: "https://ghproxy.com/https:/raw.githubusercontent.com/Loyalsoldier/clash-rules/release/google.txt"
+    path: ./ruleset/google.yaml
+    interval: 86400
+  proxy:
+    type: http
+    behavior: domain
+    url: "https://ghproxy.com/https:/raw.githubusercontent.com/Loyalsoldier/clash-rules/release/proxy.txt"
+    path: ./ruleset/proxy.yaml
+    interval: 86400
+  direct:
+    type: http
+    behavior: domain
+    url: "https://ghproxy.com/https:/raw.githubusercontent.com/Loyalsoldier/clash-rules/release/direct.txt"
+    path: ./ruleset/direct.yaml
+    interval: 86400
+  private:
+    type: http
+    behavior: domain
+    url: "https://ghproxy.com/https:/raw.githubusercontent.com/Loyalsoldier/clash-rules/release/private.txt"
+    path: ./ruleset/private.yaml
+    interval: 86400
+  gfw:
+    type: http
+    behavior: domain
+    url: "https://ghproxy.com/https:/raw.githubusercontent.com/Loyalsoldier/clash-rules/release/gfw.txt"
+    path: ./ruleset/gfw.yaml
+    interval: 86400
+  greatfire:
+    type: http
+    behavior: domain
+    url: "https://ghproxy.com/https:/raw.githubusercontent.com/Loyalsoldier/clash-rules/release/greatfire.txt"
+    path: ./ruleset/greatfire.yaml
+    interval: 86400
+  tld-not-cn:
+    type: http
+    behavior: domain
+    url: "https://ghproxy.com/https:/raw.githubusercontent.com/Loyalsoldier/clash-rules/release/tld-not-cn.txt"
+    path: ./ruleset/tld-not-cn.yaml
+    interval: 86400
+  telegramcidr:
+    type: http
+    behavior: ipcidr
+    url: "https://ghproxy.com/https:/raw.githubusercontent.com/Loyalsoldier/clash-rules/release/telegramcidr.txt"
+    path: ./ruleset/telegramcidr.yaml
+    interval: 86400
+  cncidr:
+    type: http
+    behavior: ipcidr
+    url: "https://ghproxy.com/https:/raw.githubusercontent.com/Loyalsoldier/clash-rules/release/cncidr.txt"
+    path: ./ruleset/cncidr.yaml
+    interval: 86400
+  lancidr:
+    type: http
+    behavior: ipcidr
+    url: "https://ghproxy.com/https:/raw.githubusercontent.com/Loyalsoldier/clash-rules/release/lancidr.txt"
+    path: ./ruleset/lancidr.yaml
+    interval: 86400
+  applications:
+    type: http
+    behavior: classical
+    url: "https://ghproxy.com/https:/raw.githubusercontent.com/Loyalsoldier/clash-rules/release/applications.txt"
+    path: ./ruleset/applications.yaml
+    interval: 86400
+  ip-attribution-direct:
+    type: http
+    behavior: classical
+    url: "https://ghproxy.com/https:/raw.githubusercontent.com/lwd-temp/anti-ip-attribution/main/generated/rule-provider-direct.yaml"
+    path: ./ruleset/ip-attribution-direct.yaml
+    interval: 86400
+  ip-attribution-reject:
+    type: http
+    behavior: classical
+    url: "https://ghproxy.com/https:/raw.githubusercontent.com/lwd-temp/anti-ip-attribution/main/generated/rule-provider-reject.yaml"
+    path: ./ruleset/ip-attribution-reject.yaml
+    interval: 86400
+  ip-attribution-proxy:
+    type: http
+    behavior: classical
+    url: "https://ghproxy.com/https:/raw.githubusercontent.com/lwd-temp/anti-ip-attribution/main/generated/rule-provider-proxy.yaml"
+    path: ./ruleset/ip-attribution-proxy.yaml
+    interval: 86400
+  bilibili:
+    type: http
+    behavior: classical
+    url: "https://ghproxy.com/https:/raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/BiliBili/BiliBili.yaml"
+    path: ./ruleset/bilibili.yaml
+    interval: 86400
+  custom-proxy:
+    type: file
+    behavior: classical
+    path: ./ruleset/custom-proxy.yaml
+    interval: 86400
+  custom-direct:
+    type: file
+    behavior: classical
+    path: ./ruleset/custom-direct.yaml
+    interval: 86400
+  custom-reject:
+    type: file
+    behavior: classical
+    path: ./ruleset/custom-reject.yaml
+    interval: 86400

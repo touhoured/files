@@ -1,0 +1,219 @@
+rules:
+  # Geph
+  - PROCESS-NAME,libgeph.so,DIRECT
+  - PROCESS-NAME,geph4-client,DIRECT
+  - PROCESS-NAME,geph4-client.exe,DIRECT
+  # AD/Block
+  - GEOSITE,category-ads-all,REJECT
+  - GEOSITE,win-spy,REJECT
+  - DOMAIN,ntp.msn.cn,REJECT
+  - AND,((OR,((DOMAIN-KEYWORD,bilibili),(DOMAIN-KEYWORD,douyu))),(NETWORK,UDP)),REJECT
+  # Private address
+  - GEOSITE,private,DIRECT
+  - GEOIP,private,DIRECT,no-resolve
+  # App
+  # - RULE-SET,applications,DIRECT
+  # Web site
+  - DOMAIN-SUFFIX,bing.com,Bing
+  - DOMAIN-SUFFIX,bingapis.com,Bing
+  - DOMAIN-SUFFIX,dl.sourceforge.net,DIRECT
+  - DOMAIN-SUFFIX,asmr-100.com,DIRECT
+  - DOMAIN-SUFFIX,ghproxy.com,DIRECT
+  - DOMAIN-SUFFIX,dockerproxy.com,DIRECT
+  - DOMAIN-SUFFIX,metacubex.one,DIRECT
+  - DOMAIN-SUFFIX,winos.me,DIRECT
+  - DOMAIN-SUFFIX,kinh.cc,DIRECT
+  - DOMAIN,yacd.haishan.me,DIRECT
+  - DOMAIN,clash.razord.top,DIRECT
+  # China CDN/Direct
+  - RULE-SET,ip-attribution-reject,REJECT
+  - RULE-SET,ip-attribution-direct,DIRECT
+  - RULE-SET,ip-attribution-proxy,IPAttribution
+  - GEOSITE,bilibili,Bilibili
+  - GEOSITE,apple-cn,DIRECT
+  - GEOSITE,google-cn,DIRECT
+  - GEOSITE,microsoft@cn,DIRECT
+  - GEOSITE,tld-cn,DIRECT
+  - GEOSITE,googlefcm,GoogleFCM
+  - GEOSITE,openai,OpenAI
+  - GEOSITE,category-games@cn,DIRECT
+  # Not China
+  - GEOSITE,geolocation-!cn,PROXY
+  # China
+  - GEOSITE,cn,DIRECT
+  - GEOIP,cn,DIRECT,no-resolve
+  # Other
+  - MATCH,MATCH
+
+proxy-groups:
+  - name: Fallback
+    type: fallback
+    proxies:
+      - local_9909
+      - local_9901
+      - local_9902
+      - local_9903
+      - local_9904
+      - tun-geph
+      - DIRECT
+    url: "http://captive.apple.com/generate_204"
+    interval: 300
+  - name: PROXY
+    type: select
+    proxies:
+      - Fallback
+      - DIRECT
+      - tun-geph
+      - local_9909
+      - local_9901
+      - local_9902
+      - local_9903
+      - local_9904
+  - name: tun-geph
+    type: select
+    proxies:
+      - DIRECT
+    interface-name: tun-geph
+  # Rule
+  - name: Bing
+    type: select
+    proxies:
+      - DIRECT
+      - PROXY
+  - name: OpenAI
+    type: select
+    proxies:
+      - PROXY
+      - DIRECT
+      - PASS
+  - name: GoogleFCM
+    type: select
+    proxies:
+      - DIRECT
+      - PASS
+      - PROXY
+  - name: Bilibili
+    type: select
+    proxies:
+      - PASS
+      - DIRECT
+      - PROXY
+  - name: Downloader
+    type: select
+    proxies:
+      - PASS
+      - DIRECT
+      - PROXY
+  - name: IPAttribution
+    type: select
+    proxies:
+      - PASS
+      - PROXY
+      - DIRECT
+      - REJECT
+  - name: Game
+    type: select
+    proxies:
+      - PROXY
+      - PASS
+      - DIRECT
+  - name: MATCH
+    type: select
+    proxies:
+      - PROXY
+      - DIRECT
+
+dns:
+  enable: true
+  ipv6: true
+  listen: 0.0.0.0:53
+  prefer-h3: false
+  # default-nameserver:
+  #   - 8.8.8.8
+  #   - 223.5.5.5
+  enhanced-mode: redir-host
+  nameserver:
+    - tls://dns.pub:853
+    - tls://dns.alidns.com:853
+  fallback:
+    - tcp://dns.google
+    - tcp://cloudflare-dns.com
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
+    geosite:
+      - "geolocation-!cn"
+    ipcidr:
+      - 0.0.0.0/8
+      - 10.0.0.0/8
+      - 100.64.0.0/10
+      - 127.0.0.0/8
+      - 169.254.0.0/16
+      - 172.16.0.0/12
+      - 192.0.0.0/24
+      - 192.0.2.0/24
+      - 192.88.99.0/24
+      - 192.168.0.0/16
+      - 198.18.0.0/15
+      - 198.51.100.0/24
+      - 203.0.113.0/24
+      - 224.0.0.0/4
+      - 240.0.0.0/4
+      - 255.255.255.255/32
+    domain:
+      - "+.google.com"
+      - "+.facebook.com"
+      - "+.youtube.com"
+      - "+.githubusercontent.com"
+      - "+.googlevideo.com"
+      - "+.msftconnecttest.com"
+      - "+.msftncsi.com"
+
+proxies:
+  - name: local_9909
+    type: socks5
+    server: 127.0.0.1
+    port: 9909
+  - name: local_9901
+    type: socks5
+    server: 127.0.0.1
+    port: 9901
+  - name: local_9902
+    type: socks5
+    server: 127.0.0.1
+    port: 9902
+  - name: local_9903
+    type: socks5
+    server: 127.0.0.1
+    port: 9903
+  - name: local_9904
+    type: socks5
+    server: 127.0.0.1
+    port: 9904
+
+rule-providers:
+  # applications:
+  #   type: http
+  #   behavior: classical
+  #   url: "https://ghproxy.com/https:/raw.githubusercontent.com/Loyalsoldier/clash-rules/release/applications.txt"
+  #   path: ./ruleset/applications.yaml
+  #   interval: 86400
+
+  ip-attribution-direct:
+    type: http
+    behavior: classical
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/lwd-temp/anti-ip-attribution/main/generated/rule-provider-direct.yaml"
+    path: ./ruleset/ip-attribution-direct.yaml
+    interval: 86400
+  ip-attribution-reject:
+    type: http
+    behavior: classical
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/lwd-temp/anti-ip-attribution/main/generated/rule-provider-reject.yaml"
+    path: ./ruleset/ip-attribution-reject.yaml
+    interval: 86400
+  ip-attribution-proxy:
+    type: http
+    behavior: classical
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/lwd-temp/anti-ip-attribution/main/generated/rule-provider-proxy.yaml"
+    path: ./ruleset/ip-attribution-proxy.yaml
+    interval: 86400

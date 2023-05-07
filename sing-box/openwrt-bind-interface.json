@@ -1,0 +1,18 @@
+{
+  "log": {
+    "level": "info"
+  },
+  "inbounds": [
+    {
+      "type": "mixed",
+      "listen": "::",
+      "listen_port": 9900
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "direct",
+      "bind_interface": "tun-geph"
+    }
+  ]
+}
