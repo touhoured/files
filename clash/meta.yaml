@@ -21,14 +21,13 @@ rules:
   - PROCESS-NAME,qbittorrent.exe,Downloader
   - RULE-SET,applications,DIRECT
   - GEOSITE,bing,Bing
-
-  - AND,((PROCESS-NAME,GenshinImpact.exe),(NETWORK,TCP)),PROXY
+  # - AND,((PROCESS-NAME,GenshinImpact.exe),(NETWORK,TCP)),PROXY
   # - SUB-RULE,(PROCESS-NAME,GenshinImpact.exe),genshin
 
   # China CDN/Direct
-  - RULE-SET,ip-attribution-reject,REJECT
-  - RULE-SET,ip-attribution-direct,DIRECT
-  - RULE-SET,ip-attribution-proxy,IPAttribution
+  - RULE-SET,ip-attribution-reject,REJECT,no-resolve
+  - RULE-SET,ip-attribution-direct,DIRECT,no-resolve
+  - RULE-SET,ip-attribution-proxy,IPAttribution,no-resolve
   - GEOSITE,apple-cn,DIRECT
   - GEOSITE,google-cn,DIRECT
   - GEOSITE,microsoft@cn,DIRECT
@@ -123,11 +122,11 @@ proxy-groups:
   #     - PROXY
   #     - PASS
   #     - DIRECT
-  - name: Games-UDP
-    type: select
-    proxies:
-      - DIRECT
-      - PROXY
+  # - name: Games-UDP
+  #   type: select
+  #   proxies:
+  #     - DIRECT
+  #     - PROXY
   - name: MATCH
     type: select
     proxies:
@@ -186,12 +185,8 @@ dns:
   default-nameserver:
     - 8.8.8.8
     - 223.5.5.5
-  enhanced-mode: redir-host
-  # enhanced-mode: fake-ip
-  # fake-ip-range: 28.0.0.1/8
-  # fake-ip-filter:
-  #   - '*'
-  #   - '+.lan'
+  # enhanced-mode: redir-host
+  enhanced-mode: fake-ip
   nameserver:
     - tls://dns.pub
     - tls://dns.alidns.com
@@ -200,11 +195,77 @@ dns:
     # - https://cloudflare-dns.com/dns-query&h3=false
     - tcp://dns.google
     - tcp://cloudflare-dns.com
+  fake-ip-range: 28.0.0.1/8
+  fake-ip-filter:
+    - music.163.com
+    - "*.music.163.com"
+    - "*.126.net"
+    - musicapi.taihe.com
+    - music.taihe.com
+    - songsearch.kugou.com
+    - trackercdn.kugou.com
+    - y.qq.com
+    - "*.y.qq.com"
+    - streamoc.music.tc.qq.com
+    - mobileoc.music.tc.qq.com
+    - isure.stream.qqmusic.qq.com
+    - dl.stream.qqmusic.qq.com
+    - aqqmusic.tc.qq.com
+    - amobile.music.tc.qq.com
+    - "*.xiami.com"
+    - "*.music.migu.cn"
+    - music.migu.cn
+    - "+.msftconnecttest.com"
+    - "+.msftncsi.com"
+    - msftconnecttest.com
+    - msftncsi.com
+    - localhost.ptlogin2.qq.com
+    - localhost.sec.qq.com
+    - "+.srv.nintendo.net"
+    - "*.n.n.srv.nintendo.net"
+    - "+.stun.playstation.net"
+    - xbox.*.*.microsoft.com
+    - "*.*.xboxlive.com"
+    - xbox.*.microsoft.com
+    - xnotify.xboxlive.com
+    - "+.battlenet.com.cn"
+    - "+.wotgame.cn"
+    - "+.wggames.cn"
+    - "+.wowsgame.cn"
+    - "+.wargaming.net"
+    - proxy.golang.org
+    - stun.*.*
+    - stun.*.*.*
+    - "+.stun.*.*"
+    - "+.stun.*.*.*"
+    - "+.stun.*.*.*.*"
+    - "+.stun.*.*.*.*.*"
+    - heartbeat.belkin.com
+    - "*.linksys.com"
+    - "*.linksyssmartwifi.com"
+    - "*.router.asus.com"
+    - mesu.apple.com
+    - swscan.apple.com
+    - swquery.apple.com
+    - swdownload.apple.com
+    - swcdn.apple.com
+    - swdist.apple.com
+    - lens.l.google.com
+    - stun.l.google.com
+    - "+.nflxvideo.net"
+    - "*.square-enix.com"
+    - "*.finalfantasyxiv.com"
+    - "*.ffxiv.com"
+    - "*.ff14.sdo.com"
+    - ff.dorado.sdo.com
+    - "*.mcdn.bilivideo.cn"
+    - "+.media.dssott.com"
+    - shark007.net
+    - Mijia Cloud
+    - "+.dns.google"
   fallback-filter:
     geoip: true
     geoip-code: CN
-    geosite:
-      - "geolocation-!cn"
     ipcidr:
       - 0.0.0.0/8
       - 10.0.0.0/8
@@ -225,11 +286,27 @@ dns:
     domain:
       - "+.google.com"
       - "+.facebook.com"
+      - "+.apple.com"
       - "+.youtube.com"
       - "+.githubusercontent.com"
       - "+.googlevideo.com"
-      - "+.msftconnecttest.com"
-      - "+.msftncsi.com"
+      - "+.returnyoutubedislikeapi.com"
+      - "+.googleapis.com"
+      - "+.gvt1.com"
+      - "+.gvt2.com"
+      - "+.citibankonline.com"
+      - "+.citi.com"
+      - "+.booking.com"
+      - "+.googlesyndication.com"
+      - "+.googletagmanager.com"
+      - "+.pki.goog"
+      - "+.thinkwithgoogle.com"
+      - "+.gstatic.com"
+      - "+.cloudfront.net"
+      - "+.obsidian.md"
+      - "+.doubleclick.net"
+      - "+.3gppnetwork.org"
+
 
 # Premium
 tun:
