@@ -8,9 +8,7 @@ rules:
   - RULE-SET,custom-reject,REJECT
   - GEOSITE,category-ads-all,REJECT
   - GEOSITE,win-spy,REJECT
-
-  
-  - AND,((OR,((DOMAIN-KEYWORD,bilibili),(DOMAIN-KEYWORD,douyu))),(NETWORK,UDP)),REJECT
+  - AND,((OR,((DOMAIN-KEYWORD,bilibili),(DOMAIN-KEYWORD,douyu))),(NETWORK,UDP,no-resolve)),REJECT
 
   # Private address
   - GEOSITE,private,DIRECT
@@ -71,11 +69,29 @@ proxy-groups:
     proxies:
       - Fallback
       - DIRECT
+      - WARP
       - local_9909
       - local_9901
       - local_9902
       - local_9903
       - local_9904
+      - local_2080
+      - local_2090
+      - local_9900
+  - name: WARPOut
+    type: select
+    proxies:
+      - Fallback
+      - DIRECT
+      - local_9909
+      - local_9901
+      - local_9902
+      - local_9903
+      - local_9904
+      - local_2080
+      - local_2090
+      - local_9900
+
   # Rule
   - name: Bing
     type: select
@@ -144,18 +160,21 @@ rule-providers:
     path: ./ruleset/ip-attribution-proxy.yaml
     interval: 86400
   custom-proxy:
-    type: file
+    type: http
     behavior: classical
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/touhoured/files/master/clash/ruleset/custom-proxy.yaml"
     path: ./ruleset/custom-proxy.yaml
     interval: 86400
   custom-direct:
-    type: file
+    type: http
     behavior: classical
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/touhoured/files/master/clash/ruleset/custom-direct.yaml"
     path: ./ruleset/custom-direct.yaml
     interval: 86400
   custom-reject:
-    type: file
+    type: http
     behavior: classical
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/touhoured/files/master/clash/ruleset/custom-reject.yaml"
     path: ./ruleset/custom-reject.yaml
     interval: 86400
 
@@ -168,6 +187,11 @@ dns:
     - 8.8.8.8
     - 223.5.5.5
   enhanced-mode: redir-host
+  # enhanced-mode: fake-ip
+  # fake-ip-range: 28.0.0.1/8
+  # fake-ip-filter:
+  #   - '*'
+  #   - '+.lan'
   nameserver:
     - tls://dns.pub
     - tls://dns.alidns.com
@@ -268,6 +292,21 @@ proxies:
     server: 127.0.0.1
     port: 9900
 
+  - name: "WARP"
+    type: wireguard
+    server: engage.cloudflareclient.com
+    port: 2408
+    ip: "172.16.0.2/32"
+    ipv6: "2606:4700:110:8abe:359b:1b05:fda5:2ca7/128"
+    private-key: "EBEM7TfbpXZ2mPv7Y4Wq/ykXOvCBIA4px5OlRqxX8Fc="
+    public-key: "bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo="
+    udp: true
+    # reserved: [219, 212, 139]
+    mtu: 1280
+    # dialer-proxy: "WARPOut"
+    remote-dns-resolve: true
+    dns:
+      - https://dns.cloudflare.com/dns-query
 
 mixed-port: 7890
 allow-lan: true
