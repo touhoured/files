@@ -32,16 +32,11 @@
         "outbound": "dns-out"
       },
       {
-        "geosite": "category-ads-all",
+        "protocol": "quic",
         "outbound": "block"
       },
       {
-        "geosite": "private",
-        "geoip": "private",
-        "outbound": "direct"
-      },
-      {
-        "protocol": "quic",
+        "geosite": "category-ads-all",
         "outbound": "block"
       },
       {
@@ -89,20 +84,26 @@
         "outbound": "proxy"
       },
       {
-        "geosite": "cn",
-        "geoip": "cn",
+        "geosite": [
+          "private",
+          "cn"
+        ],
+        "geoip": [
+          "private",
+          "cn"
+        ],
         "outbound": "bypass"
       }
     ],
     "geoip": {
       "path": "geoip.db",
       "download_url": "https://ghproxy.com/https://github.com/1715173329/sing-geoip/releases/latest/download/geoip.db",
-      "download_detour": "bypass"
+      "download_detour": "direct"
     },
     "geosite": {
       "path": "geosite.db",
       "download_url": "https://ghproxy.com/https://github.com/1715173329/sing-geosite/releases/latest/download/geosite.db",
-      "download_detour": "bypass"
+      "download_detour": "direct"
     }
   },
   "dns": {
@@ -135,7 +136,7 @@
       },
       {
         "geosite": "googlefcm",
-        "server": "GoogleFCM"
+        "server": "googlefcm"
       },
       {
         "process_name": "GenshinImpact.exe",
@@ -150,7 +151,10 @@
         "server": "proxy"
       },
       {
-        "geosite": "cn",
+        "geosite": [
+          "private",
+          "cn"
+        ],
         "server": "bypass"
       }
     ],
@@ -231,6 +235,14 @@
         "local_9903",
         "local_9904",
         "direct"
+      ],
+      "type": "selector"
+    },
+    {
+      "tag": "googlefcm",
+      "outbounds": [
+        "bypass",
+        "proxy"
       ],
       "type": "selector"
     },

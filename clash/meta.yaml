@@ -10,10 +10,6 @@ rules:
   - GEOSITE,win-spy,REJECT
   - AND,((OR,((DOMAIN-KEYWORD,bilibili),(DOMAIN-KEYWORD,douyu))),(NETWORK,UDP,no-resolve)),REJECT
 
-  # Private address
-  - GEOSITE,private,DIRECT
-  - GEOIP,private,DIRECT,no-resolve
-
   # Custom
   - RULE-SET,custom-proxy,PROXY
   - RULE-SET,custom-direct,DIRECT
@@ -37,6 +33,10 @@ rules:
   # China
   - GEOSITE,cn,DIRECT
   - GEOIP,cn,DIRECT,no-resolve
+
+  # Private address
+  - GEOSITE,private,DIRECT
+  - GEOIP,private,DIRECT,no-resolve
 
   # Other
   - MATCH,MATCH
