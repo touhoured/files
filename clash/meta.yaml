@@ -17,8 +17,6 @@ rules:
   # Custom
   - RULE-SET,custom-proxy,PROXY
   - RULE-SET,custom-direct,DIRECT
-  - PROCESS-NAME,IDMan.exe,Downloader
-  - PROCESS-NAME,qbittorrent.exe,Downloader
   - RULE-SET,applications,DIRECT
   - GEOSITE,bing,Bing
   - AND,((PROCESS-NAME,GenshinImpact.exe),(NETWORK,TCP)),PROXY
@@ -69,16 +67,16 @@ proxy-groups:
     type: select
     proxies:
       - Fallback
-      - DIRECT
+      - local_9900
+      - local_2080
+      - local_2090
       - WARP
       - local_9909
       - local_9901
       - local_9902
       - local_9903
       - local_9904
-      - local_2080
-      - local_2090
-      - local_9900
+      - DIRECT
   - name: WARPOut
     type: select
     proxies:
@@ -106,12 +104,12 @@ proxy-groups:
       - DIRECT
       - PASS
       - PROXY
-  - name: Downloader
-    type: select
-    proxies:
-      - PASS
-      - DIRECT
-      - PROXY
+  # - name: Downloader
+  #   type: select
+  #   proxies:
+  #     - PASS
+  #     - DIRECT
+  #     - PROXY
   - name: IPAttribution
     type: select
     proxies:
