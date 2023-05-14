@@ -49,6 +49,7 @@
       },
       {
         "domain_suffix": [
+          "loli.io",
           "cjjd15.com",
           "cjjd18.com",
           "cjjd20.com",
@@ -89,15 +90,14 @@
         "outbound": "proxy"
       },
       {
-        "geosite": [
-          "cn",
-          "private"
-        ],
-        "geoip": [
-          "cn",
-          "private"
-        ],
+        "geosite": "cn",
+        "geoip": "cn",
         "outbound": "bypass"
+      },
+      {
+        "geosite": "private",
+        "geoip": "private",
+        "outbound": "direct"
       }
     ],
     "geoip": {
@@ -117,10 +117,6 @@
         "geosite": "category-ads-all",
         "disable_cache": true,
         "server": "block"
-      },
-      {
-        "geosite": "private",
-        "server": "direct"
       },
       {
         "domain_suffix": [
@@ -159,12 +155,13 @@
         "server": "proxy"
       },
       {
-        "geosite": [
-          "private",
-          "cn"
-        ],
+        "geosite": "cn",
         "server": "bypass"
-      }
+      },
+      {
+        "geosite": "private",
+        "server": "direct"
+      },
     ],
     "servers": [
       {
