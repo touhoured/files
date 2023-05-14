@@ -21,7 +21,7 @@ rules:
   - PROCESS-NAME,qbittorrent.exe,Downloader
   - RULE-SET,applications,DIRECT
   - GEOSITE,bing,Bing
-  # - AND,((PROCESS-NAME,GenshinImpact.exe),(NETWORK,TCP)),PROXY
+  - AND,((PROCESS-NAME,GenshinImpact.exe),(NETWORK,TCP)),PROXY
   # - SUB-RULE,(PROCESS-NAME,GenshinImpact.exe),genshin
 
   # China CDN/Direct

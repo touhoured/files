@@ -44,8 +44,13 @@
         "detour": "direct"
       },
       {
+        "tag": "local",
+        "address": "local",
+        "detour": "direct"
+      },
+      {
         "tag": "direct",
-        "address": "tls://223.5.5.5",
+        "address": "223.5.5.5",
         "detour": "direct"
       },
       {
@@ -90,7 +95,7 @@
       },
       {
         "process_name": "GenshinImpact.exe",
-        "domain_suffix": "dispatchosglobal.yuanshen.com",
+        // "domain_suffix": "dispatchosglobal.yuanshen.com",
         "server": "proxy"
       },
       {
@@ -149,6 +154,8 @@
       "tag": "proxy",
       "outbounds": [
         "fallback",
+        "direct",
+        "local_9900",
         "local_9909",
         "local_9901",
         "local_9902",
@@ -159,30 +166,30 @@
       ],
       "type": "selector"
     },
-    {
-      "tag": "game",
-      "outbounds": [
-        "bypass",
-        "proxy"
-      ],
-      "type": "selector"
-    },
-    {
-      "tag": "game-udp",
-      "outbounds": [
-        "bypass",
-        "proxy"
-      ],
-      "type": "selector"
-    },
-    {
-      "tag": "bilibili",
-      "outbounds": [
-        "bypass",
-        "proxy"
-      ],
-      "type": "selector"
-    },
+    // {
+    //   "tag": "game",
+    //   "outbounds": [
+    //     "bypass",
+    //     "proxy"
+    //   ],
+    //   "type": "selector"
+    // },
+    // {
+    //   "tag": "game-udp",
+    //   "outbounds": [
+    //     "bypass",
+    //     "proxy"
+    //   ],
+    //   "type": "selector"
+    // },
+    // {
+    //   "tag": "bilibili",
+    //   "outbounds": [
+    //     "bypass",
+    //     "proxy"
+    //   ],
+    //   "type": "selector"
+    // },
     // {
     //   "tag": "openai",
     //   "outbounds": [
@@ -191,6 +198,13 @@
     //   ],
     //   "type": "selector"
     // },
+    {
+      "tag": "local_9900",
+      "server": "127.0.0.1",
+      "server_port": 9901,
+      "version": "5",
+      "type": "socks"
+    },
     {
       "tag": "local_9901",
       "server": "127.0.0.1",
@@ -260,16 +274,16 @@
   ],
   "route": {
     "final": "proxy",
-    // "auto_detect_interface": true,
-    "default_interface": "WLAN",
+    "auto_detect_interface": true,
+    // "default_interface": "WLAN",
     "rules": [
-      {
-        "process_name": [
-          "sing-box",
-          "sing-box.exe"
-        ],
-        "outbound": "block"
-      },
+      // {
+      //   "process_name": [
+      //     "sing-box",
+      //     "sing-box.exe"
+      //   ],
+      //   "outbound": "block"
+      // },
       {
         "process_name": [
           "libgeph.so",
@@ -282,10 +296,10 @@
         "protocol": "dns",
         "outbound": "dns-out"
       },
-      {
-        "port": 53,
-        "outbound": "dns-out"
-      },
+      // {
+      //   "port": 53,
+      //   "outbound": "dns-out"
+      // },
       {
         "clash_mode": "global",
         "outbound": "proxy"
@@ -298,10 +312,6 @@
         "geosite": "private",
         "geoip": "private",
         "outbound": "direct"
-      },
-      {
-        "clash_mode": "global",
-        "outbound": "proxy"
       },
       {
         "geosite": "category-ads-all",
@@ -331,6 +341,7 @@
       {
         "domain_suffix": [
           "cjjd20.com",
+          "cjjd15.com",
           "dl.sourceforge.net",
           "asmr-100.com",
           "ghporxy.com",
