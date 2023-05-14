@@ -10,6 +10,7 @@ rules:
   - GEOSITE,win-spy,REJECT
   - AND,((OR,((DOMAIN-KEYWORD,bilibili),(DOMAIN-KEYWORD,douyu))),(NETWORK,UDP,no-resolve)),REJECT
   # - AND,((AND,((NETWORK,UDP,no-resolve),(DST-PORT,443))),(NOT,((GEOIP,cn,no-resolve)))),REJECT
+  - AND,((NETWORK,UDP,no-resolve),(DST-PORT,443)),REJECT
 
   # Custom
   - RULE-SET,custom-proxy,PROXY

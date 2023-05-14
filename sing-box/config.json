@@ -48,6 +48,16 @@
         "outbound": "block"
       },
       {
+        "process_name": "GenshinImpact.exe",
+        "network": "tcp",
+        "outbound": "proxy"
+      },
+      // {
+      //   "process_name": "GenshinImpact.exe",
+      //   "network": "udp",
+      //   "outbound": "game-udp"
+      // },
+      {
         "domain_suffix": [
           "loli.io",
           "cjjd15.com",
@@ -71,16 +81,6 @@
         "geosite": "googlefcm",
         "outbound": "googlefcm"
       },
-      {
-        "process_name": "GenshinImpact.exe",
-        "network": "tcp",
-        "outbound": "proxy"
-      },
-      // {
-      //   "process_name": "GenshinImpact.exe",
-      //   "network": "udp",
-      //   "outbound": "game-udp"
-      // },
       {
         "geosite": "category-games@cn",
         "outbound": "bypass"
@@ -120,7 +120,7 @@
       },
       {
         "domain_suffix": [
-          "loli.io",
+          // "loli.io",
           "cjjd15.com",
           "cjjd18.com",
           "cjjd20.com",

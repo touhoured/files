@@ -10,7 +10,7 @@ rules:
   - RULE-SET,reject,REJECT
   - RULE-SET,custom-reject,REJECT
   - SCRIPT,bilibili-p2p,REJECT,no-resolve
-  # - SCRIPT,quic,REJECT,no-resolve
+  - SCRIPT,quic,REJECT,no-resolve
 
   # Custom
   - RULE-SET,custom-proxy,PROXY
@@ -48,7 +48,7 @@ rules:
 script:
   shortcuts:
     # quic: network == 'udp' and dst_port == 443 and (geoip(resolve_ip(host)) != 'CN' or geoip(dst_ip) != 'CN')
-    # bilibili-p2p: network == 'udp' and host.endswith('bilibili.com')
+    quic: network == 'udp' and dst_port == 443
     bilibili-p2p: network == 'udp' and match_provider('bilibili')
     # genshin-asia-udp: network == 'udp' and in_cidr(dst_ip,'8.211.128.0/18')
     # genshin-udp: network == 'udp' and resolve_process_name() == 'GenshinImpact.exe'
