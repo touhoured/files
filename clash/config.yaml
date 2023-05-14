@@ -18,10 +18,11 @@ rules:
   - RULE-SET,applications,DIRECT
   - DOMAIN-SUFFIX,bing.com,Bing
   - DOMAIN-SUFFIX,bingapis.com,Bing
-  - RULE-SET,googlefcm,GoogleFCM
+  - RULE-SET,googlefcm,GoogleFCM,no-resolve
   # - RULE-SET,bilibili,Bilibili,no-resolve
   # - SCRIPT,genshin-udp,Game-UDP,no-resolve
-  - SCRIPT,genshin-tcp,PROXY
+  # - SCRIPT,genshin-tcp,PROXY,no-resolve
+  - PROCESS-NAME,GenshinImpact.exe,PROXY
 
   # China CDN/Direct/Game
   - RULE-SET,ip-attribution-reject,REJECT,no-resolve
@@ -51,7 +52,7 @@ script:
     bilibili-p2p: network == 'udp' and match_provider('bilibili')
     # genshin-asia-udp: network == 'udp' and in_cidr(dst_ip,'8.211.128.0/18')
     # genshin-udp: network == 'udp' and resolve_process_name() == 'GenshinImpact.exe'
-    genshin-tcp: network == 'tcp' and resolve_process_name() == 'GenshinImpact.exe'
+    # genshin-tcp: network == 'tcp' and resolve_process_name() == 'GenshinImpact.exe'
 
 proxy-groups:
   - name: Fallback
@@ -69,15 +70,15 @@ proxy-groups:
     type: select
     proxies:
       - Fallback
-      - DIRECT
+      - local_9900
+      - local_2080
+      - local_2090
       - local_9909
       - local_9901
       - local_9902
       - local_9903
       - local_9904
-      - local_2080
-      - local_2090
-      - local_9900
+      - DIRECT
 
   # Rule
   - name: Bing
@@ -100,7 +101,6 @@ proxy-groups:
     proxies:
       - PROXY
       - DIRECT
-      - REJECT
   # - name: Game
   #   type: select
   #   proxies:
@@ -116,7 +116,6 @@ proxy-groups:
     proxies:
       - PROXY
       - DIRECT
-
 
 dns:
   enable: true
