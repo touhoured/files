@@ -33,7 +33,6 @@ rules:
   # China
   - GEOSITE,cn,DIRECT
   - GEOIP,cn,DIRECT,no-resolve
-
   # Private address
   - GEOSITE,private,DIRECT
   - GEOIP,private,DIRECT,no-resolve

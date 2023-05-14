@@ -85,12 +85,12 @@
       },
       {
         "geosite": [
-          "private",
-          "cn"
+          "cn",
+          "private"
         ],
         "geoip": [
-          "private",
-          "cn"
+          "cn",
+          "private"
         ],
         "outbound": "bypass"
       }
@@ -119,18 +119,16 @@
       },
       {
         "domain_suffix": [
+          "cjjd15.com",
+          "cjjd18.com",
+          "cjjd20.com",
+          "geilijiasu.com",
           "winos.me",
           "kinh.cc",
           "dandanplay.net",
           "metacubex.one",
           "dl.google.com",
           "yacd.haishan.me"
-        ],
-        "server": "bypass-google"
-      },
-      {
-        "domain_suffix": [
-          "geilijiasu.com"
         ],
         "server": "bypass"
       },
@@ -367,7 +365,7 @@
     }
   ],
   "log": {
-    "level": "debug",
+    "level": "info",
     "timestamp": true
   },
   "experimental": {
