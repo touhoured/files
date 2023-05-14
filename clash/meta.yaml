@@ -9,12 +9,15 @@ rules:
   - GEOSITE,category-ads-all,REJECT
   - GEOSITE,win-spy,REJECT
   - AND,((OR,((DOMAIN-KEYWORD,bilibili),(DOMAIN-KEYWORD,douyu))),(NETWORK,UDP,no-resolve)),REJECT
+  # - AND,((AND,((NETWORK,UDP,no-resolve),(DST-PORT,443))),(NOT,((GEOIP,cn,no-resolve)))),REJECT
 
   # Custom
   - RULE-SET,custom-proxy,PROXY
   - RULE-SET,custom-direct,DIRECT
   - RULE-SET,applications,DIRECT
   - GEOSITE,bing,Bing
+  - GEOSITE,googlefcm,GoogleFCM
+  # - GEOSITE,bilibili,Bilibili
   - AND,((PROCESS-NAME,GenshinImpact.exe),(NETWORK,TCP)),PROXY
   # - SUB-RULE,(PROCESS-NAME,GenshinImpact.exe),genshin
 
@@ -26,7 +29,6 @@ rules:
   - GEOSITE,google-cn,DIRECT
   - GEOSITE,microsoft@cn,DIRECT
   - GEOSITE,tld-cn,DIRECT
-  - GEOSITE,googlefcm,GoogleFCM
   - GEOSITE,category-games@cn,DIRECT
   # Not China
   - GEOSITE,geolocation-!cn,PROXY
@@ -36,7 +38,6 @@ rules:
   # Private address
   - GEOSITE,private,DIRECT
   - GEOIP,private,DIRECT,no-resolve
-
   # Other
   - MATCH,MATCH
 
@@ -103,10 +104,9 @@ proxy-groups:
       - DIRECT
       - PASS
       - PROXY
-  # - name: Downloader
+  # - name: Bilibili
   #   type: select
   #   proxies:
-  #     - PASS
   #     - DIRECT
   #     - PROXY
   - name: IPAttribution
@@ -131,51 +131,6 @@ proxy-groups:
     proxies:
       - PROXY
       - DIRECT
-
-rule-providers:
-  applications:
-    type: http
-    behavior: classical
-    url: "https://ghproxy.com/https:/raw.githubusercontent.com/Loyalsoldier/clash-rules/release/applications.txt"
-    path: ./ruleset/applications.yaml
-    interval: 86400
-  ip-attribution-direct:
-    type: http
-    behavior: classical
-    url: "https://ghproxy.com/https://raw.githubusercontent.com/lwd-temp/anti-ip-attribution/main/generated/rule-provider-direct.yaml"
-    path: ./ruleset/ip-attribution-direct.yaml
-    interval: 86400
-  ip-attribution-reject:
-    type: http
-    behavior: classical
-    url: "https://ghproxy.com/https://raw.githubusercontent.com/lwd-temp/anti-ip-attribution/main/generated/rule-provider-reject.yaml"
-    path: ./ruleset/ip-attribution-reject.yaml
-    interval: 86400
-  ip-attribution-proxy:
-    type: http
-    behavior: classical
-    url: "https://ghproxy.com/https://raw.githubusercontent.com/lwd-temp/anti-ip-attribution/main/generated/rule-provider-proxy.yaml"
-    path: ./ruleset/ip-attribution-proxy.yaml
-    interval: 86400
-  custom-proxy:
-    type: http
-    behavior: classical
-    url: "https://ghproxy.com/https://raw.githubusercontent.com/touhoured/files/master/clash/ruleset/custom-proxy.yaml"
-    path: ./ruleset/custom-proxy.yaml
-    interval: 86400
-  custom-direct:
-    type: http
-    behavior: classical
-    url: "https://ghproxy.com/https://raw.githubusercontent.com/touhoured/files/master/clash/ruleset/custom-direct.yaml"
-    path: ./ruleset/custom-direct.yaml
-    interval: 86400
-  custom-reject:
-    type: http
-    behavior: classical
-    url: "https://ghproxy.com/https://raw.githubusercontent.com/touhoured/files/master/clash/ruleset/custom-reject.yaml"
-    path: ./ruleset/custom-reject.yaml
-    interval: 86400
-
 
 dns:
   enable: true
@@ -306,6 +261,50 @@ dns:
       - "+.obsidian.md"
       - "+.doubleclick.net"
       - "+.3gppnetwork.org"
+
+rule-providers:
+  applications:
+    type: http
+    behavior: classical
+    url: "https://ghproxy.com/https:/raw.githubusercontent.com/Loyalsoldier/clash-rules/release/applications.txt"
+    path: ./ruleset/applications.yaml
+    interval: 86400
+  ip-attribution-direct:
+    type: http
+    behavior: classical
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/lwd-temp/anti-ip-attribution/main/generated/rule-provider-direct.yaml"
+    path: ./ruleset/ip-attribution-direct.yaml
+    interval: 86400
+  ip-attribution-reject:
+    type: http
+    behavior: classical
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/lwd-temp/anti-ip-attribution/main/generated/rule-provider-reject.yaml"
+    path: ./ruleset/ip-attribution-reject.yaml
+    interval: 86400
+  ip-attribution-proxy:
+    type: http
+    behavior: classical
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/lwd-temp/anti-ip-attribution/main/generated/rule-provider-proxy.yaml"
+    path: ./ruleset/ip-attribution-proxy.yaml
+    interval: 86400
+  custom-proxy:
+    type: http
+    behavior: classical
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/touhoured/files/master/clash/ruleset/custom-proxy.yaml"
+    path: ./ruleset/custom-proxy.yaml
+    interval: 86400
+  custom-direct:
+    type: http
+    behavior: classical
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/touhoured/files/master/clash/ruleset/custom-direct.yaml"
+    path: ./ruleset/custom-direct.yaml
+    interval: 86400
+  custom-reject:
+    type: http
+    behavior: classical
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/touhoured/files/master/clash/ruleset/custom-reject.yaml"
+    path: ./ruleset/custom-reject.yaml
+    interval: 86400
 
 
 # Premium

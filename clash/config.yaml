@@ -6,28 +6,22 @@ rules:
   - PROCESS-NAME,geph4-client,DIRECT
   - PROCESS-NAME,geph4-client.exe,DIRECT
 
-  # Private address
-  - RULE-SET,private,DIRECT
-  - RULE-SET,lancidr,DIRECT,no-resolve
-  - GEOIP,LAN,DIRECT,no-resolve
-
   # AD/Block
   - RULE-SET,reject,REJECT
   - RULE-SET,custom-reject,REJECT
   - SCRIPT,bilibili-p2p,REJECT,no-resolve
-  - SCRIPT,quic,REJECT,no-resolve
+  # - SCRIPT,quic,REJECT,no-resolve
 
   # Custom
   - RULE-SET,custom-proxy,PROXY
   - RULE-SET,custom-direct,DIRECT
-  - PROCESS-NAME,IDMan.exe,Downloader
-  - PROCESS-NAME,qbittorrent.exe,Downloader
   - RULE-SET,applications,DIRECT
   - DOMAIN-SUFFIX,bing.com,Bing
   - DOMAIN-SUFFIX,bingapis.com,Bing
+  - RULE-SET,googlefcm,GoogleFCM
   # - RULE-SET,bilibili,Bilibili,no-resolve
   # - SCRIPT,genshin-udp,Game-UDP,no-resolve
-  # - DOMAIN-SUFFIX,openai.com,OpenAI
+  - SCRIPT,genshin-tcp,PROXY
 
   # China CDN/Direct/Game
   - RULE-SET,ip-attribution-reject,REJECT,no-resolve
@@ -43,16 +37,21 @@ rules:
   - RULE-SET,direct,DIRECT
   - RULE-SET,cncidr,DIRECT,no-resolve
   - GEOIP,CN,DIRECT,no-resolve
+  # Private address
+  - RULE-SET,private,DIRECT
+  - RULE-SET,lancidr,DIRECT,no-resolve
+  - GEOIP,LAN,DIRECT,no-resolve
   # Other
   - MATCH,MATCH
 
 script:
   shortcuts:
-    quic: network == 'udp' and dst_port == 443 and (geoip(resolve_ip(host)) != 'CN' or geoip(dst_ip) != 'CN')
+    # quic: network == 'udp' and dst_port == 443 and (geoip(resolve_ip(host)) != 'CN' or geoip(dst_ip) != 'CN')
     # bilibili-p2p: network == 'udp' and host.endswith('bilibili.com')
     bilibili-p2p: network == 'udp' and match_provider('bilibili')
     # genshin-asia-udp: network == 'udp' and in_cidr(dst_ip,'8.211.128.0/18')
-    genshin-udp: network == 'udp' and resolve_process_name() == 'GenshinImpact.exe'
+    # genshin-udp: network == 'udp' and resolve_process_name() == 'GenshinImpact.exe'
+    genshin-tcp: network == 'tcp' and resolve_process_name() == 'GenshinImpact.exe'
 
 proxy-groups:
   - name: Fallback
@@ -86,26 +85,16 @@ proxy-groups:
     proxies:
       - PROXY
       - DIRECT
-  - name: OpenAI
-    type: select
-    proxies:
-      - PROXY
-      - DIRECT
   - name: GoogleFCM
     type: select
     proxies:
       - DIRECT
       - PROXY
-  - name: Bilibili
-    type: select
-    proxies:
-      - DIRECT
-      - PROXY
-  - name: Downloader
-    type: select
-    proxies:
-      - DIRECT
-      - PROXY
+  # - name: Bilibili
+  #   type: select
+  #   proxies:
+  #     - DIRECT
+  #     - PROXY
   - name: IPAttribution
     type: select
     proxies:
@@ -414,6 +403,12 @@ rule-providers:
     url: "https://ghproxy.com/https:/raw.githubusercontent.com/lwd-temp/anti-ip-attribution/main/generated/rule-provider-proxy.yaml"
     path: ./ruleset/ip-attribution-proxy.yaml
     interval: 86400
+  googlefcm:
+    type: http
+    behavior: classical
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/GoogleFCM/GoogleFCM.yaml"
+    path: ./ruleset/googlefcm.yaml
+    interval: 86400
   # bilibili:
   #   type: http
   #   behavior: classical
@@ -421,17 +416,20 @@ rule-providers:
   #   path: ./ruleset/bilibili.yaml
   #   interval: 86400
   custom-proxy:
-    type: file
+    type: http
     behavior: classical
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/touhoured/files/master/clash/ruleset/custom-proxy.yaml"
     path: ./ruleset/custom-proxy.yaml
     interval: 86400
   custom-direct:
-    type: file
+    type: http
     behavior: classical
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/touhoured/files/master/clash/ruleset/custom-direct.yaml"
     path: ./ruleset/custom-direct.yaml
     interval: 86400
   custom-reject:
-    type: file
+    type: http
     behavior: classical
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/touhoured/files/master/clash/ruleset/custom-reject.yaml"
     path: ./ruleset/custom-reject.yaml
     interval: 86400
