@@ -1,2 +1,7 @@
 payload:
   - DOMAIN,ntp.msn.cn
+  - DOMAIN,overseauspider.yuanshen.com
+  - DOMAIN,devlog-upload.mihoyo.com
+  - DOMAIN,log-upload-os.hoyoverse.com
+  - DOMAIN,log-upload-os.mihoyo.com
+  - DOMAIN,log-upload.mihoyo.com

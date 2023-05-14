@@ -144,6 +144,7 @@ dns:
     - tcp://cloudflare-dns.com
   # use-hosts: true
   # enhanced-mode: fake-ip
+  # enhanced-mode: normal
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter:
     - music.163.com
@@ -307,7 +308,8 @@ mode: rule
 log-level: debug
 external-controller: 0.0.0.0:9090
 profile:
-  store-selected: true
+  store-selected: false
+  store-fake-ip: true
 
 rule-providers:
   reject:

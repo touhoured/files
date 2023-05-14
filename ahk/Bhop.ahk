@@ -29,15 +29,15 @@
             Sleep 20
         }
     }
-   if WinActive("ahk_exe SCPSL.exe"){
-       ErrorLevel := KeyWait("Space", "D t3")
-       if ErrorLevel {
-           Exit
-       }
-       Sleep 200
-       While !GetKeyState("Space", "P") {
-           Send "{Space}"
-           Sleep 20
-       }
-   }
+;    if WinActive("ahk_exe SCPSL.exe"){
+;        ErrorLevel := KeyWait("Space", "D t3")
+;        if ErrorLevel {
+;            Exit
+;        }
+;        Sleep 200
+;        While !GetKeyState("Space", "P") {
+;            Send "{Space}"
+;            Sleep 20
+;        }
+;    }
 }

@@ -43,13 +43,15 @@ rules:
   # Other
   - MATCH,MATCH
 
-# sub-rules:
-#   genshin:
-#     # - IP-CIDR,8.211.128.0/18,Games,udp # Genshin Asia
-#     # - IP-CIDR,47.74.0.0/18,Games,udp # Genshin Asia
-#     - NETWORK,UDP,Games-UDP
-#     # - DOMAIN,dispatchosglobal.yuanshen.com,PROXY # Genshin global
-#     - NETWORK,TCP,PROXY
+sub-rules:
+  global-proxy:
+    - MATCH,WARP
+  # genshin:
+  #   # - IP-CIDR,8.211.128.0/18,Games,udp # Genshin Asia
+  #   # - IP-CIDR,47.74.0.0/18,Games,udp # Genshin Asia
+  #   - NETWORK,UDP,Games-UDP
+  #   # - DOMAIN,dispatchosglobal.yuanshen.com,PROXY # Genshin global
+  #   - NETWORK,TCP,PROXY
 
 proxy-groups:
   - name: Fallback
@@ -80,8 +82,8 @@ proxy-groups:
   - name: WARPOut
     type: select
     proxies:
-      - Fallback
       - DIRECT
+      - Fallback
       - local_9909
       - local_9901
       - local_9902
@@ -185,8 +187,9 @@ dns:
   default-nameserver:
     - 8.8.8.8
     - 223.5.5.5
-  # enhanced-mode: redir-host
-  enhanced-mode: fake-ip
+  enhanced-mode: redir-host
+  # enhanced-mode: fake-ip
+  # enhanced-mode: normal
   nameserver:
     - tls://dns.pub
     - tls://dns.alidns.com
@@ -372,7 +375,7 @@ proxies:
   - name: "WARP"
     type: wireguard
     server: engage.cloudflareclient.com
-    port: 2408
+    port: 2480
     ip: "172.16.0.2/32"
     ipv6: "2606:4700:110:8abe:359b:1b05:fda5:2ca7/128"
     private-key: "EBEM7TfbpXZ2mPv7Y4Wq/ykXOvCBIA4px5OlRqxX8Fc="
@@ -392,7 +395,17 @@ log-level: info
 ipv6: true
 external-controller: :9090
 profile:
-  store-selected: true
+  store-selected: false
+  store-fake-ip: true
+
+listeners:
+  - name: mixed-in-warp
+    type: mixed
+    port: 9900
+    listen: 0.0.0.0
+    rule: global-proxy
+    proxy: WARP
+
 # Meta
 inbound-tfo: false # TCP Fast Open
 geodata-mode: true
