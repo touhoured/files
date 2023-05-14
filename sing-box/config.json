@@ -161,7 +161,7 @@
       {
         "geosite": "private",
         "server": "direct"
-      },
+      }
     ],
     "servers": [
       {
