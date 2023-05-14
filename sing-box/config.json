@@ -49,8 +49,9 @@
       },
       {
         "domain_suffix": [
-          "cjjd20.com",
           "cjjd15.com",
+          "cjjd18.com",
+          "cjjd20.com",
           "dl.sourceforge.net",
           "asmr-100.com",
           "ghporxy.com",
@@ -64,6 +65,10 @@
           "yacd.haishan.me"
         ],
         "outbound": "bypass"
+      },
+      {
+        "geosite": "googlefcm",
+        "outbound": "googlefcm"
       },
       {
         "process_name": "GenshinImpact.exe",
@@ -119,13 +124,18 @@
       },
       {
         "domain_suffix": [
+          "loli.io",
           "cjjd15.com",
           "cjjd18.com",
           "cjjd20.com",
-          "geilijiasu.com",
+          "dl.sourceforge.net",
+          "asmr-100.com",
+          "ghporxy.com",
+          "dockerproxy.com",
           "winos.me",
           "kinh.cc",
           "dandanplay.net",
+          "geilijiasu.com",
           "metacubex.one",
           "dl.google.com",
           "yacd.haishan.me"
