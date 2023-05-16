@@ -73,12 +73,19 @@ proxy-groups:
       - local_9900
       - local_2080
       - local_2090
+      - aggregator
       - local_9909
       - local_9901
       - local_9902
       - local_9903
       - local_9904
       - DIRECT
+  - name: aggregator
+    type: url-test
+    use:
+      - aggregator
+    url: "http://captive.apple.com/generate_204"
+    interval: 300
 
   # Rule
   - name: Bing
@@ -116,6 +123,7 @@ proxy-groups:
     proxies:
       - PROXY
       - DIRECT
+
 
 dns:
   enable: true
@@ -433,3 +441,14 @@ rule-providers:
     url: "https://ghproxy.com/https://raw.githubusercontent.com/touhoured/files/master/clash/ruleset/custom-reject.yaml"
     path: ./ruleset/custom-reject.yaml
     interval: 86400
+
+proxy-providers:
+  aggregator:
+    type: http
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/mahdibland/V2RayAggregator/master/Eternity.yml"
+    interval: 3600
+    path: ./proxyset/aggregator.yaml
+    health-check:
+      enable: true
+      interval: 300
+      url: "http://captive.apple.com/generate_204"
