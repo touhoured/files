@@ -363,7 +363,8 @@
     },
     {
       "tag": "mixed-in",
-      "listen": "0.0.0.0",
+      "listen": "127.0.0.1",
+      "secret": "touhoured",
       "listen_port": 7890,
       "set_system_proxy": false,
       "sniff": true,

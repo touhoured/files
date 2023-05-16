@@ -291,12 +291,13 @@ proxies:
     port: 9900
 
 mixed-port: 7890
-allow-lan: true
+allow-lan: false
 mode: rule
-log-level: debug
-external-controller: 0.0.0.0:9090
+log-level: info
+external-controller: 127.0.0.1:9090
+secret: touhoured
 profile:
-  store-selected: false
+  store-selected: true
   store-fake-ip: true
 
 rule-providers:

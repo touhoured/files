@@ -386,20 +386,21 @@ proxies:
       - https://dns.cloudflare.com/dns-query
 
 mixed-port: 7890
-allow-lan: true
+allow-lan: false
 mode: rule
 log-level: info
 ipv6: true
-external-controller: :9090
+external-controller: 127.0.0.1:9090
+secret: touhoured
 profile:
-  store-selected: false
+  store-selected: true
   store-fake-ip: true
 
 listeners:
   - name: mixed-in-warp
     type: mixed
     port: 9900
-    listen: 0.0.0.0
+    listen: 127.0.0.1
     rule: global-proxy
     proxy: WARP
 
