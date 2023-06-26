@@ -62,7 +62,7 @@ proxy-groups:
       - local_9903
       - local_9904
       # - DIRECT
-    url: "https://captive.apple.com/generate_204"
+    url: "http://google.com/generate_204"
     interval: 300
   - name: PROXY
     type: select
