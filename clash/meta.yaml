@@ -1,13 +1,12 @@
 rules:
   # Geph
-  - PROCESS-NAME,libgeph.so,DIRECT
-  - PROCESS-NAME,geph4-client,DIRECT
   - PROCESS-NAME,geph4-client.exe,DIRECT
 
   # AD/Block
   - RULE-SET,custom-reject,REJECT
   - GEOSITE,category-ads-all,REJECT
   - GEOSITE,win-spy,REJECT
+  # - GEOSITE,win-extra,REJECT
   - AND,((OR,((DOMAIN-KEYWORD,bilibili),(DOMAIN-KEYWORD,douyu))),(NETWORK,UDP,no-resolve)),REJECT
   # - AND,((AND,((NETWORK,UDP,no-resolve),(DST-PORT,443))),(NOT,((GEOIP,cn,no-resolve)))),REJECT
   - AND,((NETWORK,UDP,no-resolve),(DST-PORT,443)),REJECT
@@ -19,26 +18,30 @@ rules:
   - GEOSITE,bing,Bing
   - GEOSITE,googlefcm,GoogleFCM
   # - GEOSITE,bilibili,Bilibili
-  - AND,((PROCESS-NAME,GenshinImpact.exe),(NETWORK,TCP)),PROXY
+  # - AND,((PROCESS-NAME,GenshinImpact.exe),(NETWORK,TCP)),PROXY
   # - SUB-RULE,(PROCESS-NAME,GenshinImpact.exe),genshin
 
   # China CDN/Direct
   - RULE-SET,ip-attribution-reject,REJECT,no-resolve
   - RULE-SET,ip-attribution-direct,DIRECT,no-resolve
-  - RULE-SET,ip-attribution-proxy,IPAttribution,no-resolve
+  # - RULE-SET,ip-attribution-proxy,IPAttribution,no-resolve
+  - AND,((GEOSITE,bilibili,Bilibili),(RULE-SET,ip-attribution-proxy,no-resolve)),IPAttribution
   - GEOSITE,apple-cn,DIRECT
   - GEOSITE,google-cn,DIRECT
-  - GEOSITE,microsoft@cn,DIRECT
   - GEOSITE,tld-cn,DIRECT
   - GEOSITE,category-games@cn,DIRECT
+  # - GEOSITE,geolocation-!cn@cn,DIRECT
+
   # Not China
   - GEOSITE,geolocation-!cn,PROXY
+
   # China
+  - GEOSITE,cn@!cn,DIRECT
   - GEOSITE,cn,DIRECT
-  - GEOIP,cn,DIRECT,no-resolve
+  - GEOIP,CN,DIRECT,no-resolve
   # Private address
   - GEOSITE,private,DIRECT
-  - GEOIP,private,DIRECT,no-resolve
+  - GEOIP,PRIVATE,DIRECT,no-resolve
   # Other
   - MATCH,MATCH
 
@@ -56,11 +59,11 @@ proxy-groups:
   - name: Fallback
     type: fallback
     proxies:
-      - local_9909
-      - local_9901
-      - local_9902
-      - local_9903
-      - local_9904
+      - geph_1
+      - geph_2
+      - geph_3
+      - geph_4
+      - geph_default
       # - DIRECT
     url: "http://google.com/generate_204"
     interval: 300
@@ -68,30 +71,24 @@ proxy-groups:
     type: select
     proxies:
       - Fallback
-      - local_9900
-      - local_2080
-      - local_2090
       - WARP
       - aggregator
-      - local_9909
-      - local_9901
-      - local_9902
-      - local_9903
-      - local_9904
+      - geph_default
+      - geph_1
+      - geph_2
+      - geph_3
+      - geph_4
       - DIRECT
   - name: WARPOut
     type: select
     proxies:
       - DIRECT
       - Fallback
-      - local_9909
-      - local_9901
-      - local_9902
-      - local_9903
-      - local_9904
-      - local_2080
-      - local_2090
-      - local_9900
+      - geph_default
+      - geph_1
+      - geph_2
+      - geph_3
+      - geph_4
   - name: aggregator
     type: url-test
     use:
@@ -120,8 +117,8 @@ proxy-groups:
   - name: IPAttribution
     type: select
     proxies:
-      - PROXY
       - PASS
+      - PROXY
       - DIRECT
   # - name: Game
   #   type: select
@@ -355,38 +352,26 @@ sniffer:
   - Mijia Cloud
 
 proxies:
-  - name: local_9909
-    type: socks5
+  - name: geph_default
+    type: http
     server: 127.0.0.1
-    port: 9909
-  - name: local_9901
-    type: socks5
+    port: 9910
+  - name: geph_1
+    type: http
     server: 127.0.0.1
-    port: 9901
-  - name: local_9902
-    type: socks5
+    port: 9911
+  - name: geph_2
+    type: http
     server: 127.0.0.1
-    port: 9902
-  - name: local_9903
-    type: socks5
+    port: 9912
+  - name: geph_3
+    type: http
     server: 127.0.0.1
-    port: 9903
-  - name: local_9904
-    type: socks5
+    port: 9913
+  - name: geph_4
+    type: http
     server: 127.0.0.1
-    port: 9904
-  - name: local_2090
-    type: socks5
-    server: 127.0.0.1
-    port: 2090
-  - name: local_2080
-    type: socks5
-    server: 127.0.0.1
-    port: 2080
-  - name: local_9900
-    type: socks5
-    server: 127.0.0.1
-    port: 9900
+    port: 9913
 
   - name: "WARP"
     type: wireguard
@@ -414,14 +399,6 @@ secret: touhoured
 profile:
   store-selected: true
   store-fake-ip: true
-
-listeners:
-  - name: mixed-in-warp
-    type: mixed
-    port: 9900
-    listen: 127.0.0.1
-    rule: global-proxy
-    proxy: WARP
 
 # Meta
 inbound-tfo: false # TCP Fast Open
