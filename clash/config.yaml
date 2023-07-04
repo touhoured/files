@@ -2,14 +2,12 @@ ipv6: true
 
 rules:
   # Geph
-  - PROCESS-NAME,libgeph.so,DIRECT
-  - PROCESS-NAME,geph4-client,DIRECT
   - PROCESS-NAME,geph4-client.exe,DIRECT
 
   # AD/Block
   - RULE-SET,reject,REJECT
   - RULE-SET,custom-reject,REJECT
-  - SCRIPT,bilibili-p2p,REJECT,no-resolve
+  - SCRIPT,block-p2p,REJECT,no-resolve
   - SCRIPT,quic,REJECT,no-resolve
 
   # Custom
@@ -22,7 +20,7 @@ rules:
   # - RULE-SET,bilibili,Bilibili,no-resolve
   # - SCRIPT,genshin-udp,Game-UDP,no-resolve
   # - SCRIPT,genshin-tcp,PROXY,no-resolve
-  - PROCESS-NAME,GenshinImpact.exe,PROXY
+  # - PROCESS-NAME,GenshinImpact.exe,PROXY
 
   # China CDN/Direct/Game
   - RULE-SET,ip-attribution-reject,REJECT,no-resolve
@@ -47,9 +45,9 @@ rules:
 
 script:
   shortcuts:
-    # quic: network == 'udp' and dst_port == 443 and (geoip(resolve_ip(host)) != 'CN' or geoip(dst_ip) != 'CN')
-    quic: network == 'udp' and dst_port == 443
-    bilibili-p2p: network == 'udp' and match_provider('bilibili')
+    quic: network == 'udp' and dst_port == 443 and (geoip(resolve_ip(host)) != 'CN' or geoip(dst_ip) != 'CN')
+    # quic: network == 'udp' and dst_port == 443
+    block-p2p: network == 'udp' and match_provider('bilibili')
     # genshin-asia-udp: network == 'udp' and in_cidr(dst_ip,'8.211.128.0/18')
     # genshin-udp: network == 'udp' and resolve_process_name() == 'GenshinImpact.exe'
     # genshin-tcp: network == 'tcp' and resolve_process_name() == 'GenshinImpact.exe'

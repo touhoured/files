@@ -19,20 +19,8 @@
         "outbound": "direct"
       },
       {
-        "protocol": "quic",
-        "outbound": "block"
-      },
-      {
         "protocol": "dns",
         "outbound": "dns-out"
-      },
-      { 
-        "process_name": [
-            "aria2.exe",
-            "qbittorrent.exe",
-            "IDMan.exe"
-        ],
-        "outbound": "bypass"
       },
       {
         "geosite": "category-ads-all",
@@ -45,9 +33,9 @@
       {
         "domain_suffix": [
           "loli.io",
-          "cjjd15.com",
-          "cjjd18.com",
-          "cjjd20.com",
+          // "cjjd15.com",
+          // "cjjd18.com",
+          // "cjjd20.com",
           "dl.sourceforge.net",
           "asmr-100.com",
           "ghporxy.com",
@@ -111,25 +99,6 @@
         "disable_cache": true,
         "server": "block"
       },
-      // {
-      //   "domain_suffix": [
-      //     "cjjd15.com",
-      //     "cjjd18.com",
-      //     "cjjd20.com",
-      //     "dl.sourceforge.net",
-      //     "asmr-100.com",
-      //     "ghporxy.com",
-      //     "dockerproxy.com",
-      //     "winos.me",
-      //     "kinh.cc",
-      //     "dandanplay.net",
-      //     "geilijiasu.com",
-      //     "metacubex.one",
-      //     "dl.google.com",
-      //     "yacd.haishan.me"
-      //   ],
-      //   "server": "bypass"
-      // },
       {
         "geosite": "category-games@cn",
         "server": "bypass"
@@ -151,7 +120,7 @@
       {
         "tag": "proxy",
         "address": "udp://127.0.0.1:9921",
-        // "strategy": "prefer_ipv6",
+        "strategy": "ipv4_only",
         "detour": "direct"
       },
       {
@@ -179,8 +148,7 @@
         "geph_2",
         "geph_3",
         "geph_4",
-        "geph_default",
-        "bypass"
+        "geph_default"
       ],
       "url": "http://www.apple.com/library/test/success.html",
       "interval": "30s",
@@ -283,6 +251,17 @@
     }
   ],
   "inbounds": [
+    // {
+    //   "tag": "tun-in",
+    //   "inet4_address": "172.19.0.1/30",
+    //   "inet6_address": "fdfe:dcba:9876::1/126",
+    //   "auto_route": true,
+    //   "strict_route": true,
+    //   "stack": "system",
+    //   "sniff": true,
+    //   "sniff_override_destination": false,
+    //   "type": "tun"
+    // },
     {
       "tag": "mixed-in",
       "listen": "127.0.0.1",

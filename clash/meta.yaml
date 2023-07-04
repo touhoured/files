@@ -7,9 +7,10 @@ rules:
   - GEOSITE,category-ads-all,REJECT
   - GEOSITE,win-spy,REJECT
   # - GEOSITE,win-extra,REJECT
-  - AND,((OR,((DOMAIN-KEYWORD,bilibili),(DOMAIN-KEYWORD,douyu))),(NETWORK,UDP,no-resolve)),REJECT
-  # - AND,((AND,((NETWORK,UDP,no-resolve),(DST-PORT,443))),(NOT,((GEOIP,cn,no-resolve)))),REJECT
-  - AND,((NETWORK,UDP,no-resolve),(DST-PORT,443)),REJECT
+  - AND,((OR,((GEOSITE,bilibili),(GEOSITE,douyu))),(NETWORK,UDP,no-resolve)),REJECT
+  # - AND,((NETWORK,UDP,no-resolve),(DST-PORT,443)),REJECT
+  # - AND,(AND,(DST-PORT,443),(NETWORK,UDP)),(GEOSITE,geolocation-!cn),REJECT # quic
+  - AND,((AND,((NETWORK,UDP,no-resolve),(DST-PORT,443))),(NOT,((GEOIP,cn,no-resolve)))),REJECT
 
   # Custom
   - RULE-SET,custom-proxy,PROXY
@@ -36,12 +37,12 @@ rules:
   - GEOSITE,geolocation-!cn,PROXY
 
   # China
-  - GEOSITE,cn@!cn,DIRECT
+  # - GEOSITE,cn@!cn,DIRECT
   - GEOSITE,cn,DIRECT
-  - GEOIP,CN,DIRECT,no-resolve
+  - GEOIP,cn,DIRECT,no-resolve
   # Private address
   - GEOSITE,private,DIRECT
-  - GEOIP,PRIVATE,DIRECT,no-resolve
+  - GEOIP,private,DIRECT,no-resolve
   # Other
   - MATCH,MATCH
 
@@ -271,52 +272,58 @@ rule-providers:
   applications:
     type: http
     behavior: classical
-    url: "https://ghproxy.com/https:/raw.githubusercontent.com/Loyalsoldier/clash-rules/release/applications.txt"
-    path: ./ruleset/applications.yaml
+    url: "https://ghproxy.com/https:/raw.githubusercontent.com/Loyalsoldier/clash-rules/releases/latest/download/applications.txt"
+    path: ./provider/rule-set/applications.yaml
     interval: 86400
   ip-attribution-direct:
     type: http
     behavior: classical
     url: "https://ghproxy.com/https://raw.githubusercontent.com/lwd-temp/anti-ip-attribution/main/generated/rule-provider-direct.yaml"
-    path: ./ruleset/ip-attribution-direct.yaml
+    path: ./provider/rule-set/ip-attribution-direct.yaml
     interval: 86400
   ip-attribution-reject:
     type: http
     behavior: classical
     url: "https://ghproxy.com/https://raw.githubusercontent.com/lwd-temp/anti-ip-attribution/main/generated/rule-provider-reject.yaml"
-    path: ./ruleset/ip-attribution-reject.yaml
+    path: ./provider/rule-set/ip-attribution-reject.yaml
     interval: 86400
   ip-attribution-proxy:
     type: http
     behavior: classical
     url: "https://ghproxy.com/https://raw.githubusercontent.com/lwd-temp/anti-ip-attribution/main/generated/rule-provider-proxy.yaml"
-    path: ./ruleset/ip-attribution-proxy.yaml
+    path: ./provider/rule-set/ip-attribution-proxy.yaml
     interval: 86400
   custom-proxy:
     type: http
     behavior: classical
     url: "https://ghproxy.com/https://raw.githubusercontent.com/touhoured/files/master/clash/ruleset/custom-proxy.yaml"
-    path: ./ruleset/custom-proxy.yaml
+    path: ./provider/rule-set/custom-proxy.yaml
     interval: 86400
   custom-direct:
     type: http
     behavior: classical
     url: "https://ghproxy.com/https://raw.githubusercontent.com/touhoured/files/master/clash/ruleset/custom-direct.yaml"
-    path: ./ruleset/custom-direct.yaml
+    path: ./provider/rule-set/custom-direct.yaml
     interval: 86400
   custom-reject:
     type: http
     behavior: classical
     url: "https://ghproxy.com/https://raw.githubusercontent.com/touhoured/files/master/clash/ruleset/custom-reject.yaml"
-    path: ./ruleset/custom-reject.yaml
+    path: ./provider/rule-set/custom-reject.yaml
     interval: 86400
+  cn:
+    behavior: domain
+    interval: 86400
+    path: ./provider/rule-set/cn_domain.yaml
+    type: http
+    url: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@releases/latest/download/cn_domain.yaml"
 
 proxy-providers:
   aggregator:
     type: http
     url: "https://ghproxy.com/https://raw.githubusercontent.com/mahdibland/V2RayAggregator/master/Eternity.yml"
     interval: 3600
-    path: ./proxyset/aggregator.yaml
+    path: ./provider/proxy-set/aggregator.yaml
     health-check:
       enable: true
       interval: 300
@@ -392,7 +399,7 @@ proxies:
 mixed-port: 7890
 allow-lan: false
 mode: rule
-log-level: info
+log-level: debug
 ipv6: true
 external-controller: 127.0.0.1:9090
 secret: touhoured
@@ -409,6 +416,6 @@ global-client-fingerprint: chrome
 external-ui: yacd
 
 geox-url:
-  geoip: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/geoip.dat"
-  geosite: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/geosite.dat"
-  mmdb: "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country.mmdb"
+  geoip: "https://ghproxy.com/https://github.com/touhoured/meta-rules-dat/releases/latest/download/geoip.dat"
+  geosite: "https://ghproxy.com/https://github.com/touhoured/meta-rules-dat/releases/latest/download/geosite.dat"
+  mmdb: "https://ghproxy.com/https://github.com/touhoured/meta-rules-dat/releases/latest/download/Country.mmdb"
