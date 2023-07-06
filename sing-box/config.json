@@ -18,10 +18,10 @@
         "clash_mode": "direct",
         "outbound": "direct"
       },
-      {
-        "protocol": "dns",
-        "outbound": "dns-out"
-      },
+      // {
+      //   "protocol": "dns",
+      //   "outbound": "dns-out"
+      // },
       {
         "geosite": "category-ads-all",
         "outbound": "block"
@@ -82,12 +82,12 @@
     ],
     "geoip": {
       "path": "geoip.db",
-      "download_url": "https://ghproxy.com/https://github.com/soffchen/sing-geoip/releases/latest/download/geoip.db",
+      "download_url": "https://ghproxy.com/https://github.com/touhoured/meta-rules-dat/releases/latest/download/geoip.db",
       "download_detour": "direct"
     },
     "geosite": {
       "path": "geosite.db",
-      "download_url": "https://ghproxy.com/https://github.com/soffchen/sing-geosite/releases/latest/download/geosite.db",
+      "download_url": "https://ghproxy.com/https://github.com/touhoured/meta-rules-dat/releases/latest/download/geosite.db",
       "download_detour": "direct"
     }
   },
@@ -101,6 +101,14 @@
       },
       {
         "geosite": "category-games@cn",
+        "server": "bypass"
+      },
+      {
+        "domain_suffix": [
+          "ghporxy.com",
+          "metacubex.one",
+          "yacd.haishan.me"
+        ],
         "server": "bypass"
       },
       {
@@ -119,9 +127,9 @@
     "servers": [
       {
         "tag": "proxy",
-        "address": "udp://127.0.0.1:9921",
+        "address": "https://1.1.1.1/dns-query",
         "strategy": "ipv4_only",
-        "detour": "direct"
+        "detour": "fallback_dns"
       },
       {
         "tag": "bypass",
@@ -141,6 +149,22 @@
     ]
   },
   "outbounds": [
+    {
+      "tag": "fallback_dns",
+      "outbounds": [
+        "geph_1",
+        "geph_2",
+        "geph_3",
+        "geph_4",
+        "geph_default",
+        "bypass",
+        "direct"
+      ],
+      "url": "http://www.apple.com/library/test/success.html",
+      "interval": "30s",
+      "tolerance": 9999,
+      "type": "urltest"
+    },
     {
       "tag": "fallback",
       "outbounds": [
@@ -209,10 +233,9 @@
     {
       "tag": "geph_1",
       "server": "127.0.0.1",
-      "server_port": 9901,
+      "server_port": 9911,
       // "domain_strategy": "ipv4_only",
-      "version": "5",
-      "type": "socks"
+      "type": "http"
     },
     {
       "tag": "geph_2",

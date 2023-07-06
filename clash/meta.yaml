@@ -9,8 +9,7 @@ rules:
   # - GEOSITE,win-extra,REJECT
   - AND,((OR,((GEOSITE,bilibili),(GEOSITE,douyu))),(NETWORK,UDP,no-resolve)),REJECT
   # - AND,((NETWORK,UDP,no-resolve),(DST-PORT,443)),REJECT
-  # - AND,(AND,(DST-PORT,443),(NETWORK,UDP)),(GEOSITE,geolocation-!cn),REJECT # quic
-  - AND,((AND,((NETWORK,UDP,no-resolve),(DST-PORT,443))),(NOT,((GEOIP,cn,no-resolve)))),REJECT
+  - AND,((AND,((NETWORK,UDP,no-resolve),(DST-PORT,443))),(OR,(NOT,((GEOIP,cn,no-resolve))),(GEOSITE,geolocation-!cn))),REJECT
 
   # Custom
   - RULE-SET,custom-proxy,PROXY
@@ -25,20 +24,22 @@ rules:
   # China CDN/Direct
   - RULE-SET,ip-attribution-reject,REJECT,no-resolve
   - RULE-SET,ip-attribution-direct,DIRECT,no-resolve
-  # - RULE-SET,ip-attribution-proxy,IPAttribution,no-resolve
-  - AND,((GEOSITE,bilibili,Bilibili),(RULE-SET,ip-attribution-proxy,no-resolve)),IPAttribution
+  - RULE-SET,ip-attribution-proxy,IPAttribution,no-resolve
+  # - AND,((GEOSITE,bilibili,Bilibili),(RULE-SET,ip-attribution-proxy,no-resolve)),IPAttribution
   - GEOSITE,apple-cn,DIRECT
   - GEOSITE,google-cn,DIRECT
   - GEOSITE,tld-cn,DIRECT
   - GEOSITE,category-games@cn,DIRECT
-  # - GEOSITE,geolocation-!cn@cn,DIRECT
+  - GEOSITE,geolocation-!cn@cn,DIRECT
 
   # Not China
+  - GEOSITE,geolocation-cn@!cn,PROXY
   - GEOSITE,geolocation-!cn,PROXY
+  # - GEOSITE,cn@!cn,PROXY
 
   # China
-  # - GEOSITE,cn@!cn,DIRECT
-  - GEOSITE,cn,DIRECT
+  - GEOSITE,geolocation-cn,DIRECT
+  # - GEOSITE,cn,DIRECT
   - GEOIP,cn,DIRECT,no-resolve
   # Private address
   - GEOSITE,private,DIRECT
@@ -138,136 +139,6 @@ proxy-groups:
       - PROXY
       - DIRECT
 
-dns:
-  enable: true
-  # ipv6: true
-  listen: :1053
-  default-nameserver:
-    - 8.8.8.8
-    - 223.5.5.5
-  enhanced-mode: redir-host
-  # enhanced-mode: fake-ip
-  # enhanced-mode: normal
-  nameserver:
-    - tls://dns.pub
-    - tls://dns.alidns.com
-  fallback:
-    # - https://dns.google/dns-query&h3=false
-    # - https://cloudflare-dns.com/dns-query&h3=false
-    - tcp://dns.google
-    - tcp://cloudflare-dns.com
-  fake-ip-range: 28.0.0.1/8
-  fake-ip-filter:
-    - music.163.com
-    - "*.music.163.com"
-    - "*.126.net"
-    - musicapi.taihe.com
-    - music.taihe.com
-    - songsearch.kugou.com
-    - trackercdn.kugou.com
-    - y.qq.com
-    - "*.y.qq.com"
-    - streamoc.music.tc.qq.com
-    - mobileoc.music.tc.qq.com
-    - isure.stream.qqmusic.qq.com
-    - dl.stream.qqmusic.qq.com
-    - aqqmusic.tc.qq.com
-    - amobile.music.tc.qq.com
-    - "*.xiami.com"
-    - "*.music.migu.cn"
-    - music.migu.cn
-    - "+.msftconnecttest.com"
-    - "+.msftncsi.com"
-    - msftconnecttest.com
-    - msftncsi.com
-    - localhost.ptlogin2.qq.com
-    - localhost.sec.qq.com
-    - "+.srv.nintendo.net"
-    - "*.n.n.srv.nintendo.net"
-    - "+.stun.playstation.net"
-    - xbox.*.*.microsoft.com
-    - "*.*.xboxlive.com"
-    - xbox.*.microsoft.com
-    - xnotify.xboxlive.com
-    - "+.battlenet.com.cn"
-    - "+.wotgame.cn"
-    - "+.wggames.cn"
-    - "+.wowsgame.cn"
-    - "+.wargaming.net"
-    - proxy.golang.org
-    - stun.*.*
-    - stun.*.*.*
-    - "+.stun.*.*"
-    - "+.stun.*.*.*"
-    - "+.stun.*.*.*.*"
-    - "+.stun.*.*.*.*.*"
-    - heartbeat.belkin.com
-    - "*.linksys.com"
-    - "*.linksyssmartwifi.com"
-    - "*.router.asus.com"
-    - mesu.apple.com
-    - swscan.apple.com
-    - swquery.apple.com
-    - swdownload.apple.com
-    - swcdn.apple.com
-    - swdist.apple.com
-    - lens.l.google.com
-    - stun.l.google.com
-    - "+.nflxvideo.net"
-    - "*.square-enix.com"
-    - "*.finalfantasyxiv.com"
-    - "*.ffxiv.com"
-    - "*.ff14.sdo.com"
-    - ff.dorado.sdo.com
-    - "*.mcdn.bilivideo.cn"
-    - "+.media.dssott.com"
-    - shark007.net
-    - Mijia Cloud
-    - "+.dns.google"
-  fallback-filter:
-    geoip: true
-    geoip-code: CN
-    ipcidr:
-      - 0.0.0.0/8
-      - 10.0.0.0/8
-      - 100.64.0.0/10
-      - 127.0.0.0/8
-      - 169.254.0.0/16
-      - 172.16.0.0/12
-      - 192.0.0.0/24
-      - 192.0.2.0/24
-      - 192.88.99.0/24
-      - 192.168.0.0/16
-      - 198.18.0.0/15
-      - 198.51.100.0/24
-      - 203.0.113.0/24
-      - 224.0.0.0/4
-      - 240.0.0.0/4
-      - 255.255.255.255/32
-    domain:
-      - "+.google.com"
-      - "+.facebook.com"
-      - "+.apple.com"
-      - "+.youtube.com"
-      - "+.githubusercontent.com"
-      - "+.googlevideo.com"
-      - "+.returnyoutubedislikeapi.com"
-      - "+.googleapis.com"
-      - "+.gvt1.com"
-      - "+.gvt2.com"
-      - "+.citibankonline.com"
-      - "+.citi.com"
-      - "+.booking.com"
-      - "+.googlesyndication.com"
-      - "+.googletagmanager.com"
-      - "+.pki.goog"
-      - "+.thinkwithgoogle.com"
-      - "+.gstatic.com"
-      - "+.cloudfront.net"
-      - "+.obsidian.md"
-      - "+.doubleclick.net"
-      - "+.3gppnetwork.org"
-
 rule-providers:
   applications:
     type: http
@@ -329,35 +200,6 @@ proxy-providers:
       interval: 300
       url: "http://captive.apple.com/generate_204"
 
-
-
-# Premium
-tun:
-  enable: false
-  stack: system
-  auto-route: true
-  strict_route: true
-  auto-detect-interface: true
-  dns-hijack:
-    - any:53
-    # - 0.0.0.0:53
-
-sniffer:
-  enable: false
-  # force-dns-mapping: true
-  # parse-pure-ip: false
-  override-destination: false
-  sniff:
-    TLS:
-      ports: [443, 8443]
-    HTTP:
-      ports: [80, 8080-8880]
-      override-destination: true
-  force-domain:
-    - "+.v2ex.com"
-  skip-domain:
-  - Mijia Cloud
-
 proxies:
   - name: geph_default
     type: http
@@ -405,7 +247,7 @@ external-controller: 127.0.0.1:9090
 secret: touhoured
 profile:
   store-selected: true
-  store-fake-ip: true
+  # store-fake-ip: true
 
 # Meta
 inbound-tfo: false # TCP Fast Open
