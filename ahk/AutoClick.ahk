@@ -12,7 +12,7 @@
 		while GetKeyState("LButton", "P") {
 			; Random rand1, 30, 70
 			Click
-			Sleep 20
+			Sleep 100
 		}
 	}
 }

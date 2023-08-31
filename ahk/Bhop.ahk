@@ -1,6 +1,6 @@
 #SingleInstance Force
 
-~$*MButton::
+; ~$*MButton::
 {
     if WinActive("ahk_exe GenshinImpact.exe") OR WinActive("ahk_exe YuanShen.exe") {
         ErrorLevel := KeyWait("Space", "D t3")

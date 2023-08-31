@@ -26,8 +26,8 @@ rules:
   - RULE-SET,ip-attribution-direct,DIRECT,no-resolve
   - RULE-SET,ip-attribution-proxy,IPAttribution,no-resolve
   # - AND,((GEOSITE,bilibili,Bilibili),(RULE-SET,ip-attribution-proxy,no-resolve)),IPAttribution
-  - GEOSITE,apple-cn,DIRECT
-  - GEOSITE,google-cn,DIRECT
+  # - GEOSITE,apple-cn,DIRECT
+  # - GEOSITE,google-cn,DIRECT
   - GEOSITE,tld-cn,DIRECT
   - GEOSITE,category-games@cn,DIRECT
   - GEOSITE,geolocation-!cn@cn,DIRECT
@@ -238,10 +238,29 @@ proxies:
     dns:
       - https://dns.cloudflare.com/dns-query
 
+dns:
+  enable: false
+  # ipv6: true
+  listen: :1053
+  default-nameserver:
+    - 8.8.8.8
+    - 223.5.5.5
+  enhanced-mode: redir-host
+  # enhanced-mode: fake-ip
+  # enhanced-mode: normal
+  nameserver:
+    - tls://dns.pub
+    - tls://dns.alidns.com
+  fallback:
+    - https://dns.google/dns-query&h3=false
+    - https://cloudflare-dns.com/dns-query&h3=false
+    - tcp://dns.google
+    - tcp://cloudflare-dns.com
+
 mixed-port: 7890
 allow-lan: false
 mode: rule
-log-level: debug
+log-level: info
 ipv6: true
 external-controller: 127.0.0.1:9090
 secret: touhoured

@@ -18,10 +18,10 @@
         "clash_mode": "direct",
         "outbound": "direct"
       },
-      // {
-      //   "protocol": "dns",
-      //   "outbound": "dns-out"
-      // },
+      {
+        "protocol": "dns",
+        "outbound": "dns-out"
+      },
       {
         "geosite": "category-ads-all",
         "outbound": "block"
@@ -32,10 +32,12 @@
       },
       {
         "domain_suffix": [
+          "ghxi.com",
+          "ly93.cc",
           "loli.io",
-          // "cjjd15.com",
-          // "cjjd18.com",
-          // "cjjd20.com",
+          "cjjd15.com",
+          "cjjd18.com",
+          "cjjd20.com",
           "dl.sourceforge.net",
           "asmr-100.com",
           "ghporxy.com",
@@ -44,7 +46,8 @@
           "kinh.cc",
           "dandanplay.net",
           "geilijiasu.com",
-          "metacubex.one",
+          "yacd.metacubex.one",
+          "clash.metacubex.one",
           "dl.google.com",
           "yacd.haishan.me"
         ],
@@ -54,13 +57,13 @@
         "geosite": "googlefcm",
         "outbound": "googlefcm"
       },
-      {
-        "geosite": [
-          "apple-cn",
-          "google-cn"
-        ],
-        "outbound": "bypass"
-      },
+      // {
+      //   "geosite": [
+      //     "apple-cn",
+      //     "google-cn"
+      //   ],
+      //   "outbound": "bypass"
+      // },
       {
         "geosite": "category-games@cn",
         "outbound": "bypass"
@@ -223,7 +226,6 @@
     //   ],
     //   "type": "selector"
     // },
-    // {
     {
       "tag": "geph_default",
       "server": "127.0.0.1",
@@ -280,7 +282,7 @@
     //   "inet6_address": "fdfe:dcba:9876::1/126",
     //   "auto_route": true,
     //   "strict_route": true,
-    //   "stack": "system",
+    //   "stack": "mixed",
     //   "sniff": true,
     //   "sniff_override_destination": false,
     //   "type": "tun"
@@ -297,7 +299,7 @@
     }
   ],
   "log": {
-    "level": "debug",
+    "level": "info",
     "timestamp": true
   },
   "experimental": {
