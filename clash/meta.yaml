@@ -167,19 +167,19 @@ rule-providers:
   custom-proxy:
     type: http
     behavior: classical
-    url: "https://ghproxy.com/https://raw.githubusercontent.com/touhoured/files/master/clash/ruleset/custom-proxy.yaml"
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/touhoured/files/master/clash/provider/rule-set/custom-proxy.yaml"
     path: ./provider/rule-set/custom-proxy.yaml
     interval: 86400
   custom-direct:
     type: http
     behavior: classical
-    url: "https://ghproxy.com/https://raw.githubusercontent.com/touhoured/files/master/clash/ruleset/custom-direct.yaml"
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/touhoured/files/master/clash/provider/rule-set/custom-direct.yaml"
     path: ./provider/rule-set/custom-direct.yaml
     interval: 86400
   custom-reject:
     type: http
     behavior: classical
-    url: "https://ghproxy.com/https://raw.githubusercontent.com/touhoured/files/master/clash/ruleset/custom-reject.yaml"
+    url: "https://ghproxy.com/https://raw.githubusercontent.com/touhoured/files/master/clash/provider/rule-set/custom-reject.yaml"
     path: ./provider/rule-set/custom-reject.yaml
     interval: 86400
   cn:
