@@ -2,7 +2,6 @@ payload:
   - DOMAIN,yacd.haishan.me
   - DOMAIN,clash.razord.top
 
-  # - DOMAIN-SUFFIX,loli.io
   - DOMAIN-SUFFIX,dl.sourceforge.net
   - DOMAIN-SUFFIX,asmr-100.com
   - DOMAIN-SUFFIX,ghproxy.com
@@ -14,3 +13,7 @@ payload:
   - DOMAIN-SUFFIX,cjjd15.com
   - DOMAIN-SUFFIX,cjjd18.com
   - DOMAIN-SUFFIX,cjjd20.com
+  - DOMAIN-SUFFIX,cjjd20.com
+  - DOMAIN-SUFFIX,ghxi.com
+  - DOMAIN-SUFFIX,ly93.cc
+  - DOMAIN-SUFFIX,loli.io
