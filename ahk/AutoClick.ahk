@@ -3,6 +3,12 @@
 ~XButton2::
 {
 	if WinActive("ahk_exe SCPSL.exe") {
+		while GetKeyState("RButton", "P") {
+			Click "Right"
+			Sleep 20
+		}
+	}
+	if WinActive("ahk_exe SCPSL.exe") {
 		while GetKeyState("XButton2", "P") {
 			Click
 			Sleep 20

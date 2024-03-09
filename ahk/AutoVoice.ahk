@@ -17,10 +17,10 @@
         }
 }
 
-; ~$!v::
-; {
-;     if WinActive("ahk_exe SCPSL.exe") {
-;         Sleep 200
-;         Send "{v Down}"
-;         }
-; }
+~$!v::
+{
+    if WinActive("ahk_exe SCPSL.exe") {
+        Sleep 200
+        Send "{v Down}"
+        }
+}

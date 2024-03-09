@@ -1,0 +1,34 @@
+{
+    "version": 1,
+    "rules": [
+        {
+            // "domain_regex": [
+            //     "cjjd[0-9][0-9].com"
+            // ],
+            "domain_suffix": [
+                "xaidc.com",
+                "cjjd15.com",
+                "cjjd18.com",
+                "cjjd20.com",
+                "7moor-fs1.com",
+                "kanxue.com",
+                // "deeplx.org",
+                "wuyou.net",
+                "ghxi.com",
+                "ly93.cc",
+                "loli.io",
+                "dl.sourceforge.net",
+                // "asmr-100.com",
+                "ghporxy.com",
+                "dockerproxy.com",
+                "winos.me",
+                "kinh.cc",
+                "dandanplay.net",
+                "geilijiasu.com",
+                "metacubex.one",
+                // "dl.google.com",
+                "yacd.haishan.me"
+            ]
+        }
+    ]
+}

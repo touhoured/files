@@ -1,167 +1,286 @@
 {
   "route": {
-    "final": "proxy",
-    "auto_detect_interface": true,
-    // "default_interface": "WLAN",
+    "final": "out-proxy", // default proxy, whilelist mode
+    // "auto_detect_interface": true,       // disable to fix multi interfaces
+    // "default_interface": "WLAN",         // disable to fix multi interfaces
     "rules": [
-      {
+      { // bypass core
         "process_name": [
-          "geph4-client.exe"
+          "geph4-client.exe",
+          "geph4-client"
         ],
-        "outbound": "direct"
+        "outbound": "out-direct"
       },
       {
-        "clash_mode": "global",
-        "outbound": "proxy"
+        "clash_mode": "Global",
+        "outbound": "out-proxy"
       },
       {
-        "clash_mode": "direct",
-        "outbound": "direct"
+        "clash_mode": "Direct",
+        "outbound": "out-direct"
       },
-      {
-        "protocol": "dns",
-        "outbound": "dns-out"
+      { // dns
+        "type": "logical",
+        "mode": "or",
+        "rules": [
+          {
+            "protocol": "dns"
+          },
+          {
+            "inbound": "in-dns"
+          },
+          {
+            "port": 53
+          }
+        ],
+        "outbound": "out-dns"
       },
-      {
-        "geosite": "category-ads-all",
-        "outbound": "block"
+      { // bypass lan, new priority, may affect match
+        "ip_is_private": true,
+        "rule_set": "geosite-private",
+        "outbound": "out-direct"
       },
-      {
-        "process_name": "GenshinImpact.exe",
-        "outbound": "proxy"
-      },
-      {
+      { // ad
+        "rule_set": [
+          "BlockHttpDNS",
+          "geosite-category-ads-all"
+        ],
         "domain_suffix": [
-          "ghxi.com",
-          "ly93.cc",
-          "loli.io",
-          "cjjd15.com",
-          "cjjd18.com",
-          "cjjd20.com",
-          "dl.sourceforge.net",
-          "asmr-100.com",
-          "ghporxy.com",
-          "dockerproxy.com",
-          "winos.me",
-          "kinh.cc",
-          "dandanplay.net",
-          "geilijiasu.com",
-          "yacd.metacubex.one",
-          "clash.metacubex.one",
-          "dl.google.com",
-          "yacd.haishan.me"
+          ".mcdn.bilivideo.cn",
+          ".szbdyd.com"
         ],
-        "outbound": "bypass"
+        "domain_regex": [
+          "cn-[a-zA-Z0-9-]+\\.bilivideo\\.com",
+          "[a-zA-Z0-9-]+-pcdn-[a-zA-Z0-9-]+\\.biliapi\\.net"
+        ],
+        "outbound": "out-block"
+      },
+      { // custom rule
+        "rule_set": "custom-rule",
+        "outbound": "out-direct"
+      },
+      { // custom rule
+        "domain": [
+          "dispatchosglobal.yuanshen.com",
+          "overseauspider.yuanshen.com"
+        ],
+        "outbound": "out-proxy"
       },
       {
-        "geosite": "googlefcm",
-        "outbound": "googlefcm"
+        "rule_set": "geosite-category-games@cn",
+        "outbound": "out-direct"
       },
-      // {
-      //   "geosite": [
-      //     "apple-cn",
-      //     "google-cn"
+      {
+        "rule_set": "geosite-googlefcm",
+        "outbound": "out-googlefcm"
+      },
+      // { // china cdn for foreign company
+      //   "rule_set": [
+      //     "geosite-apple@cn",
+      //     "geosite-google@cn"
       //   ],
-      //   "outbound": "bypass"
+      //   "outbound": "out-direct"
       // },
-      {
-        "geosite": "category-games@cn",
-        "outbound": "bypass"
+      { // not china
+        "rule_set": "geosite-geolocation-!cn",
+        "outbound": "out-proxy"
       },
-      {
-        "geosite": "geolocation-!cn",
-        "outbound": "proxy"
-      },
-      {
-        "geosite": "cn",
-        "geoip": "cn",
-        "outbound": "bypass"
-      },
-      {
-        "geosite": "private",
-        "geoip": "private",
-        "outbound": "direct"
+      { // china
+        "rule_set": [
+          "geosite-geolocation-cn",
+          "geosite-tld-cn",
+          "geoip-cn"
+        ],
+        "outbound": "out-direct"
       }
+      // {                                   // bypass lan, old priority, may affect performance
+      //   "ip_is_private": true,
+      //   "rule_set": "geosite-private",
+      //   "outbound": "out-direct"
+      // }
     ],
-    "geoip": {
-      "path": "geoip.db",
-      "download_url": "https://ghproxy.com/https://github.com/touhoured/meta-rules-dat/releases/latest/download/geoip.db",
-      "download_detour": "direct"
-    },
-    "geosite": {
-      "path": "geosite.db",
-      "download_url": "https://ghproxy.com/https://github.com/touhoured/meta-rules-dat/releases/latest/download/geosite.db",
-      "download_detour": "direct"
-    }
+    "rule_set": [
+      {
+        "tag": "BlockHttpDNS",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/bm7/BlockHttpDNS.srs",
+        "download_detour": "out-proxy",
+        "type": "remote"
+      },
+      {
+        "tag": "geosite-category-ads-all",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs",
+        "download_detour": "out-proxy",
+        "type": "remote"
+      },
+      {
+        "tag": "geosite-category-games@cn",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-games@cn.srs",
+        "download_detour": "out-proxy",
+        "type": "remote"
+      },
+      {
+        "tag": "geosite-googlefcm",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-googlefcm.srs",
+        "download_detour": "out-proxy",
+        "type": "remote"
+      },
+      {
+        "tag": "geosite-apple@cn",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-apple@cn.srs",
+        "download_detour": "out-proxy",
+        "type": "remote"
+      },
+      {
+        "tag": "geosite-google@cn",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-google@cn.srs",
+        "download_detour": "out-proxy",
+        "type": "remote"
+      },
+      {
+        "tag": "geosite-geolocation-!cn",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-!cn.srs",
+        "download_detour": "out-proxy",
+        "type": "remote"
+      },
+      {
+        "tag": "geosite-geolocation-cn",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-cn.srs",
+        "download_detour": "out-proxy",
+        "type": "remote"
+      },
+      {
+        "tag": "geosite-tld-cn",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-tld-cn.srs",
+        "download_detour": "out-proxy",
+        "type": "remote"
+      },
+      {
+        "tag": "geoip-cn",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs",
+        "download_detour": "out-proxy",
+        "type": "remote"
+      },
+      {
+        "tag": "geosite-private",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-private.srs",
+        "download_detour": "out-proxy",
+        "type": "remote"
+      },
+      {
+        "tag": "custom-rule",
+        "format": "source",
+        "path": "custom-rule.json",
+        "type": "local"
+      }
+    ]
   },
   "dns": {
-    "final": "proxy",
+    // "final": "dns-proxy",
     "rules": [
+      // {
+      //   "outbound": "any",
+      //   "server": "local"
+      // },
+      // {
+      //   "clash_mode": "Global",
+      //   "server": "google"
+      // },
+      // {
+      //   "clash_mode": "Direct",
+      //   "server": "google"
+      // },
       {
-        "geosite": "category-ads-all",
-        "disable_cache": true,
-        "server": "block"
-      },
-      {
-        "geosite": "category-games@cn",
-        "server": "bypass"
-      },
-      {
-        "domain_suffix": [
-          "ghporxy.com",
-          "metacubex.one",
-          "yacd.haishan.me"
+        "rule_set": [
+          "BlockHttpDNS",
+          "geosite-category-ads-all"
         ],
-        "server": "bypass"
+        "domain_suffix": [
+          ".mcdn.bilivideo.cn",
+          ".szbdyd.com"
+        ],
+        "domain_regex": [
+          "cn-[a-zA-Z0-9-]+\\.bilivideo\\.com",
+          "[a-zA-Z0-9-]+-pcdn-[a-zA-Z0-9-]+\\.biliapi\\.net"
+        ],
+        "disable_cache": true,
+        "server": "dns-success"
       },
       {
-        "geosite": "geolocation-!cn",
-        "server": "proxy"
+        "rule_set": [
+          "geosite-apple@cn",
+          "geosite-google@cn"
+        ],
+        "server": "out-direct"
       },
       {
-        "geosite": "cn",
-        "server": "bypass"
+        "rule_set": "geosite-category-games@cn",
+        "server": "dns-direct"
       },
       {
-        "geosite": "private",
-        "server": "direct"
+        "rule_set": "geosite-geolocation-!cn",
+        "server": "dns-proxy"
+      },
+      {
+        "rule_set": [
+          "geosite-tld-cn",
+          "geosite-geolocation-cn"
+        ],
+        "server": "dns-direct"
       }
     ],
     "servers": [
+      //  h3://1.1.1.1/dns-query
+      //  https://1.1.1.1/dns-query
+      //  tcp://1.1.1.1
+      //  127.0.0.1:15353
+      // quic://dns.adguard-dns.com
       {
-        "tag": "proxy",
-        "address": "https://1.1.1.1/dns-query",
-        "strategy": "ipv4_only",
-        "detour": "fallback_dns"
+        "tag": "dns-proxy",
+        "address": "tcp://1.0.0.1",
+        // "strategy": "ipv4_only",
+        "address_resolver": "dns-local",
+        "detour": "out-proxy"
       },
       {
-        "tag": "bypass",
+        "tag": "dns-direct",
         "address": "tls://223.5.5.5",
-        // "strategy": "prefer_ipv6"
-        "detour": "bypass"
+        "detour": "out-direct"
       },
       {
-        "tag": "direct",
-        "address": "dhcp://auto",
-        "detour": "direct"
+        "tag": "dns-local",
+        "address": "local",
+        "detour": "out-direct"
       },
       {
-        "tag": "block",
+        "tag": "dns-success",
         "address": "rcode://success"
+      },
+      {
+        "tag": "dns-block",
+        "address": "rcode://refused"
       }
     ]
   },
   "outbounds": [
     {
-      "tag": "fallback_dns",
+      "tag": "out-fallback",
       "outbounds": [
-        "geph_1",
-        "geph_2",
-        "geph_3",
-        "geph_4",
-        "geph_default",
-        "bypass",
-        "direct"
+        "out-geph-default",
+        "out-geph-1",
+        "out-geph-2",
+        "out-geph-3",
+        "out-geph-4"
       ],
       "url": "http://www.apple.com/library/test/success.html",
       "interval": "30s",
@@ -169,109 +288,100 @@
       "type": "urltest"
     },
     {
-      "tag": "fallback",
+      "tag": "out-proxy",
       "outbounds": [
-        "geph_1",
-        "geph_2",
-        "geph_3",
-        "geph_4",
-        "geph_default"
-      ],
-      "url": "http://www.apple.com/library/test/success.html",
-      "interval": "30s",
-      "tolerance": 9999,
-      "type": "urltest"
-    },
-    {
-      "tag": "proxy",
-      "outbounds": [
-        "fallback",
-        "geph_default",
-        "geph_1",
-        "geph_2",
-        "geph_3",
-        "geph_4"
+        "out-fallback",
+        "out-geph-default",
+        "out-geph-1",
+        "out-geph-2",
+        "out-geph-3",
+        "out-geph-4"
       ],
       "type": "selector"
     },
     {
-      "tag": "googlefcm",
+      "tag": "out-googlefcm",
       "outbounds": [
-        "bypass",
-        "proxy"
+        "out-direct",
+        "out-proxy"
       ],
       "type": "selector"
     },
     // {
-    //   "tag": "game",
+    //   "tag": "out-game",
     //   "outbounds": [
-    //     "bypass",
-    //     "proxy"
+    //     "out-direct",
+    //     "out-proxy"
     //   ],
     //   "type": "selector"
     // },
     // {
-    //   "tag": "game-udp",
+    //   "tag": "out-game-udp",
     //   "outbounds": [
-    //     "bypass",
-    //     "proxy"
+    //     "out-direct",
+    //     "out-proxy"
     //   ],
     //   "type": "selector"
     // },
     // {
-    //   "tag": "bilibili",
+    //   "tag": "out-bilibili",
     //   "outbounds": [
-    //     "bypass",
-    //     "proxy"
+    //     "out-direct",
+    //     "out-proxy"
     //   ],
     //   "type": "selector"
     // },
     {
-      "tag": "geph_default",
+      "tag": "out-geph-default",
       "server": "127.0.0.1",
-      "server_port": 9910,
-      "type": "http"
-    },
-    {
-      "tag": "geph_1",
-      "server": "127.0.0.1",
-      "server_port": 9911,
+      "server_port": 9909,
       // "domain_strategy": "ipv4_only",
-      "type": "http"
+      "network": "tcp",
+      "version": "5",
+      "type": "socks"
     },
     {
-      "tag": "geph_2",
+      "tag": "out-geph-1",
       "server": "127.0.0.1",
-      "server_port": 9912,
-      "type": "http"
+      "server_port": 9908,
+      "network": "tcp",
+      "version": "5",
+      "type": "socks"
     },
     {
-      "tag": "geph_3",
+      "tag": "out-geph-2",
       "server": "127.0.0.1",
-      "server_port": 9913,
-      "type": "http"
+      "server_port": 9907,
+      "network": "tcp",
+      "version": "5",
+      "type": "socks"
     },
     {
-      "tag": "geph_4",
+      "tag": "out-geph-3",
       "server": "127.0.0.1",
-      "server_port": 9914,
-      "type": "http"
+      "server_port": 9906,
+      "network": "tcp",
+      "version": "5",
+      "type": "socks"
     },
     {
-      "tag": "direct",
+      "tag": "out-geph-4",
+      "server": "127.0.0.1",
+      "server_port": 9905,
+      "network": "tcp",
+      "version": "5",
+      "type": "socks"
+    },
+    {
+      "tag": "out-direct",
       "type": "direct"
     },
     {
-      "tag": "bypass",
-      // "domain_strategy": "prefer_ipv6",
-      "type": "direct"
-    },
-    {
-      "tag": "block",
+      "tag": "out-block",
       "type": "block"
     },
     {
-      "tag": "dns-out",
+      "tag": "out-dns",
       "type": "dns"
     }
   ],
@@ -281,15 +391,21 @@
     //   "inet4_address": "172.19.0.1/30",
     //   "inet6_address": "fdfe:dcba:9876::1/126",
     //   "auto_route": true,
-    //   "strict_route": true,
-    //   "stack": "mixed",
+    //   "strict_route": false,
+    //   "stack": "mixed",    //default
     //   "sniff": true,
     //   "sniff_override_destination": false,
     //   "type": "tun"
     // },
     {
-      "tag": "mixed-in",
-      "listen": "127.0.0.1",
+      "tag": "in-dns",
+      "listen": "::",
+      "listen_port": 1053,
+      "type": "direct"
+    },
+    {
+      "tag": "in-mixed",
+      "listen": "::",
       "listen_port": 7890,
       "set_system_proxy": false,
       "sniff": true,
@@ -300,14 +416,19 @@
   ],
   "log": {
     "level": "info",
-    "timestamp": true
+    "timestamp": false
   },
   "experimental": {
+    "cache_file": {
+      "enabled": true,
+      "path": "cache.db"
+    },
     "clash_api": {
-      "external_controller": "127.0.0.1:9090",
-      "external_ui": "yacd",
+      "external_controller": ":9090",
       "secret": "touhoured",
-      "store_selected": true
+      "external_ui_download_url": "https://github.com/MetaCubeX/metacubexd/archive/gh-pages.zip",
+      "external_ui_download_detour": "out-proxy",
+      "external_ui": "xd"
     }
   }
 }
