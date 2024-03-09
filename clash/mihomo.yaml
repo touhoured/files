@@ -3,6 +3,11 @@ rules:
   - PROCESS-NAME,geph4-client.exe,DIRECT
   - PROCESS-NAME,geph4-client,DIRECT
 
+  # Custom
+  - RULE-SET,custom-reject,REJECT
+  - RULE-SET,custom-direct,DIRECT
+  - RULE-SET,custom-proxy,PROXY
+
   # Private address
   - GEOSITE,private,DIRECT
   - GEOIP,private,DIRECT,no-resolve
@@ -15,12 +20,6 @@ rules:
   # - AND,((NETWORK,UDP,no-resolve),(DST-PORT,443)),REJECT
   - AND,((AND,((NETWORK,UDP,no-resolve),(DST-PORT,443))),(OR,(NOT,((GEOIP,cn,no-resolve))),(GEOSITE,geolocation-!cn))),REJECT
 
-  # Custom
-  # - RULE-SET,custom-reject,REJECT
-  - RULE-SET,custom-direct,DIRECT
-  # - RULE-SET,custom-proxy,PROXY
-  - DOMAIN,dispatchosglobal.yuanshen.com,PROXY
-  - DOMAIN,overseauspider.yuanshen.com.PROXY
   - RULE-SET,applications,DIRECT
   - GEOSITE,bing,Bing
   - GEOSITE,googlefcm,GoogleFCM
