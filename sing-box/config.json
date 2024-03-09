@@ -79,7 +79,7 @@
           "metacubex.one",
           // "dl.google.com",
           "yacd.haishan.me"
-        ]
+        ],
         "outbound": "out-direct"
       },
       { // custom rule
