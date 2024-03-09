@@ -56,7 +56,30 @@
         "outbound": "out-block"
       },
       { // custom rule
-        "rule_set": "custom-rule",
+        "domain_suffix": [
+          "xaidc.com",
+          "cjjd15.com",
+          "cjjd18.com",
+          "cjjd20.com",
+          "7moor-fs1.com",
+          "kanxue.com",
+          // "deeplx.org",
+          "wuyou.net",
+          "ghxi.com",
+          "ly93.cc",
+          "loli.io",
+          "dl.sourceforge.net",
+          // "asmr-100.com",
+          "ghporxy.com",
+          "dockerproxy.com",
+          "winos.me",
+          "kinh.cc",
+          "dandanplay.net",
+          "geilijiasu.com",
+          "metacubex.one",
+          // "dl.google.com",
+          "yacd.haishan.me"
+        ]
         "outbound": "out-direct"
       },
       { // custom rule
@@ -176,12 +199,6 @@
         "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-private.srs",
         "download_detour": "out-proxy",
         "type": "remote"
-      },
-      {
-        "tag": "custom-rule",
-        "format": "source",
-        "path": "custom-rule.json",
-        "type": "local"
       }
     ]
   },
