@@ -1,0 +1,296 @@
+rules:
+  # Geph
+  - PROCESS-NAME,geph4-client.exe,DIRECT
+  - PROCESS-NAME,geph4-client,DIRECT
+
+  # Private address
+  - GEOSITE,private,DIRECT
+  - GEOIP,private,DIRECT,no-resolve
+
+  # AD/Block
+  - GEOSITE,category-ads-all,REJECT
+  - GEOSITE,win-spy,REJECT
+  # - GEOSITE,win-extra,REJECT
+  - AND,((OR,((GEOSITE,bilibili),(GEOSITE,douyu))),(NETWORK,UDP,no-resolve)),REJECT
+  # - AND,((NETWORK,UDP,no-resolve),(DST-PORT,443)),REJECT
+  - AND,((AND,((NETWORK,UDP,no-resolve),(DST-PORT,443))),(OR,(NOT,((GEOIP,cn,no-resolve))),(GEOSITE,geolocation-!cn))),REJECT
+
+  # Custom
+  # - RULE-SET,custom-reject,REJECT
+  - RULE-SET,custom-direct,DIRECT
+  # - RULE-SET,custom-proxy,PROXY
+  - DOMAIN,dispatchosglobal.yuanshen.com,PROXY
+  - DOMAIN,overseauspider.yuanshen.com.PROXY
+  - RULE-SET,applications,DIRECT
+  - GEOSITE,bing,Bing
+  - GEOSITE,googlefcm,GoogleFCM
+  # - GEOSITE,bilibili,Bilibili
+  # - AND,((PROCESS-NAME,GenshinImpact.exe),(NETWORK,TCP)),PROXY
+  # - SUB-RULE,(PROCESS-NAME,GenshinImpact.exe),genshin
+
+  # China CDN/Direct
+  - RULE-SET,ip-attribution-reject,REJECT,no-resolve
+  - RULE-SET,ip-attribution-direct,DIRECT,no-resolve
+  - RULE-SET,ip-attribution-proxy,IPAttribution,no-resolve
+  # - AND,((GEOSITE,bilibili,Bilibili),(RULE-SET,ip-attribution-proxy,no-resolve)),IPAttribution
+  # - GEOSITE,apple-cn,DIRECT
+  # - GEOSITE,google-cn,DIRECT
+  - GEOSITE,tld-cn,DIRECT
+  - GEOSITE,category-games@cn,DIRECT
+  - GEOSITE,geolocation-!cn@cn,DIRECT
+
+  # Not China
+  - GEOSITE,geolocation-cn@!cn,PROXY
+  - GEOSITE,geolocation-!cn,PROXY
+  # - GEOSITE,cn@!cn,PROXY
+
+  # China
+  - GEOSITE,geolocation-cn,DIRECT
+  # - GEOSITE,cn,DIRECT
+  - GEOIP,cn,DIRECT,no-resolve
+
+  # Other
+  - MATCH,MATCH
+
+sub-rules:
+  global-proxy:
+    - MATCH,WARP
+  # genshin:
+  #   # - IP-CIDR,8.211.128.0/18,Games,udp # Genshin Asia
+  #   # - IP-CIDR,47.74.0.0/18,Games,udp # Genshin Asia
+  #   - NETWORK,UDP,Games-UDP
+  #   # - DOMAIN,dispatchosglobal.yuanshen.com,PROXY # Genshin global
+  #   - NETWORK,TCP,PROXY
+
+proxy-groups:
+  - name: Fallback
+    type: fallback
+    proxies:
+      - geph_1
+      - geph_2
+      - geph_3
+      - geph_4
+      - geph_default
+      # - DIRECT
+    url: "http://google.com/generate_204"
+    interval: 300
+  - name: PROXY
+    type: select
+    proxies:
+      - Fallback
+      - WARP
+      - aggregator
+      - geph_default
+      - geph_1
+      - geph_2
+      - geph_3
+      - geph_4
+      - DIRECT
+  - name: WARPOut
+    type: select
+    proxies:
+      - DIRECT
+      - Fallback
+      - geph_default
+      - geph_1
+      - geph_2
+      - geph_3
+      - geph_4
+  - name: aggregator
+    type: url-test
+    use:
+      - aggregator
+    url: "http://captive.apple.com/generate_204"
+    interval: 300
+
+  # Rule
+  - name: Bing
+    type: select
+    proxies:
+      - PROXY
+      - PASS
+      - DIRECT
+  - name: GoogleFCM
+    type: select
+    proxies:
+      - DIRECT
+      - PASS
+      - PROXY
+  # - name: Bilibili
+  #   type: select
+  #   proxies:
+  #     - DIRECT
+  #     - PROXY
+  - name: IPAttribution
+    type: select
+    proxies:
+      - PASS
+      - PROXY
+      - DIRECT
+  # - name: Game
+  #   type: select
+  #   proxies:
+  #     - PROXY
+  #     - PASS
+  #     - DIRECT
+  # - name: Games-UDP
+  #   type: select
+  #   proxies:
+  #     - DIRECT
+  #     - PROXY
+  - name: MATCH
+    type: select
+    proxies:
+      - PROXY
+      - DIRECT
+
+rule-anchor:
+  ip: &ip {type: http, interval: 86400, behavior: ipcidr, format: text}
+  domain: &domain {type: http, interval: 86400, behavior: domain, format: text}
+  classical: &classical {type: http, interval: 86400, behavior: classical, format: text}
+
+rule-providers:
+  applications:
+    <<: *classical
+    format: yaml
+    url: "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/applications.txt"
+  ip-attribution-direct:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/lwd-temp/anti-ip-attribution/main/generated/rule-set-direct.list"
+  ip-attribution-reject:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/lwd-temp/anti-ip-attribution/main/generated/rule-set-reject.list"
+  ip-attribution-proxy:
+    <<: *classical
+    url: "https://raw.githubusercontent.com/lwd-temp/anti-ip-attribution/main/generated/rule-set-proxy.list"
+  custom-reject:
+    <<: *classical
+    path: rulse/custom-reject.txt
+    url: "https://raw.githubusercontent.com/touhoured/files/master/clash/provider/rule-set/custom-reject.txt"
+  custom-direct:
+    <<: *classical
+    path: rulse/custom-direct.txt
+    url: "https://raw.githubusercontent.com/touhoured/files/master/clash/provider/rule-set/custom-direct.txt"
+  custom-proxy:
+    <<: *classical
+    path: rulse/custom-proxy.txt
+    url: "https://raw.githubusercontent.com/touhoured/files/master/clash/provider/rule-set/custom-proxy.txt"
+
+
+proxy-providers:
+  aggregator:
+    type: http
+    url: "https://raw.githubusercontent.com/mahdibland/V2RayAggregator/master/Eternity.yml"
+    interval: 3600
+    health-check:
+      enable: true
+      interval: 300
+      url: "http://captive.apple.com/generate_204"
+
+proxies:
+  - name: geph_default
+    type: http
+    server: 127.0.0.1
+    port: 9910
+  - name: geph_1
+    type: http
+    server: 127.0.0.1
+    port: 9911
+  - name: geph_2
+    type: http
+    server: 127.0.0.1
+    port: 9912
+  - name: geph_3
+    type: http
+    server: 127.0.0.1
+    port: 9913
+  - name: geph_4
+    type: http
+    server: 127.0.0.1
+    port: 9913
+
+  - name: "WARP"
+    type: wireguard
+    server: engage.cloudflareclient.com
+    port: 2480
+    ip: "172.16.0.2/32"
+    ipv6: "2606:4700:110:8abe:359b:1b05:fda5:2ca7/128"
+    private-key: "EBEM7TfbpXZ2mPv7Y4Wq/ykXOvCBIA4px5OlRqxX8Fc="
+    public-key: "bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo="
+    udp: true
+    # reserved: [219, 212, 139]
+    mtu: 1280
+    # dialer-proxy: "WARPOut"
+    remote-dns-resolve: true
+    dns:
+      - https://dns.cloudflare.com/dns-query
+
+dns:
+  enable: true
+  # ipv6: true
+  listen: :1053
+  default-nameserver:
+    # - 127.0.0.1:15353
+    - 8.8.8.8
+    - 223.5.5.5
+  enhanced-mode: redir-host
+  # enhanced-mode: fake-ip
+  # enhanced-mode: normal
+  nameserver:
+    - tls://dns.pub
+    - tls://dns.alidns.com
+  fallback:
+    # - 127.0.0.1:15353
+    - https://dns.google/dns-query&h3=false
+    - https://cloudflare-dns.com/dns-query&h3=false
+    - tcp://dns.google
+    - tcp://cloudflare-dns.com
+
+mixed-port: 7890
+allow-lan: true
+mode: rule
+log-level: info
+ipv6: true
+external-controller: :9090
+external-ui-name: xd
+external-ui-url: "https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip"
+secret: touhoured
+profile:
+  store-selected: true
+  # store-fake-ip: true
+inbound-tfo: false # TCP Fast Open
+geodata-mode: true
+tcp-concurrent: false
+unified-delay: false # is Self deception ?
+
+
+tun:
+  enable: false
+  stack: mixed
+  auto-route: true
+  # strict_route: true
+  auto-detect-interface: true
+  dns-hijack:
+    - any:53
+    # - 0.0.0.0:53
+
+sniffer:
+  enable: true
+  # force-dns-mapping: true
+  # parse-pure-ip: false
+  override-destination: false
+  sniff:
+    TLS:
+      ports: [443, 8443]
+    HTTP:
+      ports: [80, 8080-8880]
+      override-destination: true
+  force-domain:
+    - "+.v2ex.com"
+  skip-domain:
+  - Mijia Cloud
+
+# geox-url:
+#   geoip: "https://github.com/touhoured/meta-rules-dat/releases/latest/download/geoip.dat"
+#   geosite: "https://github.com/touhoured/meta-rules-dat/releases/latest/download/geosite.dat"
+#   mmdb: "https://github.com/touhoured/meta-rules-dat/releases/latest/download/Country.mmdb"
