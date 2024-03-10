@@ -467,7 +467,7 @@
       "inet4_address": "172.19.0.1/30",
       // "inet6_address": "fdfe:dcba:9876::1/126",
       "auto_route": true,
-      "strict_route": false,
+      "strict_route": true,
       "stack": "mixed",
       "sniff": true,
       "sniff_override_destination": false,
@@ -504,7 +504,7 @@
   "experimental": {
     "cache_file": {
       "enabled": true,
-      // "store_rdrc": true,
+      "store_rdrc": true,
       "path": "cache.db"
     },
     "clash_api": {
