@@ -467,10 +467,17 @@
       "inet4_address": "172.19.0.1/30",
       // "inet6_address": "fdfe:dcba:9876::1/126",
       "auto_route": true,
-      "strict_route": true,
+      "strict_route": false,
       "stack": "mixed",
       "sniff": true,
       "sniff_override_destination": false,
+      "platform": {
+        "http_proxy": {
+          "enabled": false,
+          "server": "127.0.0.1",
+          "server_port": 7890
+        }
+      },
       "type": "tun"
     },
     {

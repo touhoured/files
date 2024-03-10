@@ -471,6 +471,13 @@
       "stack": "mixed",
       "sniff": true,
       "sniff_override_destination": false,
+      "platform": {
+        "http_proxy": {
+          "enabled": false,
+          "server": "127.0.0.1",
+          "server_port": 7890
+        }
+      },
       "type": "tun"
     },
     {
