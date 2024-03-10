@@ -11,14 +11,6 @@
         ],
         "outbound": "out-direct"
       },
-      {
-        "clash_mode": "Global",
-        "outbound": "out-proxy"
-      },
-      {
-        "clash_mode": "Direct",
-        "outbound": "out-direct"
-      },
       { // dns
         "type": "logical",
         "mode": "or",
@@ -35,6 +27,14 @@
         ],
         "outbound": "out-dns"
       },
+      {
+        "clash_mode": "Global",
+        "outbound": "out-proxy"
+      },
+      {
+        "clash_mode": "Direct",
+        "outbound": "out-direct"
+      },
       { // bypass lan, new priority, may affect match
         "ip_is_private": true,
         "rule_set": "geosite-private",
@@ -44,6 +44,14 @@
         "rule_set": [
           "BlockHttpDNS",
           "geosite-category-ads-all"
+        ],
+        "domain": [
+          "ntp.msn.cn",
+          "ys-log-upload-os.hoyoverse.com",
+          "devlog-upload.mihoyo.com",
+          "log-upload-os.hoyoverse.com",
+          "log-upload-os.mihoyo.com",
+          "log-upload.mihoyo.com"
         ],
         "domain_suffix": [
           ".mcdn.bilivideo.cn",
@@ -55,14 +63,12 @@
         ],
         "outbound": "out-block"
       },
-      { // custom rule
-        "domain": [
-          "dispatchosglobal.yuanshen.com",
-          "overseauspider.yuanshen.com"
+      {
+        "rule_set": [
+          "geosite-apple@cn",
+          // "geosite-google@cn",
+          "geosite-category-games@cn"
         ],
-        "outbound": "out-block"
-      },
-      { // custom rule
         "domain_suffix": [
           "xaidc.com",
           "cjjd15.com",
@@ -89,30 +95,24 @@
         ],
         "outbound": "out-direct"
       },
-      { // custom rule
-        "domain": [
-          "dispatchosglobal.yuanshen.com",
-          "overseauspider.yuanshen.com"
+      { // game udp
+        "process_name": [
+          "GenshinImpact.exe",
+          "Yuanshen.exe"
         ],
-        "outbound": "out-proxy"
-      },
-      {
-        "rule_set": "geosite-category-games@cn",
-        "outbound": "out-direct"
+        "network": "udp",
+        "outbound": "out-game-udp"
       },
       {
         "rule_set": "geosite-googlefcm",
         "outbound": "out-googlefcm"
       },
-      // { // china cdn for foreign company
-      //   "rule_set": [
-      //     "geosite-apple@cn",
-      //     "geosite-google@cn"
-      //   ],
-      //   "outbound": "out-direct"
-      // },
       { // not china
         "rule_set": "geosite-geolocation-!cn",
+        "domain": [
+          "dispatchosglobal.yuanshen.com",
+          "overseauspider.yuanshen.com"
+        ],
         "outbound": "out-proxy"
       },
       { // china
@@ -211,22 +211,30 @@
   },
   "dns": {
     "rules": [
-      // {
-      //   "outbound": "any",
-      //   "server": "local"
-      // },
-      // {
-      //   "clash_mode": "Global",
-      //   "server": "google"
-      // },
-      // {
-      //   "clash_mode": "Direct",
-      //   "server": "google"
-      // },
+      {
+        "outbound": "any",
+        "server": "local"
+      },
+      {
+        "clash_mode": "Global",
+        "server": "google"
+      },
+      {
+        "clash_mode": "Direct",
+        "server": "google"
+      },
       {
         "rule_set": [
           "BlockHttpDNS",
           "geosite-category-ads-all"
+        ],
+        "domain": [
+          "ntp.msn.cn",
+          "ys-log-upload-os.hoyoverse",
+          "devlog-upload.mihoyo.com",
+          "log-upload-os.hoyoverse.com",
+          "log-upload-os.mihoyo.com",
+          "log-upload.mihoyo.com"
         ],
         "domain_suffix": [
           ".mcdn.bilivideo.cn",
@@ -243,7 +251,12 @@
         "rule_set": "geosite-private",
         "server": "dns-local"
       },
-      { // custom rule
+      {
+        "rule_set": [
+          "geosite-apple@cn",
+          "geosite-google@cn",
+          "geosite-category-games@cn"
+        ],
         "domain_suffix": [
           "xaidc.com",
           "cjjd15.com",
@@ -270,26 +283,13 @@
         ],
         "server": "dns-direct"
       },
-      { // custom rule
+      {
+        "rule_set": "geosite-geolocation-!cn",
         "domain": [
+          "osuspider.yuanshen.com",
           "dispatchosglobal.yuanshen.com",
           "overseauspider.yuanshen.com"
         ],
-        "server": "dns-proxy"
-      },
-      {
-        "rule_set": [
-          "geosite-apple@cn",
-          "geosite-google@cn"
-        ],
-        "server": "dns-direct"
-      },
-      {
-        "rule_set": "geosite-category-games@cn",
-        "server": "dns-direct"
-      },
-      {
-        "rule_set": "geosite-geolocation-!cn",
         "server": "dns-proxy"
       },
       {
@@ -391,14 +391,14 @@
     //   ],
     //   "type": "selector"
     // },
-    // {
-    //   "tag": "out-game-udp",
-    //   "outbounds": [
-    //     "out-direct",
-    //     "out-proxy"
-    //   ],
-    //   "type": "selector"
-    // },
+    {
+      "tag": "out-game-udp",
+      "outbounds": [
+        "out-direct",
+        "out-proxy"
+      ],
+      "type": "selector"
+    },
     // {
     //   "tag": "out-bilibili",
     //   "outbounds": [
@@ -490,7 +490,7 @@
       "tag": "in-mixed",
       "listen": "::",
       "listen_port": 7890,
-      "set_system_proxy": false,
+      "set_system_proxy": true,
       "sniff": true,
       "sniff_override_destination": false,
       // "domain_strategy": "prefer_ipv4",
