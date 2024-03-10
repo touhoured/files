@@ -16,4 +16,4 @@ DOMAIN-SUFFIX,kinh.cc
 DOMAIN-SUFFIX,dandanplay.net
 DOMAIN-SUFFIX,geilijiasu.com
 DOMAIN-SUFFIX,metacubex.one
-DOMAIN-SUFFIX,yacd.haishan.meDOMAIN-SUFFIX,
+DOMAIN-SUFFIX,haishan.me
