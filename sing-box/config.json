@@ -312,35 +312,22 @@
         ],
         "server": "dns-direct"
       },
-      // {
-      //   "type": "logical",
-      //   "mode": "and",
-      //   "rules": [
-      //     {
-      //       "rule_set": "geosite-geolocation-!cn",
-      //       "invert": true
-      //     },
-      //     {
-      //       "rule_set": "geoip-cn"
-      //     }
-      //   ],
-      //   "client_subnet": "1.0.1.0/24", // Any China client IP address
-      //   "server": "dns-proxy"
-      // }
       {
-        "query_type": [
-          "A",
-          "AAAA"
+        "type": "logical",
+        "mode": "and",
+        "rules": [
+          {
+            "rule_set": "geosite-geolocation-!cn",
+            "invert": true
+          },
+          {
+            "rule_set": "geoip-cn"
+          }
         ],
-        "rewrite_ttl": 0,
-        "server": "dns-fakeip"
+        "client_subnet": "1.0.1.0/24", // Any China client IP address
+        "server": "dns-proxy"
       }
     ],
-    "fakeip": {
-      "enabled": true,
-      "inet4_range": "198.18.0.0/15"
-    },
-    "independent_cache": true,
     // "final": "dns-proxy",
     // "strategy": "ipv4_only"
     "servers": [
@@ -371,10 +358,6 @@
         "tag": "dns-local",
         "address": "local",
         "detour": "out-direct"
-      },
-      {
-        "tag": "dns-fakeip",
-        "address": "fakeip"
       },
       {
         "tag": "dns-success",
@@ -526,15 +509,15 @@
     }
   ],
   "inbounds": [
-    {
-      "tag": "in-tun",
-      "address": "172.19.0.1/30",
-      "auto_route": true,
-      "strict_route": true,
-      "stack": "mixed",
-      "sniff": true,
-      "type": "tun"
-    },
+    // {
+    //   "tag": "in-tun",
+    //   "address": "172.19.0.1/30",
+    //   "auto_route": true,
+    //   "strict_route": true,
+    //   "stack": "mixed",
+    //   "sniff": true,
+    //   "type": "tun"
+    // },
     {
       "tag": "in-dns",
       "listen": "::",
