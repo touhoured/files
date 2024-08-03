@@ -1,3 +1,6 @@
+
+choice
+
 pushd %~dp0
 call copy.cmd
 
