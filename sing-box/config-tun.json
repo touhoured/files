@@ -41,22 +41,22 @@
         "outbound": "out-direct"
       },
       { // ad
-        "rule_set": [
-          "BlockHttpDNS",
-          "geosite-category-ads-all"
-        ],
-        "domain": [
-          "httpdns.bilivideo.com",
-          "ntp.msn.cn"
-        ],
-        "domain_suffix": [
-          ".mcdn.bilivideo.cn",
-          ".szbdyd.com"
-        ],
-        "domain_regex": [
-          "cn-.+\\.bilivideo\\.com$",
-          "-pcdn-.+\\.biliapi\\.net$"
-        ],
+        // "rule_set": [
+        //   "BlockHttpDNS",
+        //   "geosite-category-ads-all"
+        // ],
+        // "domain": [
+        //   "httpdns.bilivideo.com",
+        //   "ntp.msn.cn"
+        // ],
+        // "domain_suffix": [
+        //   ".mcdn.bilivideo.cn",
+        //   ".szbdyd.com"
+        // ],
+        // "domain_regex": [
+        //   "cn-.+\\.bilivideo\\.com$",
+        //   "-pcdn-.+\\.biliapi\\.net$"
+        // ],
         "ip_cidr": [ // bilibili
           "47.101.175.206/32",
           "47.100.123.169/32",
