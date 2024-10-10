@@ -7,6 +7,14 @@
 ; ~ *XButton2 Up::Reload
 ~XButton2::
 {
+	if WinActive("ahk_exe Game_boxed.exe") {
+	SendMode "Play"
+		while GetKeyState("Space","P") {
+			Click "Down"
+			Sleep 200
+			Click "Up"
+		}
+	}
 	while GetKeyState("LButton","P") {
 		Click
 		Sleep 20
