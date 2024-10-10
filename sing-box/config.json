@@ -183,6 +183,13 @@
         "type": "remote"
       },
       {
+        "tag": "geosite-AdGuardSDNSFilter",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/xmdhs/sing-box-ruleset/rule-set/AdGuardSDNSFilter.srs",
+        "download_detour": "out-proxy",
+        "type": "remote"
+      },
+      {
         "tag": "geosite-googlefcm",
         "format": "binary",
         "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-googlefcm.srs",
@@ -288,6 +295,7 @@
       },
       {
         "rule_set": [
+          "geosite-AdGuardSDNSFilter",
           "geosite-category-httpdns-cn",
           "geosite-category-ads-all"
         ],
@@ -361,7 +369,8 @@
       },
       {
         "tag": "dns-local",
-        "address": "dhcp://auto",
+        // "address": "dhcp://auto",
+        "address": "https://223.5.5.5/dns-query",
         "detour": "out-direct"
       },
       {
@@ -546,10 +555,10 @@
   },
   "experimental": {
     "cache_file": {
-      "enabled": true,
       "store_rdrc": true,
       "rdrc_timeout": "1d",
-      // "path": "cache.db"
+      // "path": "cache.db",
+      "enabled": true
     },
     "clash_api": {
       "external_controller": ":9090",
