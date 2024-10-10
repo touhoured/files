@@ -376,6 +376,19 @@
   },
   "outbounds": [
     {
+      "tag": "out-proxy",
+      "outbounds": [
+        // "out-fallback",
+        "out-geph5",
+        "out-geph4",
+        "out-geph4-1",
+        "out-geph4-2",
+        "out-geph4-3",
+        "out-geph4-4"
+      ],
+      "type": "selector"
+    },
+    {
       "tag": "out-fallback",
       "outbounds": [
         "out-geph5",
@@ -389,27 +402,6 @@
       "interval": "30s",
       "tolerance": 9999,
       "type": "urltest"
-    },
-    // {
-    //   "tag": "out-fallback",
-    //   "server": "127.0.0.1",
-    //   "server_port": 9999,
-    //   // "domain_strategy": "ipv4_only",
-    //   "version": "5",
-    //   "type": "socks"
-    // },
-    {
-      "tag": "out-proxy",
-      "outbounds": [
-        "out-fallback",
-        "out-geph5",
-        "out-geph4",
-        "out-geph4-1",
-        "out-geph4-2",
-        "out-geph4-3",
-        "out-geph4-4"
-      ],
-      "type": "selector"
     },
     {
       "type": "selector",
