@@ -162,6 +162,13 @@
     ],
     "rule_set": [
       {
+        "tag": "geosite-private",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-private.srs",
+        "download_detour": "out-proxy",
+        "type": "remote"
+      },
+      {
         "tag": "geosite-category-httpdns-cn",
         "format": "binary",
         "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-httpdns-cn.srs",
@@ -240,13 +247,6 @@
         "type": "remote"
       },
       {
-        "tag": "geoip-cn",
-        "format": "binary",
-        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs",
-        "download_detour": "out-proxy",
-        "type": "remote"
-      },
-      {
         "tag": "geosite-cn",
         "format": "binary",
         "url": "https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs",
@@ -254,9 +254,9 @@
         "type": "remote"
       },
       {
-        "tag": "geosite-private",
+        "tag": "geoip-cn",
         "format": "binary",
-        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-private.srs",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs",
         "download_detour": "out-proxy",
         "type": "remote"
       }
@@ -390,6 +390,14 @@
       "tolerance": 9999,
       "type": "urltest"
     },
+    // {
+    //   "tag": "out-fallback",
+    //   "server": "127.0.0.1",
+    //   "server_port": 9999,
+    //   // "domain_strategy": "ipv4_only",
+    //   "version": "5",
+    //   "type": "socks"
+    // },
     {
       "tag": "out-proxy",
       "outbounds": [
