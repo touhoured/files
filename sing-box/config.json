@@ -387,8 +387,8 @@
     {
       "tag": "out-proxy",
       "outbounds": [
-        // "out-fallback",
         "out-geph5",
+        "out-fallback",
         "out-geph4",
         "out-geph4-1",
         "out-geph4-2",
