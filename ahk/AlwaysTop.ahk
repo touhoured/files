@@ -1,4 +1,5 @@
 #SingleInstance Force
 
-~RControl & t::WinSetAlwaysOnTop -1, "A"
-~RControl & F12::ExitApp
+#v::"D:\Program\Ditto\Ditto.exe" /open
+
+#e::"D:\Program\TotalCMD\tcrun64.exe"
