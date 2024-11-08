@@ -35,6 +35,27 @@
         "clash_mode": "Direct",
         "outbound": "out-direct"
       },
+      {
+        "type": "logical",
+        "mode": "or",
+        "rules": [
+          {
+            "port": 853
+          },
+          {
+            "network": "udp",
+            "port": 443
+          },
+          {
+            "protocol": "stun"
+          }
+        ],
+        "outbound": "out-block"
+      },
+      {
+        "protocol": "quic",
+        "outbound": "out-block"
+      },
       { // bypass lan, new priority, may affect match
         "ip_is_private": true,
         "rule_set": "geosite-private",
@@ -79,6 +100,9 @@
       },
       {
         "domain_suffix": [
+          "proxy.ghproxy.com",
+          "ghp.ci",
+          "ghproxy.cc",
           "xaidc.com",
           "cjjd15.com",
           "cjjd18.com",
@@ -92,7 +116,6 @@
           "loli.io",
           "dl.sourceforge.net",
           "asmr-100.com",
-          "ghporxy.com",
           "dockerproxy.com",
           "winos.me",
           "kinh.cc",
