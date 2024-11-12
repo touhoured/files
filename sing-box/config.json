@@ -1,8 +1,10 @@
+// first launch need download rules-set.
+// or change dns.final to "out.direct"
 {
   "route": {
-    "final": "out-proxy", // default proxy, whilelist mode
-    "auto_detect_interface": true, // disable to fix multi interfaces
-    // "default_interface": "WLAN", // disable to fix multi interfaces
+    "final": "out-proxy",
+    "auto_detect_interface": true,
+    // "default_interface": "WLAN",
     "rules": [
       { // bypass core, but look like cannot bypass dns request
         "process_name": [
@@ -21,21 +23,21 @@
         "outbound": "out-direct"
       },
       {
-        // "inbound": "tun-in",
+        // "inbound": "in-tun",
         // "timeout": "1s",
         "action": "sniff"
       },
       {
         "protocol": "dns",
-        "outbound": "out-dns"
-        // "action": "hijack-dns"
+        // "outbound": "out-dns"
+        "action": "hijack-dns"
       },
       {
         "clash_mode": "Global",
         "action": "route",
         "outbound": "out-proxy"
       },
-      {
+      { // dot quic stun
         "type": "logical",
         "mode": "or",
         "rules": [
@@ -43,11 +45,11 @@
             "port": 853
           },
           {
-            "network": "udp",
-            "port": 443
+            "protocol": "stun"
           },
           {
-            "protocol": "stun"
+            "network": "udp",
+            "port": 443
           },
           {
             "protocol": "quic"
@@ -78,7 +80,7 @@
         ],
         "action": "reject"
       },
-      {
+      { // custom direct
         "domain_suffix": [
           "proxy.ghproxy.com",
           "ghp.ci",
@@ -158,94 +160,96 @@
         "action": "route",
         "outbound": "out-direct"
       },
-      // {
-      //   "ip_is_private": true,
-      //   "rule_set": "geosite-private",
-      //   "action": "route",
-      //   "outbound": "out-direct"
-      // }
+      {
+        "ip_is_private": true,
+        "rule_set": "geosite-private",
+        "action": "route",
+        "outbound": "out-direct"
+      }
     ],
     "rule_set": [
       {
         "tag": "geosite-private",
         "format": "binary",
-        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-private.srs",
-        "download_detour": "out-proxy",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-private.srs",
+        "download_detour": "out-direct",
         "type": "remote"
       },
       {
         "tag": "geosite-category-httpdns-cn",
         "format": "binary",
-        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-httpdns-cn.srs",
-        "download_detour": "out-proxy",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-httpdns-cn.srs",
+        "download_detour": "out-direct",
         "type": "remote"
       },
       {
         "tag": "geosite-category-ads-all",
         "format": "binary",
-        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs",
-        "download_detour": "out-proxy",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs",
+        "download_detour": "out-direct",
         "type": "remote"
       },
       {
         "tag": "geosite-AdGuardSDNSFilter",
         "format": "binary",
-        "url": "https://raw.githubusercontent.com/xmdhs/sing-box-ruleset/rule-set/AdGuardSDNSFilter.srs",
-        "download_detour": "out-proxy",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/xmdhs/sing-box-ruleset/rule-set/AdGuardSDNSFilter.srs",
+        "download_detour": "out-direct",
         "type": "remote"
       },
       {
         "tag": "geosite-googlefcm",
         "format": "binary",
-        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-googlefcm.srs",
-        "download_detour": "out-proxy",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-googlefcm.srs",
+        "download_detour": "out-direct",
         "type": "remote"
       },
       {
         "tag": "geosite-onedrive",
         "format": "binary",
-        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-onedrive.srs",
-        "download_detour": "out-proxy",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-onedrive.srs",
+        "download_detour": "out-direct",
         "type": "remote"
       },
       {
         "tag": "geosite-geolocation-!cn",
         "format": "binary",
-        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-!cn.srs",
-        "download_detour": "out-proxy",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-!cn.srs",
+        "download_detour": "out-direct",
         "type": "remote"
       },
       {
         "tag": "geosite-geolocation-cn",
         "format": "binary",
-        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-cn.srs",
-        "download_detour": "out-proxy",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-cn.srs",
+        "download_detour": "out-direct",
         "type": "remote"
       },
       {
         "tag": "geosite-tld-cn",
         "format": "binary",
-        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-tld-cn.srs",
-        "download_detour": "out-proxy",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-tld-cn.srs",
+        "download_detour": "out-direct",
         "type": "remote"
       },
       {
         "tag": "geosite-cn",
         "format": "binary",
-        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs",
-        "download_detour": "out-proxy",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs",
+        "download_detour": "out-direct",
         "type": "remote"
       },
       {
         "tag": "geoip-cn",
         "format": "binary",
-        "url": "https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs",
-        "download_detour": "out-proxy",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs",
+        "download_detour": "out-direct",
         "type": "remote"
       }
     ]
   },
   "dns": {
+    "final": "dns-proxy",
+    // "strategy": "ipv4_only",
     "rules": [
       {
         "process_name": [
@@ -335,14 +339,12 @@
       //   "action": "route-options",
       //   "server": "dns-refused"
       // },
-      { // bypass lan, new priority, may affect match
+      {
         "rule_set": "geosite-private",
         "action": "route",
         "server": "dns-local"
-      },
+      }
     ],
-    "final": "dns-proxy",
-    // "strategy": "ipv4_only",
     "servers": [
       // h3://1.1.1.1/dns-query
       // https://1.1.1.1/dns-query
@@ -390,13 +392,14 @@
     {
       "tag": "out-proxy",
       "outbounds": [
-        "out-geph5",
         "out-fallback",
+        "out-geph5",
         "out-geph4",
         "out-geph4-1",
         "out-geph4-2",
         "out-geph4-3",
-        "out-geph4-4"
+        "out-geph4-4",
+        "out-direct"
       ],
       "type": "selector"
     },
@@ -510,10 +513,10 @@
       "version": "5",
       "type": "socks"
     },
-    {
-      "tag": "out-dns",
-      "type": "dns"
-    },
+    // {
+    //   "tag": "out-dns",
+    //   "type": "dns"
+    // },
     {
       "tag": "out-direct",
       "type": "direct"
@@ -523,7 +526,7 @@
     {
       "tag": "in-tun",
       "address": [
-        // "fd00::1/126",
+        "fd00::1/126",
         "172.19.0.1/30"
       ],
       "auto_route": true,
@@ -561,8 +564,8 @@
       "default_mode": "Rule",
       "secret": "touhoured",
       "external_ui": "ui",
-      "external_ui_download_url": "https://github.com/MetaCubeX/metacubexd/archive/gh-pages.zip",
-      "external_ui_download_detour": "out-proxy",
+      "external_ui_download_url": "https://ghp.ci/https://github.com/MetaCubeX/metacubexd/archive/gh-pages.zip",
+      "external_ui_download_detour": "out-direct",
       "external_controller": ":9090"
     }
   }
