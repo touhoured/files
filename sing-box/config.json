@@ -21,13 +21,14 @@
         "outbound": "out-direct"
       },
       {
-        "inbound": "tun-in",
+        // "inbound": "tun-in",
         // "timeout": "1s",
         "action": "sniff"
       },
       {
         "protocol": "dns",
-        "action": "hijack-dns"
+        "outbound": "out-dns"
+        // "action": "hijack-dns"
       },
       {
         "clash_mode": "Global",
@@ -55,12 +56,6 @@
         "method": "default",
         "no_drop": false,
         "action": "reject"
-      },
-      { // bypass lan, new priority, may affect match
-      "ip_is_private": true,
-      "rule_set": "geosite-private",
-      "action": "route",
-        "outbound": "out-direct"
       },
       { // ad
         "ip_cidr": [ // bilibili
@@ -162,7 +157,13 @@
         ],
         "action": "route",
         "outbound": "out-direct"
-      }
+      },
+      // {
+      //   "ip_is_private": true,
+      //   "rule_set": "geosite-private",
+      //   "action": "route",
+      //   "outbound": "out-direct"
+      // }
     ],
     "rule_set": [
       {
@@ -231,14 +232,14 @@
       {
         "tag": "geosite-cn",
         "format": "binary",
-        "url": "https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs",
         "download_detour": "out-proxy",
         "type": "remote"
       },
       {
         "tag": "geoip-cn",
         "format": "binary",
-        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs",
         "download_detour": "out-proxy",
         "type": "remote"
       }
@@ -257,6 +258,12 @@
         "action": "route",
         "server": "dns-geph"
       },
+      { // if outbound use domain
+        "disable_cache": true,
+        "outbound": "any",
+        "action": "route-options",
+        "server": "dns-local"
+      },
       {
         "clash_mode": "Global",
         "action": "route",
@@ -264,15 +271,6 @@
       },
       {
         "clash_mode": "Direct",
-        "action": "route",
-        "server": "dns-local"
-      },
-      // { // if outbound use domain
-      //   "outbound": "any",
-      //   "server": "dns_resolver"
-      // },
-      { // bypass lan, new priority, may affect match
-        "rule_set": "geosite-private",
         "action": "route",
         "server": "dns-local"
       },
@@ -326,17 +324,22 @@
         "action": "route-options",
         "server": "dns-proxy"
       },
-      {
-        "query_type": [
-          "CNAME",
-          "AAAA",
-          "A"
-        ],
-        "invert": true,
-        "disable_cache": true,
-        "action": "route-options",
-        "server": "dns-refused"
-      }
+      // { // fakeip
+      //   "query_type": [
+      //     "CNAME",
+      //     "AAAA",
+      //     "A"
+      //   ],
+      //   "invert": true,
+      //   "disable_cache": true,
+      //   "action": "route-options",
+      //   "server": "dns-refused"
+      // },
+      { // bypass lan, new priority, may affect match
+        "rule_set": "geosite-private",
+        "action": "route",
+        "server": "dns-local"
+      },
     ],
     "final": "dns-proxy",
     // "strategy": "ipv4_only",
@@ -508,22 +511,26 @@
       "type": "socks"
     },
     {
+      "tag": "out-dns",
+      "type": "dns"
+    },
+    {
       "tag": "out-direct",
       "type": "direct"
     }
   ],
   "inbounds": [
-    // {
-    //   "tag": "in-tun",
-    //   "address": [
-    //     "fd00::1/126",
-    //     "172.19.0.1/30"
-    //   ],
-    //   "auto_route": true,
-    //   "strict_route": true,
-    //   "stack": "mixed",
-    //   "type": "tun"
-    // },
+    {
+      "tag": "in-tun",
+      "address": [
+        // "fd00::1/126",
+        "172.19.0.1/30"
+      ],
+      "auto_route": true,
+      "strict_route": true,
+      "stack": "mixed",
+      "type": "tun"
+    },
     {
       "tag": "in-dns",
       "listen": "::",
@@ -552,11 +559,10 @@
     },
     "clash_api": {
       "default_mode": "Rule",
-      "access_control_allow_private_network": true,
       "secret": "touhoured",
-      "external_ui": "xd",
-      "external_ui_download_url": "https://ghp.ci/https://github.com/MetaCubeX/metacubexd/archive/gh-pages.zip",
-      "external_ui_download_detour": "out-direct",
+      "external_ui": "ui",
+      "external_ui_download_url": "https://github.com/MetaCubeX/metacubexd/archive/gh-pages.zip",
+      "external_ui_download_detour": "out-proxy",
       "external_controller": ":9090"
     }
   }
