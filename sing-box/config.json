@@ -16,9 +16,21 @@
           "geph5-client",
           "geph4-client"
         ],
-        "action": "resolve",
-        "strategy": "prefer_ipv4",
-        "server": "dns-direct"
+        "outbound": "out-direct"
+      },
+      {
+        "clash_mode": "Direct",
+        // "inbound": "in-tun",
+        // "timeout": "1s",
+        "server": "dns-direct",
+        "action": "sniff"
+        // "action": "resolve"
+      },
+      {
+        "clash_mode": "Direct",
+        "protocol": "dns",
+        // "outbound": "out-dns"
+        "action": "hijack-dns"
       },
       {
         "clash_mode": "Direct",
@@ -76,12 +88,12 @@
         ],
         "domain": [
           "black.qimo.ink",
+          "2fa.qwq2333.top",
+          "api.qwq2333.top",
           "sgameicon.ecology.smoba.qq.com",
-          "httpdns.bilivideo.com",
           "ntp.msn.cn"
         ],
         "domain_suffix": [
-          ".qwq2333.top",
           ".mcdn.bilivideo.cn",
           ".szbdyd.com"
         ],
@@ -95,7 +107,7 @@
       },
       {
         // "inbound": "in-tun",
-        "timeout": "1s",
+        // "timeout": "1s",
         "action": "sniff"
       },
       {
@@ -126,19 +138,6 @@
           "yacd.haishan.me"
         ],
         "outbound": "out-direct"
-      },
-      {
-        "domain_suffix": [
-          "bilivideo.com",
-          "bilivideo.cn",
-          "hdslb.net",
-          "hdslb.com"
-        ],
-        "outbound": "out-bilibili-cdn-cn"
-      },
-      {
-        "domain": "upos-hz-mirrorakam.akamaized.net",
-        "outbound": "out-bilibili-cdn-global"
       },
       {
         "domain_suffix": [
@@ -187,6 +186,7 @@
         "format": "binary",
         "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-private.srs",
         "download_detour": "out-direct",
+        // "update_interval": "1d",
         "type": "remote"
       },
       {
@@ -194,6 +194,7 @@
         "format": "binary",
         "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-httpdns-cn.srs",
         "download_detour": "out-direct",
+        // "update_interval": "1d",
         "type": "remote"
       },
       {
@@ -201,6 +202,7 @@
         "format": "binary",
         "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs",
         "download_detour": "out-direct",
+        // "update_interval": "1d",
         "type": "remote"
       },
       {
@@ -208,6 +210,7 @@
         "format": "binary",
         "url": "https://ghp.ci/https://raw.githubusercontent.com/xmdhs/sing-box-ruleset/rule-set/AdGuardSDNSFilter.srs",
         "download_detour": "out-direct",
+        // "update_interval": "1d",
         "type": "remote"
       },
       {
@@ -215,6 +218,7 @@
         "format": "binary",
         "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-googlefcm.srs",
         "download_detour": "out-direct",
+        // "update_interval": "1d",
         "type": "remote"
       },
       {
@@ -222,6 +226,7 @@
         "format": "binary",
         "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-onedrive.srs",
         "download_detour": "out-direct",
+        // "update_interval": "1d",
         "type": "remote"
       },
       {
@@ -229,6 +234,7 @@
         "format": "binary",
         "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-!cn.srs",
         "download_detour": "out-direct",
+        // "update_interval": "1d",
         "type": "remote"
       },
       {
@@ -236,6 +242,7 @@
         "format": "binary",
         "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-cn.srs",
         "download_detour": "out-direct",
+        // "update_interval": "1d",
         "type": "remote"
       },
       {
@@ -243,6 +250,7 @@
         "format": "binary",
         "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-tld-cn.srs",
         "download_detour": "out-direct",
+        // "update_interval": "1d",
         "type": "remote"
       },
       {
@@ -250,6 +258,7 @@
         "format": "binary",
         "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs",
         "download_detour": "out-direct",
+        // "update_interval": "1d",
         "type": "remote"
       },
       {
@@ -257,12 +266,13 @@
         "format": "binary",
         "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs",
         "download_detour": "out-direct",
+        // "update_interval": "1d",
         "type": "remote"
       }
     ]
   },
   "dns": {
-    "final": "dns-proxy",
+    // "final": "dns-proxy",
     // "strategy": "ipv4_only",
     "reverse_mapping": true,
     "independent_cache": true,
@@ -272,6 +282,10 @@
       "inet4_range": "198.18.0.0/15"
     },
     "rules": [
+      {
+        "domain_suffix": [ "cdn77.com", "cdn77.org" ],
+        "server": "dns-local"
+      },
       // { // if outbound use domain
       //   "disable_cache": true,
       //   "outbound": "any",
@@ -280,12 +294,10 @@
       // },
       {
         "clash_mode": "Direct",
-        "action": "route",
         "server": "dns-local"
       },
       {
         "clash_mode": "Global",
-        "action": "route",
         "server": "dns-proxy"
       },
       {
@@ -322,15 +334,17 @@
           "AAAA",
           "A"
         ],
+        "rewrite_ttl": 1,
+        "action": "route-options",
         "server": "dns-fakeip"
       },
-      {
-        "rule_set": "geosite-geolocation-!cn",
-        "query_type": [
-          "CNAME"
-        ],
-        "server": "dns-proxy"
-      },
+      // {
+      //   "rule_set": "geosite-geolocation-!cn",
+      //   "query_type": [
+      //     "CNAME"
+      //   ],
+      //   "server": "dns-proxy"
+      // },
       // {
       //   "query_type": [
       //     "CNAME",
@@ -404,7 +418,8 @@
     //   "tag": "out-fallback",
     //   "outbounds": [
     //     "out-geph5",
-    //     "out-geph4"
+    //     "out-geph4",
+    //     "out-direct"
     //   ],
     //   "url": "http://www.apple.com/library/test/success.html",
     //   "interval": "30s",
@@ -421,26 +436,10 @@
     },
     {
       "type": "selector",
-      "tag": "out-bilibili-cdn-cn",
-      "outbounds": [
-        "out-direct",
-        "out-proxy"
-      ]
-    },
-    {
-      "type": "selector",
-      "tag": "out-bilibili-cdn-global",
-      "outbounds": [
-        "out-direct",
-        "out-proxy"
-      ]
-    },
-    {
-      "type": "selector",
       "tag": "out-weixin",
       "outbounds": [
-        "out-proxy",
-        "out-direct"
+        "out-direct",
+        "out-proxy"
       ]
     },
     {
@@ -474,10 +473,6 @@
       "version": "5",
       "type": "socks"
     },
-    // {
-    //   "tag": "out-dns",
-    //   "type": "dns"
-    // },
     {
       "tag": "out-direct",
       "type": "direct"
@@ -492,7 +487,16 @@
     //   ],
     //   "auto_route": true,
     //   "strict_route": true,
-    //   "stack": "mixed",
+    //   "platform": {
+    //     "http_proxy": {
+    //       "server": "127.0.0.1",
+    //       "server_port": 7890,
+    //       // "bypass_domain": [ "dl.google.com" ],
+    //       // "match_domain": [ "github.com" ]
+    //       "enabled": true
+    //     }
+    //   },
+    //   // "stack": "mixed",
     //   "type": "tun"
     // },
     {
@@ -505,25 +509,25 @@
       "tag": "in-mixed",
       "listen": "::",
       "listen_port": 7890,
-      // "set_system_proxy": true,
+      "set_system_proxy": true,
       "type": "mixed"
     }
   ],
   "log": {
-    "disabled": false,
+    // "disabled": false,
     "level": "trace",
     "timestamp": false
   },
   "experimental": {
     "cache_file": {
-      "store_rdrc": false,
-      "store_fakeip": false,
+      // "store_rdrc": false,
+      // "store_fakeip": false,
       "rdrc_timeout": "1d",
-      "path": "cache.db",
+      // "path": "cache.db",
       "enabled": true
     },
     "clash_api": {
-      "default_mode": "Rule",
+      "default_mode": "Direct",
       "secret": "touhoured",
       "external_ui": "ui",
       "external_ui_download_url": "https://ghp.ci/https://github.com/MetaCubeX/metacubexd/archive/gh-pages.zip",
