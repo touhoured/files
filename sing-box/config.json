@@ -9,6 +9,15 @@
     // "default_interface": "WLAN",
     "rules": [
       {
+        // "inbound": "in-tun",
+        // "timeout": "1s",
+        "action": "sniff"
+      },
+      {
+        "protocol": "dns",
+        "action": "hijack-dns"
+      },
+      {
         "process_name": [
           "geph5-client-gui.exe",
           "geph4-client.exe",
@@ -17,20 +26,6 @@
           "geph4-client"
         ],
         "outbound": "out-direct"
-      },
-      {
-        "clash_mode": "Direct",
-        // "inbound": "in-tun",
-        // "timeout": "1s",
-        "server": "dns-direct",
-        "action": "sniff"
-        // "action": "resolve"
-      },
-      {
-        "clash_mode": "Direct",
-        "protocol": "dns",
-        // "outbound": "out-dns"
-        "action": "hijack-dns"
       },
       {
         "clash_mode": "Direct",
@@ -104,16 +99,6 @@
         "method": "default",
         "no_drop": false,
         "action": "reject"
-      },
-      {
-        // "inbound": "in-tun",
-        // "timeout": "1s",
-        "action": "sniff"
-      },
-      {
-        "protocol": "dns",
-        // "outbound": "out-dns"
-        "action": "hijack-dns"
       },
       { // custom direct
         "domain_suffix": [
@@ -283,7 +268,20 @@
     },
     "rules": [
       {
-        "domain_suffix": [ "cdn77.com", "cdn77.org" ],
+        "domain_suffix": [
+          "cdn77.com",
+          "cdn77.org"
+        ],
+        "server": "dns-local"
+      },
+      {
+        "process_name": [
+          "geph5-client-gui.exe",
+          "geph4-client.exe",
+          "geph5-client.exe",
+          "geph5-client",
+          "geph4-client"
+        ],
         "server": "dns-local"
       },
       // { // if outbound use domain
@@ -303,6 +301,32 @@
       {
         "rule_set": "geosite-private",
         "server": "dns-local"
+      },
+      { // ad
+        "rule_set": [
+          "geosite-AdGuardSDNSFilter",
+          "geosite-category-httpdns-cn",
+          "geosite-category-ads-all"
+        ],
+        "domain": [
+          "black.qimo.ink",
+          "2fa.qwq2333.top",
+          "api.qwq2333.top",
+          "sgameicon.ecology.smoba.qq.com",
+          "ntp.msn.cn"
+        ],
+        "domain_suffix": [
+          ".mcdn.bilivideo.cn",
+          ".szbdyd.com"
+        ],
+        "domain_regex": [
+          "cn-.+\\.bilivideo\\.com$",
+          "-pcdn-.?\\.biliapi\\.net$"
+        ],
+        "method": "default",
+        "no_drop": false,
+        "action": "reject"
+        // "server": "dns-success"
       },
       {
         "rule_set": [
@@ -334,8 +358,8 @@
           "AAAA",
           "A"
         ],
-        "rewrite_ttl": 1,
-        "action": "route-options",
+        // "rewrite_ttl": 1,
+        // "action": "route-options",
         "server": "dns-fakeip"
       },
       // {
@@ -378,7 +402,8 @@
       },
       {
         "tag": "dns-direct",
-        "address": "tls://dns.pub",
+        // "address": "tls://dns.pub",
+        "address": "tls://dns.alidns.com",
         "address_resolver": "dns-local",
         "detour": "out-direct"
       },
@@ -393,14 +418,14 @@
         "tag": "dns-fakeip",
         "address": "fakeip"
       },
-      {
-        "tag": "dns-success",
-        "address": "rcode://success"
-      },
-      {
-        "tag": "dns-block",
-        "address": "rcode://refused"
-      }
+      // {
+      //   "tag": "dns-success",
+      //   "address": "rcode://success"
+      // },
+      // {
+      //   "tag": "dns-block",
+      //   "address": "rcode://refused"
+      // }
     ]
   },
   "outbounds": [
@@ -527,7 +552,7 @@
       "enabled": true
     },
     "clash_api": {
-      "default_mode": "Direct",
+      // "default_mode": "Rule",
       "secret": "touhoured",
       "external_ui": "ui",
       "external_ui_download_url": "https://ghp.ci/https://github.com/MetaCubeX/metacubexd/archive/gh-pages.zip",
