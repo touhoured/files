@@ -364,8 +364,8 @@
       // },
       {
         "tag": "dns-direct",
-        "address": "tls://dns.pub",
-        "address_resolver": "dns-local",
+        "address": "tls://223.5.5.5",
+        // "address_resolver": "dns-local",
         "detour": "out-direct"
       },
       {
