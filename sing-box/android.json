@@ -1,0 +1,534 @@
+// first launch need download rules-set.
+// or change dns.final to "out-direct"
+{
+  "route": {
+    "final": "out-proxy",
+    "auto_detect_interface": true,
+    // "default_network_strategy": "fallback",
+    // "default_fallback_delay": "300ms",
+    // "default_interface": "WLAN",
+    "rules": [
+      {
+        "process_name": [
+          "geph5-client-gui.exe",
+          "geph4-client.exe",
+          "geph5-client.exe",
+          "geph5-client",
+          "geph4-client"
+        ],
+        "action": "resolve",
+        "strategy": "prefer_ipv4",
+        "server": "dns-direct"
+      },
+      {
+        "clash_mode": "Direct",
+        "outbound": "out-direct"
+      },
+      {
+        "clash_mode": "Global",
+        "outbound": "out-proxy"
+      },
+      { // dot quic stun
+        "type": "logical",
+        "mode": "or",
+        "rules": [
+          {
+            "port": 853
+          },
+          {
+            "protocol": "stun"
+          },
+          {
+            "network": "udp",
+            "port": 443
+          },
+          {
+            "protocol": "quic"
+          }
+        ],
+        "method": "default",
+        "no_drop": false,
+        "action": "reject"
+      },
+      { // ad
+        "ip_cidr": [ // bilibili
+          "47.101.175.206/32",
+          "47.100.123.169/32",
+          "120.46.169.234/32",
+          "121.36.72.124/32",
+          "116.63.10.135/32",
+          "122.9.7.134/32",
+          "117.185.228.108/32",
+          "117.144.238.29/32",
+          "122.9.13.79/32",
+          "122.9.15.129/32",
+          "101.91.140.224/32",
+          "101.91.140.124/32",
+          "114.116.215.110/32",
+          "116.63.10.31/32",
+          "112.64.218.119/32",
+          "112.65.200.117/32"
+        ],
+        "rule_set": [
+          "geosite-AdGuardSDNSFilter",
+          "geosite-category-httpdns-cn",
+          "geosite-category-ads-all"
+        ],
+        "domain": [
+          "black.qimo.ink",
+          "sgameicon.ecology.smoba.qq.com",
+          "httpdns.bilivideo.com",
+          "ntp.msn.cn"
+        ],
+        "domain_suffix": [
+          ".qwq2333.top",
+          ".mcdn.bilivideo.cn",
+          ".szbdyd.com"
+        ],
+        "domain_regex": [
+          "cn-.+\\.bilivideo\\.com$",
+          "-pcdn-.?\\.biliapi\\.net$"
+        ],
+        "method": "default",
+        "no_drop": false,
+        "action": "reject"
+      },
+      {
+        // "inbound": "in-tun",
+        "timeout": "1s",
+        "action": "sniff"
+      },
+      {
+        "protocol": "dns",
+        // "outbound": "out-dns"
+        "action": "hijack-dns"
+      },
+      { // custom direct
+        "domain_suffix": [
+          "proxy.ghproxy.com",
+          "ghp.ci",
+          "ghproxy.cc",
+          "xaidc.com",
+          "cjjd15.com",
+          "cjjd18.com",
+          "cjjd20.com",
+          "7moor-fs1.com",
+          "deeplx.org",
+          "ghxi.com",
+          "ly93.cc",
+          "dl.sourceforge.net",
+          "asmr-100.com",
+          "dockerproxy.com",
+          "kinh.cc",
+          "dandanplay.net",
+          "geilijiasu.com",
+          "metacubex.one",
+          "yacd.haishan.me"
+        ],
+        "outbound": "out-direct"
+      },
+      {
+        "domain_suffix": [
+          "bilivideo.com",
+          "bilivideo.cn",
+          "hdslb.net",
+          "hdslb.com"
+        ],
+        "outbound": "out-bilibili-cdn-cn"
+      },
+      {
+        "domain": "upos-hz-mirrorakam.akamaized.net",
+        "outbound": "out-bilibili-cdn-global"
+      },
+      {
+        "domain_suffix": [
+          "biliapi.net",
+          "biliapi.com",
+          "bilibili.com"
+        ],
+        "ip_cidr": "203.107.1.0/24",
+        "outbound": "out-bilibili"
+      },
+      {
+        "domain_suffix": "short.weixin.qq.com",
+        "outbound": "out-weixin"
+      },
+      {
+        "rule_set": "geosite-googlefcm",
+        "outbound": "out-googlefcm"
+      },
+      {
+        "rule_set": "geosite-onedrive",
+        "outbound": "out-onedrive"
+      },
+      {
+        "rule_set": [
+          "geosite-geolocation-cn",
+          "geosite-tld-cn",
+          "geosite-cn"
+        ],
+        "outbound": "out-direct"
+      },
+      {
+        "rule_set": [
+          "geoip-cn"
+        ],
+        "outbound": "out-direct"
+      },
+      {
+        "ip_is_private": true,
+        "rule_set": "geosite-private",
+        "outbound": "out-direct"
+      }
+    ],
+    "rule_set": [
+      {
+        "tag": "geosite-private",
+        "format": "binary",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-private.srs",
+        "download_detour": "out-direct",
+        "type": "remote"
+      },
+      {
+        "tag": "geosite-category-httpdns-cn",
+        "format": "binary",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-httpdns-cn.srs",
+        "download_detour": "out-direct",
+        "type": "remote"
+      },
+      {
+        "tag": "geosite-category-ads-all",
+        "format": "binary",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs",
+        "download_detour": "out-direct",
+        "type": "remote"
+      },
+      {
+        "tag": "geosite-AdGuardSDNSFilter",
+        "format": "binary",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/xmdhs/sing-box-ruleset/rule-set/AdGuardSDNSFilter.srs",
+        "download_detour": "out-direct",
+        "type": "remote"
+      },
+      {
+        "tag": "geosite-googlefcm",
+        "format": "binary",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-googlefcm.srs",
+        "download_detour": "out-direct",
+        "type": "remote"
+      },
+      {
+        "tag": "geosite-onedrive",
+        "format": "binary",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-onedrive.srs",
+        "download_detour": "out-direct",
+        "type": "remote"
+      },
+      {
+        "tag": "geosite-geolocation-!cn",
+        "format": "binary",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-!cn.srs",
+        "download_detour": "out-direct",
+        "type": "remote"
+      },
+      {
+        "tag": "geosite-geolocation-cn",
+        "format": "binary",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-cn.srs",
+        "download_detour": "out-direct",
+        "type": "remote"
+      },
+      {
+        "tag": "geosite-tld-cn",
+        "format": "binary",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-tld-cn.srs",
+        "download_detour": "out-direct",
+        "type": "remote"
+      },
+      {
+        "tag": "geosite-cn",
+        "format": "binary",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs",
+        "download_detour": "out-direct",
+        "type": "remote"
+      },
+      {
+        "tag": "geoip-cn",
+        "format": "binary",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs",
+        "download_detour": "out-direct",
+        "type": "remote"
+      }
+    ]
+  },
+  "dns": {
+    "final": "dns-proxy",
+    // "strategy": "ipv4_only",
+    "reverse_mapping": true,
+    "independent_cache": true,
+    "fakeip": {
+      "enabled": true,
+      "inet6_range": "fc00::/18",
+      "inet4_range": "198.18.0.0/15"
+    },
+    "rules": [
+      // { // if outbound use domain
+      //   "disable_cache": true,
+      //   "outbound": "any",
+      //   // "action": "route-options",
+      //   "server": "dns-local"
+      // },
+      {
+        "clash_mode": "Direct",
+        "action": "route",
+        "server": "dns-local"
+      },
+      {
+        "clash_mode": "Global",
+        "action": "route",
+        "server": "dns-proxy"
+      },
+      {
+        "rule_set": "geosite-private",
+        "server": "dns-local"
+      },
+      {
+        "rule_set": [
+          "geosite-geolocation-cn",
+          "geosite-tld-cn",
+          "geosite-cn"
+        ],
+        "server": "dns-direct"
+      },
+      {
+        "type": "logical",
+        "mode": "and",
+        "rules": [
+          {
+            "rule_set": "geosite-geolocation-!cn",
+            "invert": true
+          },
+          {
+            "rule_set": "geoip-cn"
+          }
+        ],
+        "client_subnet": "114.114.114.114/24", // Any China client IP address
+        "action": "route-options",
+        "server": "dns-proxy"
+      },
+      {
+        "rule_set": "geosite-geolocation-!cn",
+        "query_type": [
+          "AAAA",
+          "A"
+        ],
+        "server": "dns-fakeip"
+      },
+      {
+        "rule_set": "geosite-geolocation-!cn",
+        "query_type": [
+          "CNAME"
+        ],
+        "server": "dns-proxy"
+      },
+      // {
+      //   "query_type": [
+      //     "CNAME",
+      //     "AAAA",
+      //     "A"
+      //   ],
+      //   "invert": true,
+      //   "disable_cache": true,
+      //   // "action": "route-options",
+      //   "server": "dns-refused"
+      // }
+    ],
+    "servers": [
+      // h3://1.1.1.1/dns-query
+      // https://1.1.1.1/dns-query
+      // tcp://1.1.1.1
+      // 127.0.0.1:15353
+      // quic://dns.adguard-dns.com
+      // 9.9.9.11
+      {
+        "tag": "dns-proxy",
+        "address": "https://8.8.4.4/dns-query",
+        // "strategy": "ipv4_only",
+        // "address_resolver": "dns-proxy-ip",
+        "detour": "out-proxy"
+      },
+      // {
+      //   "tag": "dns-proxy-ip",
+      //   "address": "tcp://8.8.8.8",
+      //   "detour": "out-proxy"
+      // },
+      {
+        "tag": "dns-direct",
+        "address": "tls://dns.pub",
+        "address_resolver": "dns-local",
+        "detour": "out-direct"
+      },
+      {
+        "tag": "dns-local",
+        // "address": "dhcp://auto",
+        "address": "local",
+        // "address": "223.5.5.5",
+        "detour": "out-direct"
+      },
+      {
+        "tag": "dns-fakeip",
+        "address": "fakeip"
+      },
+      {
+        "tag": "dns-success",
+        "address": "rcode://success"
+      },
+      {
+        "tag": "dns-block",
+        "address": "rcode://refused"
+      }
+    ]
+  },
+  "outbounds": [
+    {
+      "tag": "out-proxy",
+      "outbounds": [
+        // "out-fallback",
+        "out-geph5",
+        "out-geph4",
+        "out-direct"
+      ],
+      "type": "selector"
+    },
+    // {
+    //   "tag": "out-fallback",
+    //   "outbounds": [
+    //     "out-geph5",
+    //     "out-geph4"
+    //   ],
+    //   "url": "http://www.apple.com/library/test/success.html",
+    //   "interval": "30s",
+    //   "tolerance": 9999,
+    //   "type": "urltest"
+    // },
+    {
+      "type": "selector",
+      "tag": "out-bilibili",
+      "outbounds": [
+        "out-direct",
+        "out-proxy"
+      ]
+    },
+    {
+      "type": "selector",
+      "tag": "out-bilibili-cdn-cn",
+      "outbounds": [
+        "out-direct",
+        "out-proxy"
+      ]
+    },
+    {
+      "type": "selector",
+      "tag": "out-bilibili-cdn-global",
+      "outbounds": [
+        "out-direct",
+        "out-proxy"
+      ]
+    },
+    {
+      "type": "selector",
+      "tag": "out-weixin",
+      "outbounds": [
+        "out-proxy",
+        "out-direct"
+      ]
+    },
+    {
+      "type": "selector",
+      "tag": "out-googlefcm",
+      "outbounds": [
+        "out-direct",
+        "out-proxy"
+      ]
+    },
+    {
+      "type": "selector",
+      "tag": "out-onedrive",
+      "outbounds": [
+        "out-direct",
+        "out-proxy"
+      ]
+    },
+    {
+      "tag": "out-geph5",
+      "server": "127.0.0.1",
+      "server_port": 9999,
+      "version": "5",
+      "type": "socks"
+    },
+    {
+      "tag": "out-geph4",
+      "server": "127.0.0.1",
+      "server_port": 9909,
+      "network": "tcp",
+      "version": "5",
+      "type": "socks"
+    },
+    // {
+    //   "tag": "out-dns",
+    //   "type": "dns"
+    // },
+    {
+      "tag": "out-direct",
+      "type": "direct"
+    }
+  ],
+  "inbounds": [
+    {
+      "tag": "in-tun",
+      "address": [
+        "fd00::1/126",
+        "172.19.0.1/30"
+      ],
+      "auto_route": true,
+      "strict_route": true,
+      "stack": "mixed",
+      "type": "tun"
+    },
+    {
+      "tag": "in-dns",
+      "listen": "::",
+      "listen_port": 1053,
+      "type": "direct"
+    },
+    {
+      "tag": "in-mixed",
+      "listen": "::",
+      "listen_port": 7890,
+      // "set_system_proxy": true,
+      "type": "mixed"
+    }
+  ],
+  "log": {
+    "disabled": false,
+    "level": "trace",
+    "timestamp": false
+  },
+  "experimental": {
+    "cache_file": {
+      "store_rdrc": false,
+      "store_fakeip": false,
+      "rdrc_timeout": "1d",
+      "path": "cache.db",
+      "enabled": true
+    },
+    "clash_api": {
+      "default_mode": "Rule",
+      "secret": "touhoured",
+      "external_ui": "ui",
+      "external_ui_download_url": "https://ghp.ci/https://github.com/MetaCubeX/metacubexd/archive/gh-pages.zip",
+      "external_ui_download_detour": "out-direct",
+      "external_controller": ":9090"
+    }
+  }
+}
