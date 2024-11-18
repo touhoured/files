@@ -352,20 +352,20 @@
       // 9.9.9.11
       {
         "tag": "dns-proxy",
-        "address": "https://8.8.4.4/dns-query",
+        "address": "tcp://dns.google",
         // "strategy": "ipv4_only",
-        // "address_resolver": "dns-proxy-ip",
+        "address_resolver": "dns-proxy-ip",
         "detour": "out-proxy"
       },
-      // {
-      //   "tag": "dns-proxy-ip",
-      //   "address": "tcp://8.8.8.8",
-      //   "detour": "out-proxy"
-      // },
+      {
+        "tag": "dns-proxy-ip",
+        "address": "tcp://8.8.8.8",
+        "detour": "out-proxy"
+      },
       {
         "tag": "dns-direct",
-        "address": "tls://223.5.5.5",
-        // "address_resolver": "dns-local",
+        "address": "tls://dns.pub",
+        "address_resolver": "dns-local",
         "detour": "out-direct"
       },
       {
