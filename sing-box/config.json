@@ -14,7 +14,28 @@
         "action": "sniff"
       },
       {
-        "protocol": "dns",
+        "type": "logical",
+        "mode": "or",
+        "rules": [
+          {
+            "process_name": [
+              "geph5-client-gui.exe",
+              "geph4-client.exe",
+              "geph5-client.exe",
+              "geph5-client",
+              "geph4-client"
+            ],
+            "protocol": "dns"
+          },
+          {
+            "clash_mode": "Direct",
+            "protocol": "dns"
+          },
+          {
+            "clash_mode": "Global",
+            "protocol": "dns"
+          }
+        ],
         "action": "hijack-dns"
       },
       {
@@ -82,6 +103,7 @@
           "geosite-category-ads-all"
         ],
         "domain": [
+          "block.test",
           "black.qimo.ink",
           "2fa.qwq2333.top",
           "api.qwq2333.top",
@@ -99,6 +121,10 @@
         "method": "default",
         "no_drop": false,
         "action": "reject"
+      },
+      {
+        "protocol": "dns",
+        "action": "hijack-dns"
       },
       { // custom direct
         "domain_suffix": [
@@ -302,32 +328,32 @@
         "rule_set": "geosite-private",
         "server": "dns-local"
       },
-      { // ad
-        "rule_set": [
-          "geosite-AdGuardSDNSFilter",
-          "geosite-category-httpdns-cn",
-          "geosite-category-ads-all"
-        ],
-        "domain": [
-          "black.qimo.ink",
-          "2fa.qwq2333.top",
-          "api.qwq2333.top",
-          "sgameicon.ecology.smoba.qq.com",
-          "ntp.msn.cn"
-        ],
-        "domain_suffix": [
-          ".mcdn.bilivideo.cn",
-          ".szbdyd.com"
-        ],
-        "domain_regex": [
-          "cn-.+\\.bilivideo\\.com$",
-          "-pcdn-.?\\.biliapi\\.net$"
-        ],
-        "method": "default",
-        "no_drop": false,
-        "action": "reject"
-        // "server": "dns-success"
-      },
+      // { // ad
+      //   "rule_set": [
+      //     "geosite-AdGuardSDNSFilter",
+      //     "geosite-category-httpdns-cn",
+      //     "geosite-category-ads-all"
+      //   ],
+      //   "domain": [
+      //     "black.qimo.ink",
+      //     "2fa.qwq2333.top",
+      //     "api.qwq2333.top",
+      //     "sgameicon.ecology.smoba.qq.com",
+      //     "ntp.msn.cn"
+      //   ],
+      //   "domain_suffix": [
+      //     ".mcdn.bilivideo.cn",
+      //     ".szbdyd.com"
+      //   ],
+      //   "domain_regex": [
+      //     "cn-.+\\.bilivideo\\.com$",
+      //     "-pcdn-.?\\.biliapi\\.net$"
+      //   ],
+      //   "method": "default",
+      //   "no_drop": false,
+      //   "action": "reject"
+      //   // "server": "dns-success"
+      // },
       {
         "rule_set": [
           "geosite-geolocation-cn",
@@ -517,7 +543,7 @@
     //       "server": "127.0.0.1",
     //       "server_port": 7890,
     //       // "bypass_domain": [ "dl.google.com" ],
-    //       // "match_domain": [ "github.com" ]
+    //       // "match_domain": [ "github.com" ],
     //       "enabled": true
     //     }
     //   },
