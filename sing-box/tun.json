@@ -79,38 +79,22 @@
         "action": "reject"
       },
       { // ad
-        "ip_cidr": [ // bilibili
-          "47.101.175.206/32",
-          "47.100.123.169/32",
-          "120.46.169.234/32",
-          "121.36.72.124/32",
-          "116.63.10.135/32",
-          "122.9.7.134/32",
-          "117.185.228.108/32",
-          "117.144.238.29/32",
-          "122.9.13.79/32",
-          "122.9.15.129/32",
-          "101.91.140.224/32",
-          "101.91.140.124/32",
-          "114.116.215.110/32",
-          "116.63.10.31/32",
-          "112.64.218.119/32",
-          "112.65.200.117/32"
-        ],
         "rule_set": [
-          "ADBlock-MeepoMaster",
-          "ADBlock-Cats-Team",
-          // "geosite-AdGuardSDNSFilter",
+          "geosite-anti-ip-attribution-reject",
+          "geosite-ADBlock-MeepoMaster",
+          "geosite-ADBlock-Cats-Team",
+          // "geosite-ADBlock-ppfeufer",
+          // "geosite-ADBlock-AdGuardSDNSFilter",
           "geosite-category-httpdns-cn",
           "geosite-category-ads-all"
         ],
         "domain": [
-          "block.test",
-          "black.qimo.ink",
-          "2fa.qwq2333.top",
-          "api.qwq2333.top",
-          "sgameicon.ecology.smoba.qq.com",
-          "ntp.msn.cn"
+          "block.test", // only test
+          "black.qimo.ink", // biliroming blacklist
+          "2fa.qwq2333.top", // QAuxiliary
+          "api.qwq2333.top", // QAuxiliary
+          "sgameicon.ecology.smoba.qq.com", // 王者荣耀
+          "ntp.msn.cn" // edge startpage
         ],
         "domain_suffix": [
           ".mcdn.bilivideo.cn",
@@ -152,18 +136,26 @@
         ],
         "outbound": "out-direct"
       },
+      // {
+      //   "domain_suffix": [
+      //     "biliapi.net",
+      //     "biliapi.com",
+      //     "bilibili.com"
+      //   ],
+      //   "ip_cidr": "203.107.1.0/24",
+      //   "outbound": "out-bilibili"
+      // },
       {
-        "domain_suffix": [
-          "biliapi.net",
-          "biliapi.com",
-          "bilibili.com"
-        ],
-        "ip_cidr": "203.107.1.0/24",
-        "outbound": "out-bilibili"
+        "rule_set": "geosite-anti-ip-attribution-direct",
+        "outbound":"out-direct"
+      },
+      {
+        "rule_set": "geosite-anti-ip-attribution-proxy",
+        "outbound": "out-anti-ip-attribution"
       },
       {
         "domain_suffix": "short.weixin.qq.com",
-        "outbound": "out-weixin"
+        "outbound": "out-wechat"
       },
       {
         "rule_set": "geosite-googlefcm",
@@ -182,9 +174,7 @@
         "outbound": "out-direct"
       },
       {
-        "rule_set": [
-          "geoip-cn"
-        ],
+        "rule_set": "geoip-cn",
         "outbound": "out-direct"
       },
       {
@@ -194,48 +184,64 @@
       }
     ],
     "rule_set": [
-      // {
-      //   "tag": "ADBlock-anti-ad",
-      //   "format": "binary",
-      //   "url": "https://anti-ad.net/anti-ad-sing-box.srs",
-      //   // "url": "https://ghp.ci/https://raw.githubusercontent.com/privacy-protection-tools/anti-ad.github.io/master/docs/anti-ad-sing-box.srs",
-      //   "download_detour": "out-direct",
-      //   // "update_interval": "1d",
-      //   "type": "remote"
-      // },
-      // Mosney/anti-anti-AD
-      // {
-      //   "tag": "ADBlock-AWAvenue",
-      //   "format": "binary",
-      //   "url": "https://ghp.ci/https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Singbox-regex.srs",
-      //   "download_detour": "out-direct",
-      //   // "update_interval": "1d",
-      //   "type": "remote"
-      // },
       {
-        "tag": "ADBlock-Cats-Team",
+        "tag": "geosite-anti-ip-attribution-reject",
+        "format": "binary",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/vstar37/sing-box-geosite/main/rule/rule-provider-reject.srs",
+        "download_detour": "out-direct",
+        // "update_interval": "1d",
+        "type": "remote"
+      },
+      {
+        "tag": "geosite-anti-ip-attribution-direct",
+        "format": "binary",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/vstar37/sing-box-geosite/main/rule/rule-provider-direct.srs",
+        "download_detour": "out-direct",
+        // "update_interval": "1d",
+        "type": "remote"
+      },
+      {
+        "tag": "geosite-anti-ip-attribution-proxy",
+        "format": "binary",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/vstar37/sing-box-geosite/main/rule/rule-provider-proxy.srs",
+        "download_detour": "out-direct",
+        // "update_interval": "1d",
+        "type": "remote"
+      },
+      {
+        "tag": "geosite-ADBlock-Cats-Team",
         "format": "binary",
         "url": "https://ghp.ci/https://raw.githubusercontent.com/Cats-Team/AdRules/main/adrules-singbox.srs",
         "download_detour": "out-direct",
         // "update_interval": "1d",
         "type": "remote"
       },
+      // 217heidai and AWAvenue
       {
-        "tag": "ADBlock-MeepoMaster",
+        "tag": "geosite-ADBlock-MeepoMaster",
         "format": "binary",
         "url": "https://ghp.ci/https://raw.githubusercontent.com/MeepoMaster/sing-box-ruleset/main/adg-dns.srs",
         "download_detour": "out-direct",
         // "update_interval": "1d",
         "type": "remote"
       },
-      {
-        "tag": "ADBlock-MeepoMaster",
-        "format": "binary",
-        "url": "https://ghp.ci/https://raw.githubusercontent.com/MeepoMaster/sing-box-ruleset/main/adg-dns.srs",
-        "download_detour": "out-direct",
-        // "update_interval": "1d",
-        "type": "remote"
-      },
+      // // include anti-AD, see Mosney/anti-anti-AD
+      // {
+      //   "tag": "geosite-ADBlock-ppfeufer",
+      //   "format": "binary",
+      //   "url": "https://ghp.ci/https://raw.githubusercontent.com/hangyu170/rules/main/blocklist.srs",
+      //   "download_detour": "out-direct",
+      //   // "update_interval": "1d",
+      //   "type": "remote"
+      // },
+      // {
+      //   "tag": "geosite-ADBlock-AdGuardSDNSFilter",
+      //   "format": "binary",
+      //   "url": "https://ghp.ci/https://raw.githubusercontent.com/xmdhs/sing-box-ruleset/rule-set/AdGuardSDNSFilter.srs",
+      //   "download_detour": "out-direct",
+      //   // "update_interval": "1d",
+      //   "type": "remote"
+      // },
       {
         "tag": "geosite-private",
         "format": "binary",
@@ -260,14 +266,6 @@
         // "update_interval": "1d",
         "type": "remote"
       },
-      // {
-      //   "tag": "geosite-AdGuardSDNSFilter",
-      //   "format": "binary",
-      //   "url": "https://ghp.ci/https://raw.githubusercontent.com/xmdhs/sing-box-ruleset/rule-set/AdGuardSDNSFilter.srs",
-      //   "download_detour": "out-direct",
-      //   // "update_interval": "1d",
-      //   "type": "remote"
-      // },
       {
         "tag": "geosite-googlefcm",
         "format": "binary",
@@ -497,15 +495,23 @@
     // },
     {
       "type": "selector",
-      "tag": "out-bilibili",
+      "tag": "out-anti-ip-attribution",
       "outbounds": [
         "out-direct",
         "out-proxy"
       ]
     },
+    // {
+    //   "type": "selector",
+    //   "tag": "out-bilibili",
+    //   "outbounds": [
+    //     "out-direct",
+    //     "out-proxy"
+    //   ]
+    // },
     {
       "type": "selector",
-      "tag": "out-weixin",
+      "tag": "out-wechat",
       "outbounds": [
         "out-direct",
         "out-proxy"
