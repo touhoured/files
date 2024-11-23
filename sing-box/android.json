@@ -573,7 +573,7 @@
     "cache_file": {
       // "store_rdrc": false,
       // "store_fakeip": false,
-      "rdrc_timeout": "1d",
+      // "rdrc_timeout": "1d",
       // "path": "cache.db",
       "enabled": true
     },
