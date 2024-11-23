@@ -328,32 +328,6 @@
         "rule_set": "geosite-private",
         "server": "dns-local"
       },
-      // { // ad
-      //   "rule_set": [
-      //     "geosite-AdGuardSDNSFilter",
-      //     "geosite-category-httpdns-cn",
-      //     "geosite-category-ads-all"
-      //   ],
-      //   "domain": [
-      //     "black.qimo.ink",
-      //     "2fa.qwq2333.top",
-      //     "api.qwq2333.top",
-      //     "sgameicon.ecology.smoba.qq.com",
-      //     "ntp.msn.cn"
-      //   ],
-      //   "domain_suffix": [
-      //     ".mcdn.bilivideo.cn",
-      //     ".szbdyd.com"
-      //   ],
-      //   "domain_regex": [
-      //     "cn-.+\\.bilivideo\\.com$",
-      //     "-pcdn-.?\\.biliapi\\.net$"
-      //   ],
-      //   "method": "default",
-      //   "no_drop": false,
-      //   "action": "reject"
-      //   // "server": "dns-success"
-      // },
       {
         "rule_set": [
           "geosite-geolocation-cn",
