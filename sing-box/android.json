@@ -98,7 +98,9 @@
           "112.65.200.117/32"
         ],
         "rule_set": [
-          "geosite-AdGuardSDNSFilter",
+          "ADBlock-MeepoMaster",
+          "ADBlock-Cats-Team",
+          // "geosite-AdGuardSDNSFilter",
           "geosite-category-httpdns-cn",
           "geosite-category-ads-all"
         ],
@@ -192,6 +194,48 @@
       }
     ],
     "rule_set": [
+      // {
+      //   "tag": "ADBlock-anti-ad",
+      //   "format": "binary",
+      //   "url": "https://anti-ad.net/anti-ad-sing-box.srs",
+      //   // "url": "https://ghp.ci/https://raw.githubusercontent.com/privacy-protection-tools/anti-ad.github.io/master/docs/anti-ad-sing-box.srs",
+      //   "download_detour": "out-direct",
+      //   // "update_interval": "1d",
+      //   "type": "remote"
+      // },
+      // Mosney/anti-anti-AD
+      // {
+      //   "tag": "ADBlock-AWAvenue",
+      //   "format": "binary",
+      //   "url": "https://ghp.ci/https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Singbox-regex.srs",
+      //   "download_detour": "out-direct",
+      //   // "update_interval": "1d",
+      //   "type": "remote"
+      // },
+      {
+        "tag": "ADBlock-Cats-Team",
+        "format": "binary",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/Cats-Team/AdRules/main/adrules-singbox.srs",
+        "download_detour": "out-direct",
+        // "update_interval": "1d",
+        "type": "remote"
+      },
+      {
+        "tag": "ADBlock-MeepoMaster",
+        "format": "binary",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/MeepoMaster/sing-box-ruleset/main/adg-dns.srs",
+        "download_detour": "out-direct",
+        // "update_interval": "1d",
+        "type": "remote"
+      },
+      {
+        "tag": "ADBlock-MeepoMaster",
+        "format": "binary",
+        "url": "https://ghp.ci/https://raw.githubusercontent.com/MeepoMaster/sing-box-ruleset/main/adg-dns.srs",
+        "download_detour": "out-direct",
+        // "update_interval": "1d",
+        "type": "remote"
+      },
       {
         "tag": "geosite-private",
         "format": "binary",
@@ -216,14 +260,14 @@
         // "update_interval": "1d",
         "type": "remote"
       },
-      {
-        "tag": "geosite-AdGuardSDNSFilter",
-        "format": "binary",
-        "url": "https://ghp.ci/https://raw.githubusercontent.com/xmdhs/sing-box-ruleset/rule-set/AdGuardSDNSFilter.srs",
-        "download_detour": "out-direct",
-        // "update_interval": "1d",
-        "type": "remote"
-      },
+      // {
+      //   "tag": "geosite-AdGuardSDNSFilter",
+      //   "format": "binary",
+      //   "url": "https://ghp.ci/https://raw.githubusercontent.com/xmdhs/sing-box-ruleset/rule-set/AdGuardSDNSFilter.srs",
+      //   "download_detour": "out-direct",
+      //   // "update_interval": "1d",
+      //   "type": "remote"
+      // },
       {
         "tag": "geosite-googlefcm",
         "format": "binary",
