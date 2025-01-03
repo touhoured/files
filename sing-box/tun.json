@@ -181,6 +181,9 @@
         "ip_is_private": true,
         "rule_set": "geosite-private",
         "outbound": "out-direct"
+      },
+      {
+        "outbound": "out-final"
       }
     ],
     "rule_set": [
@@ -424,22 +427,11 @@
       // }
     ],
     "servers": [
-      // h3://1.1.1.1/dns-query
-      // https://1.1.1.1/dns-query
-      // tcp://1.1.1.1
-      // 127.0.0.1:15353
-      // quic://dns.adguard-dns.com
-      // 9.9.9.11
       {
         "tag": "dns-proxy",
-        "address": "tcp://dns.google",
-        // "strategy": "ipv4_only",
-        "address_resolver": "dns-proxy-ip",
-        "detour": "out-proxy"
-      },
-      {
-        "tag": "dns-proxy-ip",
         "address": "tcp://8.8.8.8",
+        // "address": "tcp://dns.google",
+        // "strategy": "ipv4_only",
         "detour": "out-proxy"
       },
       {
@@ -475,8 +467,19 @@
       "tag": "out-proxy",
       "outbounds": [
         // "out-fallback",
-        "out-geph5",
-        "out-geph4",
+        "out-9999",
+        "out-9909",
+        "out-2080",
+        "out-2090",
+        "out-direct"
+      ],
+      "type": "selector"
+    },
+    {
+      "tag": "out-final",
+      "outbounds": [
+        // "out-fallback",
+        "out-proxy",
         "out-direct"
       ],
       "type": "selector"
@@ -484,8 +487,10 @@
     // {
     //   "tag": "out-fallback",
     //   "outbounds": [
-    //     "out-geph5",
-    //     "out-geph4",
+    //     "out-9999",
+    //     "out-9909",
+    //     "out-2080",
+    //     "out-2090",
     //     "out-direct"
     //   ],
     //   "url": "http://www.apple.com/library/test/success.html",
@@ -534,17 +539,30 @@
       ]
     },
     {
-      "tag": "out-geph5",
+      "tag": "out-9999",
       "server": "127.0.0.1",
       "server_port": 9999,
       "version": "5",
       "type": "socks"
     },
     {
-      "tag": "out-geph4",
+      "tag": "out-9909",
       "server": "127.0.0.1",
       "server_port": 9909,
-      "network": "tcp",
+      "version": "5",
+      "type": "socks"
+    },
+    {
+      "tag": "out-2080",
+      "server": "127.0.0.1",
+      "server_port": 2080,
+      "version": "5",
+      "type": "socks"
+    },
+    {
+      "tag": "out-2090",
+      "server": "127.0.0.1",
+      "server_port": 2080,
       "version": "5",
       "type": "socks"
     },
