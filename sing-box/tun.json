@@ -14,28 +14,7 @@
         "action": "sniff"
       },
       {
-        "type": "logical",
-        "mode": "or",
-        "rules": [
-          {
-            "process_name": [
-              "geph5-client-gui.exe",
-              "geph4-client.exe",
-              "geph5-client.exe",
-              "geph5-client",
-              "geph4-client"
-            ],
-            "protocol": "dns"
-          },
-          {
-            "clash_mode": "Direct",
-            "protocol": "dns"
-          },
-          {
-            "clash_mode": "Global",
-            "protocol": "dns"
-          }
-        ],
+        "protocol": "dns",
         "action": "hijack-dns"
       },
       {
@@ -49,11 +28,11 @@
         "outbound": "out-direct"
       },
       {
-        "clash_mode": "Direct",
+        "clash_mode": "direct",
         "outbound": "out-direct"
       },
       {
-        "clash_mode": "Global",
+        "clash_mode": "global",
         "outbound": "out-proxy"
       },
       { // dot quic stun
@@ -74,11 +53,11 @@
             "protocol": "quic"
           }
         ],
-        "method": "default",
-        "no_drop": false,
+        // "method": "default",
+        // "no_drop": false,
         "action": "reject"
       },
-      { // ad
+      {
         "rule_set": [
           "geosite-anti-ip-attribution-reject",
           "geosite-ADBlock-MeepoMaster",
@@ -86,53 +65,16 @@
           // "geosite-ADBlock-ppfeufer",
           // "geosite-ADBlock-AdGuardSDNSFilter",
           "geosite-category-httpdns-cn",
-          "geosite-category-ads-all"
+          "geosite-category-ads-all",
+          "custom-block"
         ],
-        "domain": [
-          "block.test", // only test
-          "black.qimo.ink", // biliroming blacklist
-          "2fa.qwq2333.top", // QAuxiliary
-          "api.qwq2333.top", // QAuxiliary
-          "sgameicon.ecology.smoba.qq.com", // 王者荣耀
-          "ntp.msn.cn" // edge startpage
-        ],
-        "domain_suffix": [
-          ".mcdn.bilivideo.cn",
-          ".szbdyd.com"
-        ],
-        "domain_regex": [
-          "cn-.+\\.bilivideo\\.com$",
-          "-pcdn-.?\\.biliapi\\.net$"
-        ],
-        "method": "default",
-        "no_drop": false,
+        // "method": "default",
+        // "no_drop": false,
         "action": "reject"
       },
       {
-        "protocol": "dns",
-        "action": "hijack-dns"
-      },
-      { // custom direct
-        "domain_suffix": [
-          "proxy.ghproxy.com",
-          "ghp.ci",
-          "ghproxy.cc",
-          "xaidc.com",
-          "cjjd15.com",
-          "cjjd18.com",
-          "cjjd20.com",
-          "7moor-fs1.com",
-          "deeplx.org",
-          "ghxi.com",
-          "ly93.cc",
-          "dl.sourceforge.net",
-          "asmr-100.com",
-          "dockerproxy.com",
-          "kinh.cc",
-          "dandanplay.net",
-          "geilijiasu.com",
-          "metacubex.one",
-          "yacd.haishan.me"
+        "rule_set": [
+          "custom-direct"
         ],
         "outbound": "out-direct"
       },
@@ -147,14 +89,17 @@
       // },
       {
         "rule_set": "geosite-anti-ip-attribution-direct",
-        "outbound":"out-direct"
+        "outbound": "out-direct"
       },
       {
         "rule_set": "geosite-anti-ip-attribution-proxy",
         "outbound": "out-anti-ip-attribution"
       },
       {
-        "domain_suffix": "short.weixin.qq.com",
+        "domain_suffix": [
+          "extshort.weixin.qq.com",
+          "short.weixin.qq.com"
+        ],
         "outbound": "out-wechat"
       },
       {
@@ -169,12 +114,9 @@
         "rule_set": [
           "geosite-geolocation-cn",
           "geosite-tld-cn",
-          "geosite-cn"
+          "geosite-cn",
+          "geoip-cn"
         ],
-        "outbound": "out-direct"
-      },
-      {
-        "rule_set": "geoip-cn",
         "outbound": "out-direct"
       },
       {
@@ -188,9 +130,48 @@
     ],
     "rule_set": [
       {
+        "tag": "custom-block",
+        "rules": [
+          {
+            "domain": [
+              "block.test", // only test
+              "black.qimo.ink", // biliroming blacklist
+              "2fa.qwq2333.top", // QAuxiliary
+              "api.qwq2333.top", // QAuxiliary
+              "ntp.msn.cn" // edge startpage
+            ],
+            "domain_suffix": [
+              ".mcdn.bilivideo.cn",
+              ".szbdyd.com"
+            ],
+            "domain_regex": [
+              "cn-.+\\.bilivideo\\.com$",
+              "-pcdn-.?\\.biliapi\\.net$"
+            ]
+          }
+        ],
+        "type": "inline"
+      },
+      {
+        "tag": "custom-direct",
+        "rules": [
+          {
+            "domain_suffix": [
+              "ghgo.xyz",
+              "ghproxy.cc",
+              "deeplx.org",
+              "dandanplay.net",
+              "metacubex.one",
+              "yacd.haishan.me"
+            ]
+          }
+        ],
+        "type": "inline"
+      },
+      {
         "tag": "geosite-anti-ip-attribution-reject",
         "format": "binary",
-        "url": "https://ghp.ci/https://raw.githubusercontent.com/vstar37/sing-box-geosite/main/rule/rule-provider-reject.srs",
+        "url": "https://ghgo.xyz/https://raw.githubusercontent.com/touhoured/sing-box-geosite/main/rule/rule-provider-reject.srs",
         "download_detour": "out-direct",
         // "update_interval": "1d",
         "type": "remote"
@@ -198,7 +179,7 @@
       {
         "tag": "geosite-anti-ip-attribution-direct",
         "format": "binary",
-        "url": "https://ghp.ci/https://raw.githubusercontent.com/vstar37/sing-box-geosite/main/rule/rule-provider-direct.srs",
+        "url": "https://ghgo.xyz/https://raw.githubusercontent.com/touhoured/sing-box-geosite/main/rule/rule-provider-direct.srs",
         "download_detour": "out-direct",
         // "update_interval": "1d",
         "type": "remote"
@@ -206,7 +187,7 @@
       {
         "tag": "geosite-anti-ip-attribution-proxy",
         "format": "binary",
-        "url": "https://ghp.ci/https://raw.githubusercontent.com/vstar37/sing-box-geosite/main/rule/rule-provider-proxy.srs",
+        "url": "https://ghgo.xyz/https://raw.githubusercontent.com/touhoured/sing-box-geosite/main/rule/rule-provider-proxy.srs",
         "download_detour": "out-direct",
         // "update_interval": "1d",
         "type": "remote"
@@ -214,7 +195,7 @@
       {
         "tag": "geosite-ADBlock-Cats-Team",
         "format": "binary",
-        "url": "https://ghp.ci/https://raw.githubusercontent.com/Cats-Team/AdRules/main/adrules-singbox.srs",
+        "url": "https://ghgo.xyz/https://raw.githubusercontent.com/Cats-Team/AdRules/main/adrules-singbox.srs",
         "download_detour": "out-direct",
         // "update_interval": "1d",
         "type": "remote"
@@ -223,7 +204,7 @@
       {
         "tag": "geosite-ADBlock-MeepoMaster",
         "format": "binary",
-        "url": "https://ghp.ci/https://raw.githubusercontent.com/MeepoMaster/sing-box-ruleset/main/adg-dns.srs",
+        "url": "https://ghgo.xyz/https://raw.githubusercontent.com/MeepoMaster/sing-box-ruleset/main/adg-dns.srs",
         "download_detour": "out-direct",
         // "update_interval": "1d",
         "type": "remote"
@@ -232,7 +213,7 @@
       // {
       //   "tag": "geosite-ADBlock-ppfeufer",
       //   "format": "binary",
-      //   "url": "https://ghp.ci/https://raw.githubusercontent.com/hangyu170/rules/main/blocklist.srs",
+      //   "url": "https://ghgo.xyz/https://raw.githubusercontent.com/hangyu170/rules/main/blocklist.srs",
       //   "download_detour": "out-direct",
       //   // "update_interval": "1d",
       //   "type": "remote"
@@ -240,7 +221,7 @@
       // {
       //   "tag": "geosite-ADBlock-AdGuardSDNSFilter",
       //   "format": "binary",
-      //   "url": "https://ghp.ci/https://raw.githubusercontent.com/xmdhs/sing-box-ruleset/rule-set/AdGuardSDNSFilter.srs",
+      //   "url": "https://ghgo.xyz/https://raw.githubusercontent.com/xmdhs/sing-box-ruleset/rule-set/AdGuardSDNSFilter.srs",
       //   "download_detour": "out-direct",
       //   // "update_interval": "1d",
       //   "type": "remote"
@@ -248,7 +229,7 @@
       {
         "tag": "geosite-private",
         "format": "binary",
-        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-private.srs",
+        "url": "https://ghgo.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-private.srs",
         "download_detour": "out-direct",
         // "update_interval": "1d",
         "type": "remote"
@@ -256,7 +237,7 @@
       {
         "tag": "geosite-category-httpdns-cn",
         "format": "binary",
-        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-httpdns-cn.srs",
+        "url": "https://ghgo.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-httpdns-cn.srs",
         "download_detour": "out-direct",
         // "update_interval": "1d",
         "type": "remote"
@@ -264,7 +245,7 @@
       {
         "tag": "geosite-category-ads-all",
         "format": "binary",
-        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs",
+        "url": "https://ghgo.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs",
         "download_detour": "out-direct",
         // "update_interval": "1d",
         "type": "remote"
@@ -272,7 +253,7 @@
       {
         "tag": "geosite-googlefcm",
         "format": "binary",
-        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-googlefcm.srs",
+        "url": "https://ghgo.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-googlefcm.srs",
         "download_detour": "out-direct",
         // "update_interval": "1d",
         "type": "remote"
@@ -280,7 +261,7 @@
       {
         "tag": "geosite-onedrive",
         "format": "binary",
-        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-onedrive.srs",
+        "url": "https://ghgo.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-onedrive.srs",
         "download_detour": "out-direct",
         // "update_interval": "1d",
         "type": "remote"
@@ -288,7 +269,7 @@
       {
         "tag": "geosite-geolocation-!cn",
         "format": "binary",
-        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-!cn.srs",
+        "url": "https://ghgo.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-!cn.srs",
         "download_detour": "out-direct",
         // "update_interval": "1d",
         "type": "remote"
@@ -296,7 +277,7 @@
       {
         "tag": "geosite-geolocation-cn",
         "format": "binary",
-        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-cn.srs",
+        "url": "https://ghgo.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-cn.srs",
         "download_detour": "out-direct",
         // "update_interval": "1d",
         "type": "remote"
@@ -304,7 +285,7 @@
       {
         "tag": "geosite-tld-cn",
         "format": "binary",
-        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-tld-cn.srs",
+        "url": "https://ghgo.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-tld-cn.srs",
         "download_detour": "out-direct",
         // "update_interval": "1d",
         "type": "remote"
@@ -312,7 +293,7 @@
       {
         "tag": "geosite-cn",
         "format": "binary",
-        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs",
+        "url": "https://ghgo.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs",
         "download_detour": "out-direct",
         // "update_interval": "1d",
         "type": "remote"
@@ -320,7 +301,7 @@
       {
         "tag": "geoip-cn",
         "format": "binary",
-        "url": "https://ghp.ci/https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs",
+        "url": "https://ghgo.xyz/https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs",
         "download_detour": "out-direct",
         // "update_interval": "1d",
         "type": "remote"
@@ -362,16 +343,48 @@
       //   "server": "dns-local"
       // },
       {
-        "clash_mode": "Direct",
+        "clash_mode": "direct",
         "server": "dns-local"
       },
       {
-        "clash_mode": "Global",
+        "clash_mode": "global",
         "server": "dns-proxy"
       },
       {
-        "rule_set": "geosite-private",
-        "server": "dns-local"
+        "rule_set": [
+          "geosite-anti-ip-attribution-reject",
+          "geosite-ADBlock-MeepoMaster",
+          "geosite-ADBlock-Cats-Team",
+          // "geosite-ADBlock-ppfeufer",
+          // "geosite-ADBlock-AdGuardSDNSFilter",
+          "geosite-category-httpdns-cn",
+          "geosite-category-ads-all",
+          "custom-block"
+        ],
+        // "method": "default",
+        // "no_drop": false,
+        "action": "reject"
+      },
+      {
+        "rule_set": [
+          "custom-direct"
+        ],
+        "server": "out-direct"
+      },
+      {
+        "domain_suffix": [
+          "extshort.weixin.qq.com",
+          "short.weixin.qq.com"
+        ],
+        "server": "out-wechat"
+      },
+      {
+        "rule_set": "geosite-googlefcm",
+        "server": "dns-googlefcm"
+      },
+      {
+        "rule_set": "geosite-onedrive",
+        "server": "dns-onedrive"
       },
       {
         "rule_set": [
@@ -394,7 +407,7 @@
           }
         ],
         "client_subnet": "114.114.114.114/24", // Any China client IP address
-        "action": "route-options",
+        // "action": "route-options",
         "server": "dns-proxy"
       },
       {
@@ -414,6 +427,10 @@
       //   ],
       //   "server": "dns-proxy"
       // },
+      {
+        "rule_set": "geosite-private",
+        "server": "dns-local"
+      },
       // {
       //   "query_type": [
       //     "CNAME",
@@ -431,8 +448,28 @@
         "tag": "dns-proxy",
         "address": "tcp://8.8.8.8",
         // "address": "tcp://dns.google",
-        // "strategy": "ipv4_only",
+        // "address_resolver": "dns-proxy-resolver",
         "detour": "out-proxy"
+      },
+      // {
+      //   "tag": "dns-proxy-resolver",
+      //   "address": "tcp://8.8.8.8",
+      //   "detour": "out-proxy"
+      // },
+      {
+        "tag": "dns-wechat",
+        "address": "tcp://223.5.5.5",
+        "detour": "out-wechat"
+      },
+      {
+        "tag": "dns-googlefcm",
+        "address": "tcp://223.5.5.5",
+        "detour": "out-googlefcm"
+      },
+      {
+        "tag": "dns-onedrive",
+        "address": "tcp://223.5.5.5",
+        "detour": "out-onedrive"
       },
       {
         "tag": "dns-direct",
@@ -623,7 +660,7 @@
       // "default_mode": "Rule",
       "secret": "touhoured",
       "external_ui": "ui",
-      "external_ui_download_url": "https://ghp.ci/https://github.com/MetaCubeX/metacubexd/archive/gh-pages.zip",
+      "external_ui_download_url": "https://ghgo.xyz/https://github.com/MetaCubeX/metacubexd/archive/gh-pages.zip",
       "external_ui_download_detour": "out-direct",
       "external_controller": ":9090"
     }
