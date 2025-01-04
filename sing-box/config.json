@@ -120,6 +120,10 @@
         "outbound": "out-direct"
       },
       {
+        "rule_set": "geosite-geolocation-!cn",
+        "outbound": "out-proxy"
+      },
+      {
         "ip_is_private": true,
         "rule_set": "geosite-private",
         "outbound": "out-direct"
@@ -393,6 +397,10 @@
           "geosite-cn"
         ],
         "server": "dns-direct"
+      },
+      {
+        "rule_set": "geosite-geolocation-!cn",
+        "server": "dns-proxy"
       },
       {
         "type": "logical",
