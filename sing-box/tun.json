@@ -493,9 +493,9 @@
       },
       {
         "tag": "dns-local",
-        "address": "dhcp://auto",
+        // "address": "dhcp://auto",
         // "address": "local",
-        // "address": "223.5.5.5",
+        "address": "223.5.5.5",
         "detour": "out-direct"
       }
     ]
