@@ -53,46 +53,33 @@
             "protocol": "quic"
           }
         ],
-        // "method": "default",
-        // "no_drop": false,
         "action": "reject"
       },
       {
         "rule_set": [
-          "geosite-anti-ip-attribution-reject",
-          "geosite-ADBlock-MeepoMaster",
-          "geosite-ADBlock-Cats-Team",
-          // "geosite-ADBlock-ppfeufer",
-          // "geosite-ADBlock-AdGuardSDNSFilter",
+          "rule-anti-ip-attribution-reject",
+          "rule-MeepoMaster",
+          "rule-Cats-Team",
+          // "rule-ppfeufer",
+          // "rule-AdGuardSDNSFilter",
           "geosite-category-httpdns-cn",
           "geosite-category-ads-all",
-          "custom-block"
+          "rule-custom-block"
         ],
-        // "method": "default",
-        // "no_drop": false,
         "action": "reject"
       },
       {
         "rule_set": [
-          "custom-direct"
+          "rule-custom-direct"
         ],
         "outbound": "out-direct"
       },
-      // {
-      //   "domain_suffix": [
-      //     "biliapi.net",
-      //     "biliapi.com",
-      //     "bilibili.com"
-      //   ],
-      //   "ip_cidr": "203.107.1.0/24",
-      //   "outbound": "out-bilibili"
-      // },
       {
-        "rule_set": "geosite-anti-ip-attribution-direct",
+        "rule_set": "rule-anti-ip-attribution-direct",
         "outbound": "out-direct"
       },
       {
-        "rule_set": "geosite-anti-ip-attribution-proxy",
+        "rule_set": "rule-anti-ip-attribution-proxy",
         "outbound": "out-anti-ip-attribution"
       },
       {
@@ -134,7 +121,7 @@
     ],
     "rule_set": [
       {
-        "tag": "custom-block",
+        "tag": "rule-custom-block",
         "rules": [
           {
             "domain": [
@@ -157,7 +144,7 @@
         "type": "inline"
       },
       {
-        "tag": "custom-direct",
+        "tag": "rule-custom-direct",
         "rules": [
           {
             "domain_suffix": [
@@ -173,61 +160,77 @@
         "type": "inline"
       },
       {
-        "tag": "geosite-anti-ip-attribution-reject",
+        "tag": "rule-anti-ip-attribution-reject-noip",
+        "format": "binary",
+        "url": "https://ghgo.xyz/https://raw.githubusercontent.com/touhoured/sing-box-geosite/main/rule/rule-provider-reject-noip.srs",
+        "download_detour": "out-direct",
+        "type": "remote"
+      },
+      {
+        "tag": "rule-anti-ip-attribution-direct-noip",
+        "format": "binary",
+        "url": "https://ghgo.xyz/https://raw.githubusercontent.com/touhoured/sing-box-geosite/main/rule/rule-provider-direct-noip.srs",
+        "download_detour": "out-direct",
+        "type": "remote"
+      },
+      {
+        "tag": "rule-anti-ip-attribution-proxy-noip",
+        "format": "binary",
+        "url": "https://ghgo.xyz/https://raw.githubusercontent.com/touhoured/sing-box-geosite/main/rule/rule-provider-proxy-noip.srs",
+        "download_detour": "out-direct",
+        "type": "remote"
+      },
+      {
+        "tag": "rule-anti-ip-attribution-reject",
         "format": "binary",
         "url": "https://ghgo.xyz/https://raw.githubusercontent.com/touhoured/sing-box-geosite/main/rule/rule-provider-reject.srs",
         "download_detour": "out-direct",
-        // "update_interval": "1d",
         "type": "remote"
       },
       {
-        "tag": "geosite-anti-ip-attribution-direct",
+        "tag": "rule-anti-ip-attribution-direct",
         "format": "binary",
         "url": "https://ghgo.xyz/https://raw.githubusercontent.com/touhoured/sing-box-geosite/main/rule/rule-provider-direct.srs",
         "download_detour": "out-direct",
-        // "update_interval": "1d",
         "type": "remote"
       },
       {
-        "tag": "geosite-anti-ip-attribution-proxy",
+        "tag": "rule-anti-ip-attribution-proxy",
         "format": "binary",
         "url": "https://ghgo.xyz/https://raw.githubusercontent.com/touhoured/sing-box-geosite/main/rule/rule-provider-proxy.srs",
         "download_detour": "out-direct",
-        // "update_interval": "1d",
         "type": "remote"
       },
       {
-        "tag": "geosite-ADBlock-Cats-Team",
+        "tag": "rule-Cats-Team",
         "format": "binary",
         "url": "https://ghgo.xyz/https://raw.githubusercontent.com/Cats-Team/AdRules/main/adrules-singbox.srs",
         "download_detour": "out-direct",
-        // "update_interval": "1d",
         "type": "remote"
       },
       // 217heidai and AWAvenue
       {
-        "tag": "geosite-ADBlock-MeepoMaster",
+        "tag": "rule-MeepoMaster",
         "format": "binary",
         "url": "https://ghgo.xyz/https://raw.githubusercontent.com/MeepoMaster/sing-box-ruleset/main/adg-dns.srs",
         "download_detour": "out-direct",
-        // "update_interval": "1d",
         "type": "remote"
       },
       // // include anti-AD, see Mosney/anti-anti-AD
       // {
-      //   "tag": "geosite-ADBlock-ppfeufer",
+      //   "tag": "rule-ppfeufer",
       //   "format": "binary",
       //   "url": "https://ghgo.xyz/https://raw.githubusercontent.com/hangyu170/rules/main/blocklist.srs",
       //   "download_detour": "out-direct",
-      //   // "update_interval": "1d",
+      //   
       //   "type": "remote"
       // },
       // {
-      //   "tag": "geosite-ADBlock-AdGuardSDNSFilter",
+      //   "tag": "rule-AdGuardSDNSFilter",
       //   "format": "binary",
       //   "url": "https://ghgo.xyz/https://raw.githubusercontent.com/xmdhs/sing-box-ruleset/rule-set/AdGuardSDNSFilter.srs",
       //   "download_detour": "out-direct",
-      //   // "update_interval": "1d",
+      //   
       //   "type": "remote"
       // },
       {
@@ -235,7 +238,6 @@
         "format": "binary",
         "url": "https://ghgo.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-private.srs",
         "download_detour": "out-direct",
-        // "update_interval": "1d",
         "type": "remote"
       },
       {
@@ -243,7 +245,6 @@
         "format": "binary",
         "url": "https://ghgo.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-httpdns-cn.srs",
         "download_detour": "out-direct",
-        // "update_interval": "1d",
         "type": "remote"
       },
       {
@@ -251,7 +252,6 @@
         "format": "binary",
         "url": "https://ghgo.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs",
         "download_detour": "out-direct",
-        // "update_interval": "1d",
         "type": "remote"
       },
       {
@@ -259,7 +259,6 @@
         "format": "binary",
         "url": "https://ghgo.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-googlefcm.srs",
         "download_detour": "out-direct",
-        // "update_interval": "1d",
         "type": "remote"
       },
       {
@@ -267,7 +266,6 @@
         "format": "binary",
         "url": "https://ghgo.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-onedrive.srs",
         "download_detour": "out-direct",
-        // "update_interval": "1d",
         "type": "remote"
       },
       {
@@ -275,7 +273,6 @@
         "format": "binary",
         "url": "https://ghgo.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-!cn.srs",
         "download_detour": "out-direct",
-        // "update_interval": "1d",
         "type": "remote"
       },
       {
@@ -283,7 +280,6 @@
         "format": "binary",
         "url": "https://ghgo.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-cn.srs",
         "download_detour": "out-direct",
-        // "update_interval": "1d",
         "type": "remote"
       },
       {
@@ -291,7 +287,6 @@
         "format": "binary",
         "url": "https://ghgo.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-tld-cn.srs",
         "download_detour": "out-direct",
-        // "update_interval": "1d",
         "type": "remote"
       },
       {
@@ -299,7 +294,6 @@
         "format": "binary",
         "url": "https://ghgo.xyz/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs",
         "download_detour": "out-direct",
-        // "update_interval": "1d",
         "type": "remote"
       },
       {
@@ -307,7 +301,6 @@
         "format": "binary",
         "url": "https://ghgo.xyz/https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs",
         "download_detour": "out-direct",
-        // "update_interval": "1d",
         "type": "remote"
       }
     ]
@@ -343,7 +336,6 @@
       // { // if outbound use domain
       //   "disable_cache": true,
       //   "outbound": "any",
-      //   // "action": "route-options",
       //   "server": "dns-local"
       // },
       {
@@ -356,24 +348,30 @@
       },
       {
         "rule_set": [
-          "geosite-anti-ip-attribution-reject",
-          "geosite-ADBlock-MeepoMaster",
-          "geosite-ADBlock-Cats-Team",
-          // "geosite-ADBlock-ppfeufer",
-          // "geosite-ADBlock-AdGuardSDNSFilter",
+          "rule-anti-ip-attribution-reject-noip",
+          "rule-MeepoMaster",
+          "rule-Cats-Team",
+          // "rule-ppfeufer",
+          // "rule-AdGuardSDNSFilter",
           "geosite-category-httpdns-cn",
           "geosite-category-ads-all",
-          "custom-block"
+          "rule-custom-block"
         ],
-        // "method": "default",
-        // "no_drop": false,
         "action": "reject"
       },
       {
         "rule_set": [
-          "custom-direct"
+          "rule-custom-direct"
         ],
         "server": "out-direct"
+      },
+      {
+        "rule_set": "rule-anti-ip-attribution-direct-noip",
+        "server": "dns-direct"
+      },
+      {
+        "rule_set": "rule-anti-ip-attribution-proxy-noip",
+        "server": "dns-anti-ip-attribution"
       },
       {
         "domain_suffix": [
@@ -415,7 +413,6 @@
           }
         ],
         "client_subnet": "114.114.114.114/24", // Any China client IP address
-        // "action": "route-options",
         "server": "dns-proxy"
       },
       {
@@ -425,7 +422,6 @@
           "A"
         ],
         // "rewrite_ttl": 1,
-        // "action": "route-options",
         "server": "dns-fakeip"
       },
       // {
@@ -447,7 +443,6 @@
       //   ],
       //   "invert": true,
       //   "disable_cache": true,
-      //   // "action": "route-options",
       //   "server": "dns-refused"
       // }
     ],
@@ -464,6 +459,11 @@
       //   "address": "tcp://8.8.8.8",
       //   "detour": "out-proxy"
       // },
+      {
+        "tag": "dns-anti-ip-attribution",
+        "address": "tcp://223.5.5.5",
+        "detour": "out-anti-ip-attribution"
+      },
       {
         "tag": "dns-wechat",
         "address": "tcp://223.5.5.5",
@@ -487,24 +487,16 @@
         "detour": "out-direct"
       },
       {
+        "tag": "dns-fakeip",
+        "address": "fakeip"
+      },
+      {
         "tag": "dns-local",
         // "address": "dhcp://auto",
         "address": "local",
         // "address": "223.5.5.5",
         "detour": "out-direct"
-      },
-      {
-        "tag": "dns-fakeip",
-        "address": "fakeip"
-      },
-      // {
-      //   "tag": "dns-success",
-      //   "address": "rcode://success"
-      // },
-      // {
-      //   "tag": "dns-block",
-      //   "address": "rcode://refused"
-      // }
+      }
     ]
   },
   "outbounds": [
@@ -551,14 +543,6 @@
         "out-proxy"
       ]
     },
-    // {
-    //   "type": "selector",
-    //   "tag": "out-bilibili",
-    //   "outbounds": [
-    //     "out-direct",
-    //     "out-proxy"
-    //   ]
-    // },
     {
       "type": "selector",
       "tag": "out-wechat",
@@ -634,7 +618,7 @@
           "enabled": true
         }
       },
-      // "stack": "mixed",
+      "stack": "system",
       "type": "tun"
     },
     {
