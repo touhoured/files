@@ -163,7 +163,7 @@
             ]
           }
         ],
-        // "type": "inline"
+        "type": "inline"
       },
       {
         "tag": "rule-custom-direct",
@@ -180,7 +180,7 @@
             ]
           }
         ],
-        // "type": "inline"
+        "type": "inline"
       },
       {
         "tag": "rule-geph",
@@ -201,7 +201,7 @@
             ]
           }
         ],
-        // "type": "inline"
+        "type": "inline"
       },
       {
         "tag": "rule-anti-ip-attribution-reject-noip",

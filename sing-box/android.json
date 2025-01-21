@@ -163,7 +163,7 @@
             ]
           }
         ],
-        // "type": "inline"
+        "type": "inline"
       },
       {
         "tag": "rule-custom-direct",
@@ -180,7 +180,7 @@
             ]
           }
         ],
-        // "type": "inline"
+        "type": "inline"
       },
       {
         "tag": "rule-geph",
@@ -201,7 +201,7 @@
             ]
           }
         ],
-        // "type": "inline"
+        "type": "inline"
       },
       {
         "tag": "rule-anti-ip-attribution-reject-noip",
@@ -677,7 +677,7 @@
         }
       },
       "route_exclude_address": "100.64.0.0/10", // Tailscale
-      // "route_exclude_address_set": "geoip-cn",
+      "route_exclude_address_set": "geoip-cn",
       "stack": "system",
       "type": "tun"
     },
