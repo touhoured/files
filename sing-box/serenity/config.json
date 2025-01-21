@@ -1,0 +1,195 @@
+{
+  "log": {
+    "disabled": false,
+    "level": "debug",
+    "timestamp": true
+  },
+  "listen": ":8080",
+  "subscriptions": [
+    {
+      "name": "dreamfunder",
+      "url": "https://ghfast.top/https://raw.githubusercontent.com/dreamfunder/breakfree/refs/heads/master/release/Sing-Box/cn.json",
+      "generate_selector": true,
+      // "deduplication": true,
+      "process": [
+	      {
+          // "remove": true,
+          // "remove_emoji": true,
+		      "exclude_type": ["http", "socks5", "shadowsocksr"]
+	      }
+      ]
+    },
+    {
+      "name": "aggregator",
+      "url": "https://ghfast.top/https://raw.githubusercontent.com/mahdibland/ShadowsocksAggregator/master/sub/sub_merge.txt",
+      "generate_selector": true,
+      // "deduplication": true,
+      "process": [
+	      {
+          // "remove": true,
+          // "remove_emoji": true,
+		      "exclude_type": ["http", "socks5", "shadowsocksr"]
+	      }
+      ]
+    },
+    {
+      "name": "collector",
+      "url": "https://ghfast.top/https://raw.githubusercontent.com/Mahdi0024/ProxyCollector/master/sub/singbox.json",
+      "generate_selector": true,
+      // "deduplication": true,
+      "process": [
+	      {
+          // "remove": true,
+          // "remove_emoji": true,
+		      "exclude_type": ["http", "socks5", "shadowsocksr"]
+	      }
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "name": "default",
+      // "extend": "",
+    
+      // Global
+    
+      "log": {
+        "level": "trace",
+        "timestamp": false
+      },
+      // "domain_strategy": "prefer_ipv4",
+      // "domain_strategy_local": "prefer_ipv4",
+      "disable_traffic_bypass": false,
+      "remote_resolve": true,
+    
+      // DNS
+    
+      "dns": "https://8.8.8.8/dns-query",
+      "dns_local": "tls://223.5.5.5",
+      // "enable_fakeip": true,
+      // "pre_dns_rules": [],
+      // "custom_dns_rules": [],
+    
+      // Inbound
+    
+      // "inbounds": [],
+      // "auto_redirect": false,
+      // "disable_tun": true,
+      // "disable_system_proxy": true,
+      // "custom_tun": {},
+      // "custom_mixed": {},
+    
+      // Outbound
+    
+      "extra_groups": [
+        {
+          "tag": "HongKong",
+          "type": "selector",
+          "filter": "🇭🇰|HK|hk|香港|港|HongKong"
+        },
+        {
+          "tag": "TaiWan",
+          "type": "selector",
+          "filter": "🇹🇼|TW|tw|台湾|臺灣|台|Taiwan"
+        },
+        {
+          "tag": "Singapore",
+          "type": "selector",
+          "filter": "🇸🇬|SG|sg|新加坡|狮|Singapore"
+        },
+        {
+          "tag": "Japan",
+          "type": "selector",
+          "filter": "🇯🇵|JP|jp|日本|日|Japan"
+        },
+        {
+          "tag": "America",
+          "type": "selector",
+          "filter": "🇺🇸|US|us|美国|美|United States"
+        },
+        {
+          "tag": "Others",
+          "type": "selector",
+          "exclude": "🇭🇰|HK|hk|香港|香|🇹🇼|TW|tw|台湾|台|🇸🇬|SG|sg|新加坡|狮|🇯🇵|JP|jp|日本|日|🇺🇸|US|us|美国|美|[Tt]raffic|[Ee]xpire"
+        }
+        // {
+        //   "tag": "auto",
+        //   "type": "urltest",
+        //   "exclude": "网站|地址|剩余|过期|时间|有效|[Tt]raffic|[Ee]xpire"
+        // }
+      ],
+      // "direct_tag": "out-direct",
+      // "default_tag": "out-default",
+      // "urltest_tag": "out-urltest",
+      // "custom_direct": {},
+      // "custom_selector": {},
+      // "custom_urltest": {},
+    
+      // Route
+    
+      // "pre_rules": [],
+      // "custom_rules": [],
+      "enable_jsdelivr": true,
+      "custom_rule_set": [
+        {
+          "type": "github",
+          "repository": "MetaCubeX/meta-rules-dat",
+          "path": "sing/geo/geosite/",
+          "prefix": "geosite-",
+          "rule_set": [
+            "category-ads-all",
+            "geolocation-cn",
+            "cn",
+            "geolocation-!cn"
+          ]
+        },
+        {
+          "type": "github",
+          "repository": "MetaCubeX/meta-rules-dat",
+          "path": "sing/geo/geoip/",
+          "prefix": "geoip-",
+          "rule_set": [ 
+            "cn"
+          ]
+        }
+      ],
+      // "post_rule_set": [],
+    
+      // Experimental
+    
+      // "disable_cache_file": false,
+      "disable_clash_mode": true,
+      // "clash_mode_rule": "",
+      // "clash_mode_global": "",
+      // "clash_mode_direct": "",
+      // "custom_clash_api": {},
+    
+      // Debug
+    
+      // "pprof_listen": "",
+      // "memory_limit": ""
+    },  
+    {
+      "name": "android",
+      "extend": "default",
+      "disable_tun": false
+    },
+    {
+      "name": "desktop",
+      "extend": "default",
+      "disable_tun": true,
+      "disable_system_proxy": true
+    }
+  ],
+  "profiles": [
+    {
+      "name": "desktop",
+      "template": "desktop",
+      "subscription": [
+        "dreamfunder",
+        "collector",
+        "aggregator"
+      ]
+    }
+  ]
+}
