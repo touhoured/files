@@ -3,7 +3,7 @@
 {
   "route": {
     // "final": "proxy",
-    "auto_detect_interface": true,
+    // "auto_detect_interface": true,
     // "default_network_strategy": "fallback",
     // "default_fallback_delay": "300ms",
     // "default_interface": "WLAN",
@@ -129,17 +129,17 @@
         ],
         "outbound": "direct"
       },
-      // {
-      //   "rule_set": [
-      //     // "geosite-tld-cn",
-      //     // "geoip-cn",
-      //     "geosite-cn"
-      //   ],
-      //   "outbound": "direct"
-      // },
-      // {
-      //   "outbound": "final"
-      // }
+      {
+        "rule_set": [
+          // "geosite-tld-cn",
+          // "geoip-cn",
+          "geosite-cn"
+        ],
+        "outbound": "direct"
+      },
+      {
+        "outbound": "final"
+      }
     ],
     "rule_set": [
       {
@@ -354,34 +354,7 @@
     // "strategy": "prefer_ipv4",
     "reverse_mapping": true,
     "independent_cache": true,
-    "fakeip": {
-      "enabled": true,
-      "inet6_range": "fc00::/18",
-      "inet4_range": "198.18.0.0/15"
-    },
     "rules": [
-      {
-        "rule_set": "rule-geph",
-        "server": "local"
-      },
-      // {
-      //   "disable_cache": true,
-      //   "outbound": "any",
-      //   "server": "local"
-      // },
-      {
-        // "ip_is_private": true,
-        "rule_set": "geosite-private",
-        "server": "local"
-      },
-      {
-        "clash_mode": "Direct",
-        "server": "local"
-      },
-      {
-        "clash_mode": "Global",
-        "server": "proxy"
-      },
       {
         "type": "logical",
         "mode": "or",
@@ -444,9 +417,9 @@
       },
       {
         "rule_set": [
-          "geosite-geolocation-cn"
-          // "geosite-tld-cn",
-          // "geosite-cn"
+          "geosite-geolocation-cn",
+          "geosite-tld-cn",
+          "geosite-cn"
         ],
         "server": "direct"
       },
@@ -468,68 +441,78 @@
         ],
         "client_subnet": "114.114.114.114/24", // Any China client IP address
         "server": "direct"
-      },
-      {
-        "rule_set": "geosite-geolocation-!cn",
-        "query_type": [
-          "AAAA",
-          "A"
-        ],
-        // "rewrite_ttl": 1,
-        "server": "fakeip"
       }
+      // {
+      //   "rule_set": "geosite-geolocation-!cn",
+      //   "query_type": [
+      //     "AAAA",
+      //     "A"
+      //   ],
+      //   // "rewrite_ttl": 1,
+      //   "server": "fakeip"
+      // }
     ],
     "servers": [
       {
         "tag": "proxy",
-        "address": "https://8.8.8.8/dns-query",
-        // "address": "tcp://dns.google",
-        // "address_resolver": "proxy-resolver",
-        "detour": "proxy"
+        "detour": "proxy",
+        "server": "8.8.8.8",
+        // "server": "dns.google",
+        // "domain_resolver": "proxy-resolver",
+        "type": "https"
       },
       // {
       //   "tag": "proxy-resolver",
-      //   "address": "tcp://8.8.8.8",
-      //   "detour": "proxy"
+      //   "detour": "proxy",
+      //   "server": "8.8.8.8",
+      //   "type": "tcp"
       // },
       {
         "tag": "anti-ip-attribution",
-        "address": "https://223.5.5.5/dns-query",
-        "detour": "anti-ip-attribution"
+        "detour": "anti-ip-attribution",
+        "server": "223.5.5.5",
+        "type": "https"
       },
       {
         "tag": "wechat",
-        "address": "https://223.5.5.5/dns-query",
-        "detour": "wechat"
+        "detour": "wechat",
+        "server": "223.5.5.5",
+        "type": "https"
       },
       {
         "tag": "googlefcm",
-        "address": "https://223.5.5.5/dns-query",
-        "detour": "googlefcm"
+        "detour": "googlefcm",
+        "server": "223.5.5.5",
+        "type": "https"
       },
       {
         "tag": "onedrive",
-        "address": "https://223.5.5.5/dns-query",
-        "detour": "onedrive"
+        "detour": "onedrive",
+        "server": "223.5.5.5",
+        "type": "https"
       },
       {
         "tag": "direct",
-        // "address": "tls://dns.pub",
-        // "address": "tls://dns.alidns.com",
-        "address": "tls://223.5.5.5",
-        // "address_resolver": "local",
-        "detour": "direct"
+        "detour": "direct",
+        // "server": "dns.pub",
+        // "server": "dns.alidns.com",
+        "server": "223.5.5.5",
+        // "server_resolver": "local",
+        "type": "tls"
       },
-      {
-        "tag": "fakeip",
-        "address": "fakeip"
-      },
+      // {
+      //   "tag": "fakeip",
+      //   "inet4_range": "198.18.0.0/15",
+      //   "inet6_range": "fc00::/18",
+      //   "type": "fakeip"
+      // },
       {
         "tag": "local",
-        "address": "dhcp://auto",
-        // "address": "local",
-        // "address": "223.5.5.5",
-        "detour": "direct"
+        "detour": "direct",
+        // "server": "223.5.5.5",
+        // "interface": "auto"
+        // "type": "dhcp"
+        "type": "local"
       }
     ]
   },
@@ -702,7 +685,7 @@
   },
   "experimental": {
     "cache_file": {
-      // "store_rdrc": true,
+      "store_rdrc": true,
       // "cache_id": "while-proxy-leak",
       "cache_id": "while-tun-leak",
       // "cache_id": "while-android-leak",
@@ -712,9 +695,9 @@
       // "default_mode": "Leak",
       "default_mode": "Rule",
       "secret": "touhoured",
-      "external_ui": "ui",
-      "external_ui_download_url": "https://ghfast.top/https://github.com/MetaCubeX/metacubexd/archive/gh-pages.zip",
-      "external_ui_download_detour": "direct",
+      // "external_ui": "ui",
+      // "external_ui_download_url": "https://ghfast.top/https://github.com/MetaCubeX/metacubexd/archive/gh-pages.zip",
+      // "external_ui_download_detour": "direct",
       "external_controller": ":9090"
     }
   }
