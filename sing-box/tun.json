@@ -357,11 +357,11 @@
     "rules": [
       {
         "rule_set": "geosite-private",
-        "server": "direct"
+        "server": "local"
       },
       {
         "clash_mode": "direct",
-        "server": "direct"
+        "server": "local"
       },
       {
         "clash_mode": "global",
