@@ -3,7 +3,7 @@
 {
   "route": {
     // "final": "proxy",
-    // "auto_detect_interface": true,
+    "auto_detect_interface": true,
     // "default_network_strategy": "fallback",
     // "default_fallback_delay": "300ms",
     // "default_interface": "WLAN",
@@ -37,11 +37,11 @@
         "outbound": "direct"
       },
       {
-        "clash_mode": "Direct",
+        "clash_mode": "direct",
         "outbound": "direct"
       },
       {
-        "clash_mode": "Global",
+        "clash_mode": "global",
         "outbound": "proxy"
       },
       {
@@ -355,6 +355,18 @@
     "reverse_mapping": true,
     "independent_cache": true,
     "rules": [
+      {
+        "rule_set": "geosite-private",
+        "server": "direct"
+      },
+      {
+        "clash_mode": "direct",
+        "server": "direct"
+      },
+      {
+        "clash_mode": "global",
+        "server": "proxy"
+      },
       {
         "type": "logical",
         "mode": "or",
@@ -688,7 +700,7 @@
   ],
   "log": {
     // "disabled": false,
-    "level": "trace",
+    "level": "info",
     "timestamp": false
   },
   "experimental": {
