@@ -71,8 +71,6 @@
           "rule-anti-ip-attribution-reject",
           "rule-MeepoMaster",
           "rule-Cats-Team",
-          // "rule-ppfeufer",
-          // "rule-AdGuardSDNSFilter",
           "geosite-category-httpdns-cn",
           "geosite-category-ads-all",
           "rule-custom-block"
@@ -138,9 +136,9 @@
         ],
         "outbound": "direct"
       },
-      // {
-      //   "outbound": "final"
-      // }
+      {
+        "outbound": "final"
+      }
     ],
     "rule_set": [
       {
@@ -381,14 +379,6 @@
         "rule_set": "geosite-private",
         "server": "local"
       },
-      // {
-      //   "clash_mode": "direct",
-      //   "server": "local"
-      // },
-      // {
-      //   "clash_mode": "global",
-      //   "server": "proxy"
-      // },
       {
         "protocol": ["stun","quic"],
         "action": "reject"
@@ -398,8 +388,6 @@
           "rule-anti-ip-attribution-reject-noip",
           "rule-MeepoMaster",
           "rule-Cats-Team",
-          // "rule-ppfeufer",
-          // "rule-AdGuardSDNSFilter",
           "geosite-category-httpdns-cn",
           "geosite-category-ads-all",
           "rule-custom-block"
@@ -438,10 +426,6 @@
         ],
         "server": "direct"
       },
-      // {
-      //   "rule_set": "geosite-geolocation-!cn",
-      //   "server": "proxy"
-      // },
       {
         "type": "logical",
         "mode": "and",
@@ -454,34 +438,17 @@
             "rule_set": "geoip-cn"
           }
         ],
-        "client_subnet": "114.114.114.114/24", // Any China client IP address
+        "client_subnet": "114.114.114.114/24",
         "server": "direct"
-      },
-      // {
-      //   // "rule_set": "geosite-geolocation-!cn",
-      //   "query_type": [
-      //     "AAAA",
-      //     "A"
-      //   ],
-      //   // "rewrite_ttl": 1,
-      //   "server": "fakeip"
-      // }
+      }
     ],
     "servers": [
       {
         "tag": "proxy",
         "detour": "proxy",
         "server": "8.8.8.8",
-        // "server": "dns.google",
-        // "domain_resolver": "proxy-resolver",
         "type": "https"
       },
-      // {
-      //   "tag": "proxy-resolver",
-      //   "detour": "proxy",
-      //   "server": "8.8.8.8",
-      //   "type": "tcp"
-      // },
       {
         "tag": "anti-ip-attribution",
         "detour": "anti-ip-attribution",
@@ -509,18 +476,9 @@
       {
         "tag": "direct",
         "detour": "direct",
-        // "server": "dns.pub",
-        // "server": "dns.alidns.com",
         "server": "223.5.5.5",
-        // "server_resolver": "local",
         "type": "tls"
       },
-      // {
-      //   "tag": "fakeip",
-      //   "inet4_range": "198.18.0.0/15",
-      //   "inet6_range": "fc00::/18",
-      //   "type": "fakeip"
-      // },
       {
         "type": "tailscale",
         "tag": "tailscale",
@@ -529,10 +487,8 @@
       {
         "tag": "local",
         "detour": "direct",
-        // "server": "223.5.5.5",
-        // "type": "tls",
-        "type": "dhcp"
-        // "type": "local"
+        // "type": "dhcp"
+        "type": "local"
       }
     ]
   },
@@ -543,7 +499,8 @@
         // "fallback",
         "9999",
         "9909",
-        "remote",
+        "remote9999",
+        "remote5330",
         "10011",
         "10012",
         "10013",
@@ -711,14 +668,12 @@
     }
   ],
   "log": {
-    // "disabled": false,
     "level": "info",
     "timestamp": false
   },
   "endpoints": [
     {
       "tag": "tailscale",
-      // "state_directory": "tailscale",
       // "ephemeral": true,
       "domain_resolver": "local",
       "type": "tailscale"
