@@ -9,20 +9,6 @@
         "action": "sniff"
       },
       {
-        "type": "logical",
-        "mode": "or",
-        "rules": [
-          {
-            "network": "udp",
-            "port": 53
-          },
-          {
-            "protocol": "dns"
-          }
-        ],
-        "action": "hijack-dns"
-      },
-      {
         "rule_set": "rule-geph",
         "outbound": "direct"
       },
@@ -47,23 +33,7 @@
       //   "outbound": "proxy"
       // },
       {
-        "type": "logical",
-        "mode": "or",
-        "rules": [
-          {
-            "port": 853
-          },
-          {
-            "protocol": "stun"
-          },
-          {
-            "network": "udp",
-            "port": 443
-          },
-          {
-            "protocol": "quic"
-          }
-        ],
+        "protocol": ["stun","quic"],
         "action": "reject"
       },
       {
@@ -76,6 +46,20 @@
           "rule-custom-block"
         ],
         "action": "reject"
+      },
+      {
+        "type": "logical",
+        "mode": "or",
+        "rules": [
+          {
+            "network": "udp",
+            "port": 53
+          },
+          {
+            "protocol": "dns"
+          }
+        ],
+        "action": "hijack-dns"
       },
       {
         "rule_set": "rule-custom-direct",
@@ -363,7 +347,7 @@
   },
   "dns": {
     "final": "proxy",
-    "strategy": "ipv4_only",
+    // "strategy": "ipv_only",
     "reverse_mapping": true,
     "independent_cache": true,
     "rules": [
@@ -378,10 +362,6 @@
       {
         "rule_set": "geosite-private",
         "server": "local"
-      },
-      {
-        "protocol": ["stun","quic"],
-        "action": "reject"
       },
       {
         "rule_set": [
@@ -487,8 +467,8 @@
       {
         "tag": "local",
         "detour": "direct",
-        // "type": "dhcp"
-        "type": "local"
+        "type": "dhcp"
+        // "type": "local"
       }
     ]
   },
@@ -668,7 +648,7 @@
     }
   ],
   "log": {
-    "level": "debug",
+    "level": "info",
     "timestamp": false
   },
   "endpoints": [
