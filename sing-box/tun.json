@@ -126,10 +126,7 @@
       //     "geosite-cn"
       //   ],
       //   "outbound": "direct"
-      // },
-      {
-        "outbound": "final"
-      }
+      // }
     ],
     "rule_set": [
       {
