@@ -363,7 +363,7 @@
   },
   "dns": {
     "final": "proxy",
-    // "strategy": "prefer_ipv4",
+    "strategy": "ipv4_only",
     "reverse_mapping": true,
     "independent_cache": true,
     "rules": [
@@ -650,7 +650,7 @@
         }
       },
       "route_exclude_address": "100.64.0.0/10", // Tailscale
-      "route_exclude_address_set": "geoip-cn",
+      // "route_exclude_address_set": "geoip-cn",
       "stack": "system",
       "type": "tun"
     },
@@ -668,7 +668,7 @@
     }
   ],
   "log": {
-    "level": "info",
+    "level": "debug",
     "timestamp": false
   },
   "endpoints": [
