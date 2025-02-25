@@ -2,15 +2,10 @@
 // or change dns.final to "direct"
 {
   "route": {
-    // "final": "proxy",
+    "final": "proxy",
     "auto_detect_interface": true,
-    // "default_network_strategy": "fallback",
-    // "default_fallback_delay": "300ms",
-    // "default_interface": "WLAN",
     "rules": [
       {
-        // "inbound": "in-tun",
-        // "timeout": "1s",
         "action": "sniff"
       },
       {
@@ -32,18 +27,25 @@
         "outbound": "direct"
       },
       {
+        "ip_cidr": [
+          "fd7a:115c:a1e0::/48",
+          "100.64.0.0/10"
+        ],
+        "outbound": "tailscale"
+      },
+      {
         "ip_is_private": true,
         "rule_set": "geosite-private",
         "outbound": "direct"
       },
-      {
-        "clash_mode": "direct",
-        "outbound": "direct"
-      },
-      {
-        "clash_mode": "global",
-        "outbound": "proxy"
-      },
+      // {
+      //   "clash_mode": "direct",
+      //   "outbound": "direct"
+      // },
+      // {
+      //   "clash_mode": "global",
+      //   "outbound": "proxy"
+      // },
       {
         "type": "logical",
         "mode": "or",
@@ -90,10 +92,7 @@
         "outbound": "anti-ip-attribution"
       },
       {
-        "domain_suffix": [
-          "extshort.weixin.qq.com",
-          "short.weixin.qq.com"
-        ],
+        "rule_set": "rule-wechat",
         "outbound": "wechat"
       },
       {
@@ -113,6 +112,8 @@
       //   "outbound": "proxy"
       // },
       {
+        "client_subnet": "114.114.114.114/24",
+        "server": "direct",
         "action": "resolve"
       },
       {
@@ -137,11 +138,23 @@
         ],
         "outbound": "direct"
       },
-      {
-        "outbound": "final"
-      }
+      // {
+      //   "outbound": "final"
+      // }
     ],
     "rule_set": [
+      {
+        "tag": "rule-wechat",
+        "rules": [
+          {
+            "domain_suffix": [
+              "extshort.weixin.qq.com",
+              "short.weixin.qq.com"
+            ]
+          }
+        ],
+        "type": "inline"
+      },
       {
         "tag": "rule-custom-block",
         "rules": [
@@ -193,6 +206,7 @@
           },
           {
             "process_name": [
+              "gephgui-wry.exe",
               "geph5-client-gui.exe",
               "geph4-client.exe",
               "geph5-client.exe",
@@ -350,41 +364,33 @@
     ]
   },
   "dns": {
-    // "final": "proxy",
+    "final": "proxy",
     // "strategy": "prefer_ipv4",
     "reverse_mapping": true,
     "independent_cache": true,
     "rules": [
       {
+        "rule_set": "rule-geph",
+        "server": "direct"
+      },
+      {
+        "domain_suffix": "ts.net",
+        "server": "tailscale"
+      },
+      {
         "rule_set": "geosite-private",
         "server": "local"
       },
+      // {
+      //   "clash_mode": "direct",
+      //   "server": "local"
+      // },
+      // {
+      //   "clash_mode": "global",
+      //   "server": "proxy"
+      // },
       {
-        "clash_mode": "direct",
-        "server": "local"
-      },
-      {
-        "clash_mode": "global",
-        "server": "proxy"
-      },
-      {
-        "type": "logical",
-        "mode": "or",
-        "rules": [
-          {
-            "port": 853
-          },
-          {
-            "protocol": "stun"
-          },
-          {
-            "network": "udp",
-            "port": 443
-          },
-          {
-            "protocol": "quic"
-          }
-        ],
+        "protocol": ["stun","quic"],
         "action": "reject"
       },
       {
@@ -413,10 +419,7 @@
         "server": "anti-ip-attribution"
       },
       {
-        "domain_suffix": [
-          "extshort.weixin.qq.com",
-          "short.weixin.qq.com"
-        ],
+        "rule_set": "rule-wechat",
         "server": "wechat"
       },
       {
@@ -453,9 +456,9 @@
         ],
         "client_subnet": "114.114.114.114/24", // Any China client IP address
         "server": "direct"
-      }
+      },
       // {
-      //   "rule_set": "geosite-geolocation-!cn",
+      //   // "rule_set": "geosite-geolocation-!cn",
       //   "query_type": [
       //     "AAAA",
       //     "A"
@@ -519,10 +522,15 @@
       //   "type": "fakeip"
       // },
       {
+        "type": "tailscale",
+        "tag": "tailscale",
+        "endpoint": "tailscale"
+      },
+      {
         "tag": "local",
         "detour": "direct",
         // "server": "223.5.5.5",
-        // "interface": "auto"
+        // "type": "tls",
         "type": "dhcp"
         // "type": "local"
       }
@@ -650,9 +658,16 @@
       "type": "socks"
     },
     {
-      "tag": "remote",
+      "tag": "remote9999",
       "server": "192.168.9.2",
       "server_port": 9999,
+      "version": "5",
+      "type": "socks"
+    },
+    {
+      "tag": "remote5330",
+      "server": "192.168.9.2",
+      "server_port": 5330,
       "version": "5",
       "type": "socks"
     },
@@ -669,13 +684,11 @@
         "172.19.0.1/30"
       ],
       "auto_route": true,
-      "strict_route": true,
+      "strict_route": false,
       "platform": {
         "http_proxy": {
           "server": "127.0.0.1",
           "server_port": 10000,
-          // "bypass_domain": [ "dl.google.com" ],
-          // "match_domain": [ "github.com" ],
           "enabled": true
         }
       },
@@ -694,7 +707,6 @@
       "tag": "in-mixed",
       "listen": "::",
       "listen_port": 10000,
-      // "set_system_proxy": true,
       "type": "mixed"
     }
   ],
@@ -703,21 +715,24 @@
     "level": "info",
     "timestamp": false
   },
+  "endpoints": [
+    {
+      "tag": "tailscale",
+      // "state_directory": "tailscale",
+      // "ephemeral": true,
+      "domain_resolver": "local",
+      "type": "tailscale"
+    }
+  ],
   "experimental": {
     "cache_file": {
-      "store_rdrc": true,
-      // "cache_id": "while-proxy-leak",
-      "cache_id": "while-tun-leak",
-      // "cache_id": "while-android-leak",
+      // "store_rdrc": true,
       "enabled": true
     },
     "clash_api": {
       // "default_mode": "Leak",
       "default_mode": "Rule",
       "secret": "touhoured",
-      // "external_ui": "ui",
-      // "external_ui_download_url": "https://ghfast.top/https://github.com/MetaCubeX/metacubexd/archive/gh-pages.zip",
-      // "external_ui_download_detour": "direct",
       "external_controller": ":9090"
     }
   }
