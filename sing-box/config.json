@@ -6,7 +6,24 @@
     // "auto_detect_interface": true,
     "rules": [
       {
+        "rule_set": "rule-geph",
+        "outbound": "direct"
+      },
+      {
         "action": "sniff"
+      },
+      {
+        "type": "logical",
+        "mode": "or",
+        "rules": [
+          {
+            "port": 53
+          },
+          {
+            "protocol": "dns"
+          }
+        ],
+        "action": "hijack-dns"
       },
       {
         "rule_set": "rule-geph",
@@ -17,6 +34,10 @@
           "fd7a:115c:a1e0::/48",
           "100.64.0.0/10"
         ],
+        "outbound": "tailscale"
+      },
+      {
+        "domain_suffix": "ts.net",
         "outbound": "tailscale"
       },
       {
@@ -39,27 +60,13 @@
       {
         "rule_set": [
           "rule-anti-ip-attribution-reject",
-          "rule-MeepoMaster",
-          "rule-Cats-Team",
+          "rule-MeepoMaster-adg-dns",
+          "rule-Cats-Team-adrules-singbox",
           "geosite-category-httpdns-cn",
           "geosite-category-ads-all",
           "rule-custom-block"
         ],
         "action": "reject"
-      },
-      {
-        "type": "logical",
-        "mode": "or",
-        "rules": [
-          {
-            "network": "udp",
-            "port": 53
-          },
-          {
-            "protocol": "dns"
-          }
-        ],
-        "action": "hijack-dns"
       },
       {
         "rule_set": "rule-custom-direct",
@@ -94,7 +101,7 @@
       //   "outbound": "proxy"
       // },
       {
-        "client_subnet": "114.114.114.114/24",
+        // "client_subnet": "114.114.114.114/24",
         "server": "direct",
         "action": "resolve"
       },
@@ -112,14 +119,14 @@
         ],
         "outbound": "direct"
       },
-      {
-        "rule_set": [
-          // "geosite-tld-cn",
-          // "geoip-cn",
-          "geosite-cn"
-        ],
-        "outbound": "direct"
-      },
+      // {
+      //   "rule_set": [
+      //     // "geosite-tld-cn",
+      //     // "geoip-cn",
+      //     "geosite-cn"
+      //   ],
+      //   "outbound": "direct"
+      // },
       {
         "outbound": "final"
       }
@@ -242,7 +249,7 @@
         "type": "remote"
       },
       {
-        "tag": "rule-Cats-Team",
+        "tag": "rule-Cats-Team-adrules-singbox",
         "format": "binary",
         "url": "https://ghfast.top/https://raw.githubusercontent.com/Cats-Team/AdRules/main/adrules-singbox.srs",
         "download_detour": "direct",
@@ -250,7 +257,7 @@
       },
       // 217heidai and AWAvenue
       {
-        "tag": "rule-MeepoMaster",
+        "tag": "rule-MeepoMaster-adg-dns",
         "format": "binary",
         "url": "https://ghfast.top/https://raw.githubusercontent.com/MeepoMaster/sing-box-ruleset/main/adg-dns.srs",
         "download_detour": "direct",
@@ -347,27 +354,30 @@
   },
   "dns": {
     "final": "proxy",
-    // "strategy": "ipv_only",
+    "strategy": "prefer_ipv4",
     "reverse_mapping": true,
     "independent_cache": true,
     "rules": [
       {
         "rule_set": "rule-geph",
+        "strategy": "ipv4_only",
         "server": "direct"
       },
       {
         "domain_suffix": "ts.net",
+        "strategy": "prefer_ipv4",
         "server": "tailscale"
       },
       {
         "rule_set": "geosite-private",
+        "strategy": "prefer_ipv4",
         "server": "local"
       },
       {
         "rule_set": [
           "rule-anti-ip-attribution-reject-noip",
-          "rule-MeepoMaster",
-          "rule-Cats-Team",
+          "rule-MeepoMaster-adg-dns",
+          "rule-Cats-Team-adrules-singbox",
           "geosite-category-httpdns-cn",
           "geosite-category-ads-all",
           "rule-custom-block"
@@ -376,10 +386,12 @@
       },
       {
         "rule_set": "rule-custom-direct",
+        "strategy": "prefer_ipv6",
         "server": "direct"
       },
       {
         "rule_set": "rule-anti-ip-attribution-direct-noip",
+        "strategy": "prefer_ipv6",
         "server": "direct"
       },
       {
@@ -398,14 +410,15 @@
         "rule_set": "geosite-onedrive",
         "server": "onedrive"
       },
-      {
-        "rule_set": [
-          "geosite-geolocation-cn",
-          "geosite-tld-cn",
-          "geosite-cn"
-        ],
-        "server": "direct"
-      },
+      // {
+      //   "rule_set": [
+      //     // "geosite-geolocation-cn",
+      //     // "geosite-tld-cn",
+      //     "geosite-cn"
+      //   ],
+      //   "strategy": "prefer_ipv6",
+      //   "server": "direct"
+      // },
       {
         "type": "logical",
         "mode": "and",
@@ -418,7 +431,8 @@
             "rule_set": "geoip-cn"
           }
         ],
-        "client_subnet": "114.114.114.114/24",
+        // "client_subnet": "114.114.114.114/24",
+        "strategy": "prefer_ipv6",
         "server": "direct"
       }
     ],
@@ -460,9 +474,12 @@
         "type": "tls"
       },
       {
-        "type": "tailscale",
         "tag": "tailscale",
-        "endpoint": "tailscale"
+        // "detour": "tailscale",
+        // "server": "100.100.100.100",
+        // "type": "udp"
+        "endpoint": "tailscale",
+        "type": "tailscale"
       },
       {
         "tag": "local",
@@ -490,15 +507,15 @@
       ],
       "type": "selector"
     },
-    {
-      "tag": "final",
-      "outbounds": [
-        // "fallback",
-        "proxy",
-        "direct"
-      ],
-      "type": "selector"
-    },
+    // {
+    //   "tag": "final",
+    //   "outbounds": [
+    //     // "fallback",
+    //     "proxy",
+    //     "direct"
+    //   ],
+    //   "type": "selector"
+    // },
     // {
     //   "tag": "fallback",
     //   "outbounds": [
@@ -635,13 +652,13 @@
     //   "type": "tun"
     // },
     {
-      "tag": "in-dns",
+      "tag": "dns",
       "listen": "::",
       "listen_port": 10001,
       "type": "direct"
     },
     {
-      "tag": "in-mixed",
+      "tag": "mixed",
       "listen": "::",
       "listen_port": 10000,
       "type": "mixed"
@@ -666,7 +683,7 @@
     },
     "clash_api": {
       // "default_mode": "Leak",
-      "default_mode": "Rule",
+      // "default_mode": "Rule",
       "secret": "touhoured",
       "external_controller": ":9090"
     }

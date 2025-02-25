@@ -6,9 +6,6 @@
     "auto_detect_interface": true,
     "rules": [
       {
-        "action": "sniff"
-      },
-      {
         "rule_set": "rule-geph",
         "outbound": "direct"
       },
@@ -21,6 +18,30 @@
       },
       {
         "ip_is_private": true,
+        "outbound": "direct"
+      },
+      {
+        "action": "sniff"
+      },
+      {
+        "type": "logical",
+        "mode": "or",
+        "rules": [
+          {
+            "network": "udp",
+            "port": 53
+          },
+          {
+            "protocol": "dns"
+          }
+        ],
+        "action": "hijack-dns"
+      },
+      {
+        "rule_set": "rule-geph",
+        "outbound": "direct"
+      },
+      {
         "rule_set": "geosite-private",
         "outbound": "direct"
       },
@@ -46,20 +67,6 @@
           "rule-custom-block"
         ],
         "action": "reject"
-      },
-      {
-        "type": "logical",
-        "mode": "or",
-        "rules": [
-          {
-            "network": "udp",
-            "port": 53
-          },
-          {
-            "protocol": "dns"
-          }
-        ],
-        "action": "hijack-dns"
       },
       {
         "rule_set": "rule-custom-direct",
@@ -353,7 +360,7 @@
     "rules": [
       {
         "rule_set": "rule-geph",
-        "server": "direct"
+        "outbound": "direct"
       },
       {
         "domain_suffix": "ts.net",
