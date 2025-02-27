@@ -435,7 +435,7 @@
           "A",
           "AAAA"
         ],
-        "server": "remote"
+        "server": "fakeip"
       }
     ],
     "servers": [
