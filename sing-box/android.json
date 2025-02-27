@@ -351,7 +351,7 @@
   },
   "dns": {
     "final": "proxy",
-    "strategy": "prefer_ipv4",
+    // "strategy": "prefer_ipv4",
     "reverse_mapping": true,
     "independent_cache": true,
     "rules": [
@@ -362,12 +362,10 @@
       },
       {
         "domain_suffix": "ts.net",
-        "strategy": "prefer_ipv4",
         "server": "tailscale"
       },
       {
         "rule_set": "geosite-private",
-        "strategy": "prefer_ipv4",
         "server": "local"
       },
       {
@@ -383,12 +381,10 @@
       },
       {
         "rule_set": "rule-custom-direct",
-        "strategy": "prefer_ipv6",
         "server": "direct"
       },
       {
         "rule_set": "rule-anti-ip-attribution-direct-noip",
-        "strategy": "prefer_ipv6",
         "server": "direct"
       },
       {
@@ -429,8 +425,14 @@
           }
         ],
         // "client_subnet": "114.114.114.114/24",
-        "strategy": "prefer_ipv6",
         "server": "direct"
+      },
+      {
+        "query_type": [
+          "A",
+          "AAAA"
+        ],
+        "server": "remote"
       }
     ],
     "servers": [
@@ -477,6 +479,10 @@
         // "type": "udp"
         "endpoint": "tailscale",
         "type": "tailscale"
+      },
+      {
+        "tag": "fakeip",
+        "address": "fakeip"
       },
       {
         "tag": "local",
@@ -643,7 +649,7 @@
           "enabled": true
         }
       },
-      "route_exclude_address": "100.64.0.0/10", // Tailscale
+      // "route_exclude_address": "100.64.0.0/10", // Tailscale
       // "route_exclude_address_set": "geoip-cn",
       "stack": "system",
       "type": "tun"
