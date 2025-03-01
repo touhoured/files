@@ -44,11 +44,11 @@
         "outbound": "direct"
       },
       {
-        "clash_mode": "direct",
+        "clash_mode": "Direct",
         "outbound": "direct"
       },
       {
-        "clash_mode": "global",
+        "clash_mode": "Global",
         "outbound": "proxy"
       },
       {
@@ -638,6 +638,7 @@
       "tag": "mixed",
       "listen": "::",
       "listen_port": 10000,
+      "set_system_proxy": true,
       "type": "mixed"
     }
   ],
