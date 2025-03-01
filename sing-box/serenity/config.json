@@ -71,19 +71,6 @@
   ],
   "subscriptions": [
     {
-      "name": "dreamfunder",
-      "url": "https://ghfast.top/https://raw.githubusercontent.com/dreamfunder/breakfree/refs/heads/master/release/Sing-Box/cn.json",
-      "generate_selector": true,
-      // "deduplication": true,
-      "process": [
-        {
-          // "remove": true,
-          "remove_emoji": true,
-          "exclude_type": ["http", "socks5", "shadowsocksr"]
-        }
-      ]
-    },
-    {
       "name": "aggregator",
       "url": "https://ghfast.top/https://raw.githubusercontent.com/mahdibland/ShadowsocksAggregator/master/sub/sub_merge.txt",
       "generate_selector": true,

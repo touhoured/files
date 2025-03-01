@@ -638,7 +638,7 @@
       "tag": "mixed",
       "listen": "::",
       "listen_port": 10000,
-      "set_system_proxy": true,
+      // "set_system_proxy": true,
       "type": "mixed"
     }
   ],
