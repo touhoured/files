@@ -1,14 +1,9 @@
-// first launch need download rules-set.
-// or change dns.final to "direct"
 {
   "route": {
     "final": "proxy",
-    "auto_detect_interface": true,
+    "default_domain_resolver": "local",
+    // "auto_detect_interface": true,
     "rules": [
-      {
-        "rule_set": "rule-geph",
-        "outbound": "direct"
-      },
       {
         "action": "sniff"
       },
@@ -42,34 +37,19 @@
       },
       {
         "ip_is_private": true,
+        "outbound": "direct"
+      },
+      {
         "rule_set": "geosite-private",
         "outbound": "direct"
       },
-      // {
-      //   "clash_mode": "direct",
-      //   "outbound": "direct"
-      // },
-      // {
-      //   "clash_mode": "global",
-      //   "outbound": "proxy"
-      // },
       {
-        "protocol": [
-          "stun",
-          "quic"
-        ],
-        "action": "reject"
+        "clash_mode": "direct",
+        "outbound": "direct"
       },
       {
-        "rule_set": [
-          "rule-anti-ip-attribution-reject",
-          "rule-MeepoMaster-adg-dns",
-          "rule-Cats-Team-adrules-singbox",
-          "geosite-category-httpdns-cn",
-          "geosite-category-ads-all",
-          "rule-custom-block"
-        ],
-        "action": "reject"
+        "clash_mode": "global",
+        "outbound": "proxy"
       },
       {
         "rule_set": "rule-custom-direct",
@@ -104,9 +84,8 @@
       //   "outbound": "proxy"
       // },
       {
-        // "client_subnet": "114.114.114.114/24",
-        "server": "direct",
-        "action": "resolve"
+        "clash_mode": "Rule",
+        "outbound": "default"
       },
       {
         "type": "logical",
@@ -121,15 +100,7 @@
           }
         ],
         "outbound": "direct"
-      },
-      // {
-      //   "rule_set": [
-      //     // "geosite-tld-cn",
-      //     // "geoip-cn",
-      //     "geosite-cn"
-      //   ],
-      //   "outbound": "direct"
-      // }
+      }
     ],
     "rule_set": [
       {
@@ -354,14 +325,13 @@
   },
   "dns": {
     "final": "proxy",
-    // "strategy": "prefer_ipv4",
+    "strategy": "prefer_ipv4",
     "reverse_mapping": true,
     "independent_cache": true,
     "rules": [
       {
         "rule_set": "rule-geph",
-        "strategy": "ipv4_only",
-        "server": "direct"
+        "server": "local"
       },
       {
         "domain_suffix": "ts.net",
@@ -369,6 +339,14 @@
       },
       {
         "rule_set": "geosite-private",
+        "server": "local"
+      },
+      {
+        "clash_mode": "global",
+        "server": "proxy"
+      },
+      {
+        "clash_mode": "Direct",
         "server": "local"
       },
       {
@@ -384,11 +362,11 @@
       },
       {
         "rule_set": "rule-custom-direct",
-        "server": "direct"
+        "server": "local"
       },
       {
         "rule_set": "rule-anti-ip-attribution-direct-noip",
-        "server": "direct"
+        "server": "local"
       },
       {
         "rule_set": "rule-anti-ip-attribution-proxy-noip",
@@ -406,15 +384,18 @@
         "rule_set": "geosite-onedrive",
         "server": "onedrive"
       },
-      // {
-      //   "rule_set": [
-      //     // "geosite-geolocation-cn",
-      //     // "geosite-tld-cn",
-      //     "geosite-cn"
-      //   ],
-      //   "strategy": "prefer_ipv6",
-      //   "server": "direct"
-      // },
+      {
+        "rule_set": [
+          // "geosite-geolocation-cn",
+          // "geosite-tld-cn",
+          "geosite-cn"
+        ],
+        "server": "local"
+      },
+      {
+        "clash_mode": "Rule",
+        "server": "default"
+      },
       {
         "type": "logical",
         "mode": "and",
@@ -428,7 +409,7 @@
           }
         ],
         // "client_subnet": "114.114.114.114/24",
-        "server": "direct"
+        "server": "local"
       },
       {
         "query_type": [
@@ -501,7 +482,7 @@
     {
       "tag": "proxy",
       "outbounds": [
-        // "fallback",
+        "fallback",
         "9999",
         "9909",
         "remote9999",
@@ -515,29 +496,17 @@
       ],
       "type": "selector"
     },
-    // {
-    //   "tag": "final",
-    //   "outbounds": [
-    //     // "fallback",
-    //     "proxy",
-    //     "direct"
-    //   ],
-    //   "type": "selector"
-    // },
-    // {
-    //   "tag": "fallback",
-    //   "outbounds": [
-    //     "9999",
-    //     "9909",
-    //     "2080",
-    //     "2090",
-    //     "direct"
-    //   ],
-    //   "url": "http://www.apple.com/library/test/success.html",
-    //   "interval": "30s",
-    //   "tolerance": 9999,
-    //   "type": "urltest"
-    // },
+    {
+      "tag": "fallback",
+      "outbounds": [
+        "9999",
+        "9909"
+      ],
+      "url": "http://www.apple.com/library/test/success.html",
+      "interval": "30s",
+      "tolerance": 9999,
+      "type": "urltest"
+    },
     {
       "type": "selector",
       "tag": "anti-ip-attribution",
@@ -680,7 +649,6 @@
     {
       "tag": "tailscale",
       // "ephemeral": true,
-      "domain_resolver": "local",
       "type": "tailscale"
     }
   ],
@@ -690,8 +658,7 @@
       "enabled": true
     },
     "clash_api": {
-      // "default_mode": "Leak",
-      // "default_mode": "Rule",
+      "default_mode": "Leak",
       "secret": "touhoured",
       "external_controller": ":9090"
     }
