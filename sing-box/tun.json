@@ -342,7 +342,7 @@
         "server": "local"
       },
       {
-        "clash_mode": "global",
+        "clash_mode": "Global",
         "server": "proxy"
       },
       {
