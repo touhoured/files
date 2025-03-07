@@ -2,7 +2,7 @@
   "route": {
     "final": "proxy",
     "default_domain_resolver": "local",
-    // "auto_detect_interface": true,
+    "auto_detect_interface": true,
     "rules": [
       {
         "action": "sniff"
@@ -85,7 +85,7 @@
       // },
       {
         "clash_mode": "Rule",
-        "outbound": "default"
+        "outbound": "proxy"
       },
       {
         "type": "logical",
@@ -394,7 +394,7 @@
       },
       {
         "clash_mode": "Rule",
-        "server": "default"
+        "server": "proxy"
       },
       {
         "type": "logical",
@@ -409,7 +409,7 @@
           }
         ],
         // "client_subnet": "114.114.114.114/24",
-        "server": "local"
+        "server": "direct"
       },
       {
         "query_type": [
@@ -423,37 +423,37 @@
       {
         "tag": "proxy",
         "detour": "proxy",
-        "server": "8.8.8.8",
+        "server": "serverless-dns.touhoured.cfd",
         "type": "https"
       },
       {
         "tag": "anti-ip-attribution",
         "detour": "anti-ip-attribution",
         "server": "223.5.5.5",
-        "type": "https"
+        "type": "tls"
       },
       {
         "tag": "wechat",
         "detour": "wechat",
         "server": "223.5.5.5",
-        "type": "https"
+        "type": "tls"
       },
       {
         "tag": "googlefcm",
         "detour": "googlefcm",
         "server": "223.5.5.5",
-        "type": "https"
+        "type": "tls"
       },
       {
         "tag": "onedrive",
         "detour": "onedrive",
         "server": "223.5.5.5",
-        "type": "https"
+        "type": "tls"
       },
       {
         "tag": "direct",
         "detour": "direct",
-        "server": "223.5.5.5",
+        "server": "serverless-dns.touhoured.cfd",
         "type": "tls"
       },
       {
