@@ -52,6 +52,37 @@
         "outbound": "proxy"
       },
       {
+        "type": "logical",
+        "mode": "or",
+        "rules": [
+          {
+            "port": 853
+          },
+          {
+            "protocol": "stun"
+          },
+          {
+            "network": "udp",
+            "port": 443
+          },
+          {
+            "protocol": "quic"
+          }
+        ],
+        "action": "reject"
+      },
+      {
+        "rule_set": [
+          "rule-anti-ip-attribution-reject-noip",
+          "rule-MeepoMaster-adg-dns",
+          "rule-Cats-Team-adrules-singbox",
+          "geosite-category-httpdns-cn",
+          "geosite-category-ads-all",
+          "rule-custom-block"
+        ],
+        "action": "reject"
+      },
+      {
         "rule_set": "rule-custom-direct",
         "outbound": "direct"
       },
@@ -473,8 +504,8 @@
       {
         "tag": "local",
         "detour": "direct",
-        // "type": "dhcp"
-        "type": "local"
+        "type": "dhcp"
+        // "type": "local"
       }
     ]
   },

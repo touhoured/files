@@ -102,7 +102,7 @@
       "extend": "tun",
       "dns_local": "local",
       "custom_tun":{
-        "route_exclude_address_set": "geosite-tld-cn"
+        "route_exclude_address_set": "geosite-tld-cn" // replace defualt
       },
       "name": "android"
     },
@@ -110,7 +110,7 @@
       "extend": "tun",
       "dns_local": "dhcp://auto",
       "custom_tun":{
-        "route_exclude_address_set": "geosite-tld-cn"
+        "route_exclude_address_set": "geosite-tld-cn" // replace default
       },
       "name": "windows"
     },
@@ -144,7 +144,7 @@
           "fd7a:115c:a1e0::/48",
           "100.64.0.0/10"
         ],
-        "route_exclude_address_set": "geoip-cn",
+        // "route_exclude_address_set": "geoip-cn",
         "stack": "system"
       },
       "disable_tun": false,
@@ -168,7 +168,7 @@
       // "disable_traffic_bypass": true,
       "remote_resolve": true,
       // DNS
-      "dns": "https://1.1.1.1/dns-query",
+      "dns": "https://serverless-dns.touhoured.cfd/dns-query",
       "dns_local": "local",
       "dns_servers": [
         {
@@ -193,7 +193,7 @@
         },
         {
           "tag": "direct",
-          "address": "tls://223.5.5.5",
+          "address": "https://serverless-dns.touhoured.cfd/dns-query",
           "detour": "direct"
         }
       ],
@@ -224,34 +224,6 @@
         {
           "rule_set": "geosite-private",
           "server": "local"
-        },
-        {
-          "rule_set": [
-            "rule-provider-reject-noip",
-            "rule-MeepoMaster-adg-dns",
-            "rule-Cats-Team-adrules-singbox",
-            "geosite-category-httpdns-cn",
-            "geosite-category-ads-all"
-          ],
-          "action": "reject"
-        },
-        {
-          "domain": [
-            "block.test", // only test
-            "black.qimo.ink", // biliroming blacklist
-            "2fa.qwq2333.top", // QAuxiliary
-            "api.qwq2333.top", // QAuxiliary
-            "ntp.msn.cn" // edge startpage
-          ],
-          "domain_suffix": [
-            ".mcdn.bilivideo.cn",
-            ".szbdyd.com"
-          ],
-          "domain_regex": [
-            "cn-.+\\.bilivideo\\.com$",
-            "-pcdn-.?\\.biliapi\\.net$"
-          ],
-          "action": "reject"
         },
         {
           "domain_suffix": [
