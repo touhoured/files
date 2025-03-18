@@ -5,19 +5,23 @@
     "auto_detect_interface": true,
     "rules": [
       {
-        "action": "sniff"
+        "action": "sniff",
+        "sniffer": [
+          // "quic",
+          "stun",
+          // "bittorrent",
+          "dns",
+          "tls",
+          "http"
+        ],
+        "timeout": "30ms"
       },
       {
-        "type": "logical",
-        "mode": "or",
-        "rules": [
-          {
-            "port": 53
-          },
-          {
-            "protocol": "dns"
-          }
-        ],
+        "port": 53,
+        "action": "hijack-dns"
+      },
+      {
+        "protocol": "dns",
         "action": "hijack-dns"
       },
       {
@@ -119,6 +123,9 @@
         "outbound": "proxy"
       },
       {
+        "action": "resolve"
+      },
+      {
         "type": "logical",
         "mode": "and",
         "rules": [
@@ -174,6 +181,7 @@
         "rules": [
           {
             "domain_suffix": [
+              "gh-proxy.com",
               "bsbsb.top",
               "ghfast.top",
               "ghproxy.cc",
@@ -439,8 +447,8 @@
             "rule_set": "geoip-cn"
           }
         ],
-        // "client_subnet": "114.114.114.114/24",
-        "server": "direct"
+        "client_subnet": "202.103.252.0/24",
+        "server": "local"
       },
       {
         "query_type": [
@@ -454,7 +462,8 @@
       {
         "tag": "proxy",
         "detour": "proxy",
-        "server": "serverless-dns.touhoured.cfd",
+        "server": "8.8.8.8",
+        // "server": "serverless-dns.touhoured.cfd",
         "type": "https"
       },
       {
@@ -484,7 +493,9 @@
       {
         "tag": "direct",
         "detour": "direct",
-        "server": "serverless-dns.touhoured.cfd",
+        // "server": "serverless-dns.touhoured.cfd",
+        "server": "223.5.5.5",
+        // "server": "8.8.8.8",
         "type": "tls"
       },
       {
@@ -674,8 +685,8 @@
     }
   ],
   "log": {
-    "level": "info",
-    "timestamp": false
+    "timestamp": false,
+    "level": "trace"
   },
   "endpoints": [
     {
