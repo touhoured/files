@@ -7,9 +7,8 @@
       {
         "action": "sniff",
         "sniffer": [
-          // "quic",
+          "quic",
           "stun",
-          // "bittorrent",
           "dns",
           "tls",
           "http"
@@ -114,10 +113,6 @@
         "rule_set": "geosite-geolocation-cn",
         "outbound": "direct"
       },
-      // {
-      //   "rule_set": "geosite-geolocation-!cn",
-      //   "outbound": "proxy"
-      // },
       {
         "clash_mode": "Rule",
         "outbound": "proxy"
@@ -158,11 +153,11 @@
         "rules": [
           {
             "domain": [
-              "block.test", // only test
-              "black.qimo.ink", // biliroming blacklist
-              "2fa.qwq2333.top", // QAuxiliary
-              "api.qwq2333.top", // QAuxiliary
-              "ntp.msn.cn" // edge startpage
+              "block.test",
+              "black.qimo.ink",
+              "2fa.qwq2333.top",
+              "api.qwq2333.top",
+              "ntp.msn.cn"
             ],
             "domain_suffix": [
               ".mcdn.bilivideo.cn",
@@ -265,7 +260,6 @@
         "download_detour": "direct",
         "type": "remote"
       },
-      // 217heidai and AWAvenue
       {
         "tag": "rule-MeepoMaster-adg-dns",
         "format": "binary",
@@ -273,23 +267,6 @@
         "download_detour": "direct",
         "type": "remote"
       },
-      // // include anti-AD, see Mosney/anti-anti-AD
-      // {
-      //   "tag": "rule-ppfeufer",
-      //   "format": "binary",
-      //   "url": "https://ghfast.top/https://raw.githubusercontent.com/hangyu170/rules/main/blocklist.srs",
-      //   "download_detour": "direct",
-      //   
-      //   "type": "remote"
-      // },
-      // {
-      //   "tag": "rule-AdGuardSDNSFilter",
-      //   "format": "binary",
-      //   "url": "https://ghfast.top/https://raw.githubusercontent.com/xmdhs/sing-box-ruleset/rule-set/AdGuardSDNSFilter.srs",
-      //   "download_detour": "direct",
-      //   
-      //   "type": "remote"
-      // },
       {
         "tag": "geosite-private",
         "format": "binary",
@@ -463,7 +440,6 @@
         "tag": "proxy",
         "detour": "proxy",
         "server": "8.8.8.8",
-        // "server": "serverless-dns.touhoured.cfd",
         "type": "https"
       },
       {
@@ -493,16 +469,11 @@
       {
         "tag": "direct",
         "detour": "direct",
-        // "server": "serverless-dns.touhoured.cfd",
         "server": "223.5.5.5",
-        // "server": "8.8.8.8",
         "type": "tls"
       },
       {
         "tag": "tailscale",
-        // "detour": "tailscale",
-        // "server": "100.100.100.100",
-        // "type": "udp"
         "endpoint": "tailscale",
         "type": "tailscale"
       },
@@ -525,7 +496,7 @@
       "tag": "proxy",
       "outbounds": [
         "fallback",
-        "9999",
+        "9908",
         "9909",
         "remote9999",
         "remote5330",
@@ -541,7 +512,7 @@
     {
       "tag": "fallback",
       "outbounds": [
-        "9999",
+        "9908",
         "9909"
       ],
       "url": "http://www.apple.com/library/test/success.html",
@@ -582,7 +553,7 @@
       ]
     },
     {
-      "tag": "9999",
+      "tag": "9908",
       "server": "127.0.0.1",
       "server_port": 9999,
       "version": "5",
@@ -680,7 +651,7 @@
       "tag": "mixed",
       "listen": "::",
       "listen_port": 10000,
-      // "set_system_proxy": true,
+      "set_system_proxy": false,
       "type": "mixed"
     }
   ],
@@ -691,13 +662,12 @@
   "endpoints": [
     {
       "tag": "tailscale",
-      // "ephemeral": true,
+      "ephemeral": false,
       "type": "tailscale"
     }
   ],
   "experimental": {
     "cache_file": {
-      // "store_rdrc": true,
       "enabled": true
     },
     "clash_api": {
