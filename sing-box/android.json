@@ -486,8 +486,8 @@
       {
         "tag": "local",
         "detour": "direct",
-        "type": "dhcp"
-        // "type": "local"
+        // "type": "dhcp"
+        "type": "local"
       }
     ]
   },
