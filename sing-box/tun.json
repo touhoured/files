@@ -84,15 +84,15 @@
       {"query_type": ["A","AAAA"],"server": "fakeip"}
     ],
     "servers": [
-      {"type": "https","tag": "proxy","detour": "proxy","server": "8.8.8.8"},
-      {"type": "https","tag": "anti-ip-attribution","detour": "anti-ip-attribution","server": "223.5.5.5"},
-      {"type": "https","tag": "wechat","detour": "wechat","server": "223.5.5.5"},
-      {"type": "https","tag": "googlefcm","detour": "googlefcm","server": "223.5.5.5"},
-      {"type": "https","tag": "onedrive","detour": "onedrive","server": "223.5.5.5"},
-      {"type": "https","tag": "direct","detour": "direct","server": "223.5.5.5"},
-      {"type": "tailscale","tag": "tailscale","endpoint": "tailscale"},
-      {"type": "fakeip","tag": "fakeip","inet4_range": "198.18.0.0/15","inet6_range": "fc00::/18"},
-      {"type": "dhcp","tag": "local"}
+      {"tag": "proxy","type": "https","detour": "proxy","server": "8.8.8.8"},
+      {"tag": "anti-ip-attribution","type": "https","detour": "anti-ip-attribution","server": "223.5.5.5"},
+      {"tag": "wechat","type": "https","detour": "wechat","server": "223.5.5.5"},
+      {"tag": "googlefcm","type": "https","detour": "googlefcm","server": "223.5.5.5"},
+      {"tag": "onedrive","type": "https","detour": "onedrive","server": "223.5.5.5"},
+      {"tag": "direct","type": "https","detour": "direct","server": "223.5.5.5"},
+      {"tag": "tailscale","type": "tailscale","endpoint": "tailscale"},
+      {"tag": "fakeip","type": "fakeip","inet4_range": "198.18.0.0/15","inet6_range": "fc00::/18"},
+      {"tag": "local","type": "dhcp"}
     ]
   },
   "outbounds": [
@@ -152,36 +152,31 @@
         "9999",
         "9909",
         "9908",
-        "9907",
-        "10011",
-        "10012",
-        "10013",
-        "10014",
-        "10015"
+        "9907"
       ],
       "interval": "30s",
       "tolerance": 9999,
       "type": "urltest"
     },
-    {"type": "selector","tag": "anti-ip-attribution","outbounds": ["bypass","direct","proxy"]},
-    {"type": "selector","tag": "wechat","outbounds": ["bypass","direct","proxy"]},
-    {"type": "selector","tag": "googlefcm","outbounds": ["bypass","direct","proxy"]},
-    {"type": "selector","tag": "onedrive","outbounds": ["bypass","direct","proxy"]},
-    {"type": "socks","tag": "9907","server": "127.0.0.1","server_port": 9907,"version": "5"},
-    {"type": "socks","tag": "9908","server": "127.0.0.1","server_port": 9908,"version": "5"},
-    {"type": "socks","tag": "9909","server": "127.0.0.1","server_port": 9909,"version": "5"},
-    {"type": "socks","tag": "9999","server": "127.0.0.1","server_port": 9999,"version": "5"},
-    {"type": "socks","tag": "10011","server": "127.0.0.1","server_port": 10011,"version": "5"},
-    {"type": "socks","tag": "10012","server": "127.0.0.1","server_port": 10012,"version": "5"},
-    {"type": "socks","tag": "10013","server": "127.0.0.1","server_port": 10013,"version": "5"},
-    {"type": "socks","tag": "10014","server": "127.0.0.1","server_port": 10014,"version": "5"},
-    {"type": "socks","tag": "10015","server": "127.0.0.1","server_port": 10015,"version": "5"},
-    {"type": "direct","tag": "direct"}
+    {"tag": "anti-ip-attribution","type": "selector","outbounds": ["bypass","direct","proxy"]},
+    {"tag": "wechat","type": "selector","outbounds": ["bypass","direct","proxy"]},
+    {"tag": "googlefcm","type": "selector","outbounds": ["bypass","direct","proxy"]},
+    {"tag": "onedrive","type": "selector","outbounds": ["bypass","direct","proxy"]},
+    {"tag": "9907","server_port": 9907,"server": "127.0.0.1","type": "socks","version": "5"},
+    {"tag": "9908","server_port": 9908,"server": "127.0.0.1","type": "socks","version": "5"},
+    {"tag": "9909","server_port": 9909,"server": "127.0.0.1","type": "socks","version": "5"},
+    {"tag": "9999","server_port": 9999,"server": "127.0.0.1","type": "socks","version": "5"},
+    {"tag": "10011","server_port": 10011,"server": "127.0.0.1","type": "socks","version": "5"},
+    {"tag": "10012","server_port": 10012,"server": "127.0.0.1","type": "socks","version": "5"},
+    {"tag": "10013","server_port": 10013,"server": "127.0.0.1","type": "socks","version": "5"},
+    {"tag": "10014","server_port": 10014,"server": "127.0.0.1","type": "socks","version": "5"},
+    {"tag": "10015","server_port": 10015,"server": "127.0.0.1","type": "socks","version": "5"},
+    {"tag": "direct","type": "direct"}
   ],
   "inbounds": [
-    {"tag":"in-tun","address":["fd00::1/126","172.19.0.1/30"],"auto_route":true,"strict_route":false,"platform":{"http_proxy":{"server":"127.0.0.1","server_port":10000,"enabled":true}},"stack":"system","type":"tun"},
-    {"type": "direct","tag": "direct","listen": "::","listen_port": 10002},
-    {"type": "mixed","tag": "mixed","listen": "::","listen_port": 10000}
+    // {"tag":"in-tun","address":["fd00::1/126","172.19.0.1/30"],"auto_route":true,"strict_route":false,"platform":{"http_proxy":{"server":"127.0.0.1","server_port":10000,"enabled":true}},"stack":"system","type":"tun"},
+    {"tag": "direct","type": "direct","listen": "::","listen_port": 10002},
+    {"tag": "mixed","type": "mixed","listen": "::","listen_port": 10000}
   ],
   "log": {
     "timestamp": false,
