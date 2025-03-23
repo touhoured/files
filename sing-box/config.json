@@ -4,339 +4,54 @@
     "default_domain_resolver": "local",
     "auto_detect_interface": false,
     "rules": [
-      {
-        "action": "sniff",
-        "sniffer": [
-          "quic",
-          "stun",
-          "dns",
-          "tls",
-          "http"
-        ],
-        "timeout": "30ms"
-      },
-      {
-        "port": 53,
-        "action": "hijack-dns"
-      },
-      {
-        "protocol": "dns",
-        "action": "hijack-dns"
-      },
-      {
-        "rule_set": "rule-geph",
-        "outbound": "direct"
-      },
-      {
-        "ip_cidr": [
-          "fd7a:115c:a1e0::/48",
-          "100.64.0.0/10"
-        ],
-        "outbound": "tailscale"
-      },
-      {
-        "domain_suffix": "ts.net",
-        "outbound": "tailscale"
-      },
-      {
-        "ip_is_private": true,
-        "outbound": "direct"
-      },
-      {
-        "rule_set": "geosite-private",
-        "outbound": "direct"
-      },
-      {
-        "clash_mode": "Direct",
-        "outbound": "direct"
-      },
-      {
-        "clash_mode": "Global",
-        "outbound": "proxy"
-      },
-      {
-        "type": "logical",
-        "mode": "or",
-        "rules": [
-          {
-            "port": 853
-          },
-          {
-            "protocol": "stun"
-          },
-          {
-            "network": "udp",
-            "port": 443
-          },
-          {
-            "protocol": "quic"
-          }
-        ],
-        "action": "reject"
-      },
-      {
-        "rule_set": [
-          "rule-anti-ip-attribution-reject-noip",
-          "rule-MeepoMaster-adg-dns",
-          "rule-Cats-Team-adrules-singbox",
-          "geosite-category-httpdns-cn",
-          "geosite-category-ads-all",
-          "rule-custom-block"
-        ],
-        "action": "reject"
-      },
-      {
-        "rule_set": "rule-custom-direct",
-        "outbound": "direct"
-      },
-      {
-        "rule_set": "rule-anti-ip-attribution-direct",
-        "outbound": "direct"
-      },
-      {
-        "rule_set": "rule-anti-ip-attribution-proxy",
-        "outbound": "anti-ip-attribution"
-      },
-      {
-        "rule_set": "rule-wechat",
-        "outbound": "wechat"
-      },
-      {
-        "rule_set": "geosite-googlefcm",
-        "outbound": "googlefcm"
-      },
-      {
-        "rule_set": "geosite-onedrive",
-        "outbound": "onedrive"
-      },
-      {
-        "rule_set": "geosite-geolocation-cn",
-        "outbound": "direct"
-      },
-      {
-        "clash_mode": "Rule",
-        "outbound": "proxy"
-      },
-      {
-        "action": "resolve"
-      },
-      {
-        "type": "logical",
-        "mode": "and",
-        "rules": [
-          {
-            "rule_set": "geoip-cn"
-          },
-          {
-            "rule_set": "geosite-geolocation-!cn",
-            "invert": true
-          }
-        ],
-        "outbound": "direct"
-      }
+      {"action":"sniff","sniffer":["quic","stun","dns","tls","http"],"timeout":"30ms"},
+      {"port": 53,"action": "hijack-dns"},
+      {"protocol": "dns","action": "hijack-dns"},
+      {"rule_set": "rule-geph","outbound": "direct"},
+      {"ip_cidr": ["fd7a:115c:a1e0::/48","100.64.0.0/10"],"outbound": "tailscale"},
+      {"domain_suffix": "ts.net","outbound": "tailscale"},
+      {"ip_is_private": true,"outbound": "direct"},
+      {"rule_set": "geosite-private","outbound": "direct"},
+      {"clash_mode": "Direct","outbound": "direct"},
+      {"clash_mode": "Global","outbound": "proxy"},
+      {"port":853,"action": "reject"},
+      {"protocol":"stun","action": "reject"},
+      {"protocol":"quic","action": "reject"},
+      {"network":"udp","port":443,"action": "reject"},
+      {"port":853,"action": "reject"},
+      {"rule_set":["rule-anti-ip-attribution-reject-noip","rule-MeepoMaster-adg-dns","rule-Cats-Team-adrules-singbox","geosite-category-httpdns-cn","geosite-category-ads-all","rule-custom-block"],"action":"reject"},
+      {"rule_set": "rule-anti-ip-attribution-direct","outbound": "bypass"},
+      {"rule_set": "rule-anti-ip-attribution-proxy","outbound": "anti-ip-attribution"},
+      {"rule_set": "rule-wechat","outbound": "wechat"},
+      {"rule_set": "geosite-googlefcm","outbound": "googlefcm"},
+      {"rule_set": "geosite-onedrive","outbound": "onedrive"},
+      {"rule_set": "geosite-geolocation-cn","outbound": "bypass"},
+      {"clash_mode": "Rule","outbound": "proxy"},
+      {"action": "resolve"},
+      {"type":"logical","mode":"and","rules":[{"rule_set":"geoip-cn"},{"rule_set":"geosite-geolocation-!cn","invert":true}],"outbound":"bypass"}
     ],
     "rule_set": [
-      {
-        "tag": "rule-wechat",
-        "rules": [
-          {
-            "domain_suffix": [
-              "extshort.weixin.qq.com",
-              "short.weixin.qq.com"
-            ]
-          }
-        ],
-        "type": "inline"
-      },
-      {
-        "tag": "rule-custom-block",
-        "rules": [
-          {
-            "domain": [
-              "block.test",
-              "black.qimo.ink",
-              "2fa.qwq2333.top",
-              "api.qwq2333.top",
-              "ntp.msn.cn"
-            ],
-            "domain_suffix": [
-              ".mcdn.bilivideo.cn",
-              ".szbdyd.com"
-            ],
-            "domain_regex": [
-              "cn-.+\\.bilivideo\\.com$",
-              "-pcdn-.?\\.biliapi\\.net$"
-            ]
-          }
-        ],
-        "type": "inline"
-      },
-      {
-        "tag": "rule-custom-direct",
-        "rules": [
-          {
-            "domain_suffix": [
-              "gh-proxy.com",
-              "bsbsb.top",
-              "ghfast.top",
-              "ghproxy.cc",
-              "deeplx.org",
-              "dandanplay.net",
-              "metacubex.one",
-              "yacd.haishan.me"
-            ]
-          }
-        ],
-        "type": "inline"
-      },
-      {
-        "tag": "rule-geph",
-        "rules": [
-          {
-            "domain_suffix": [
-              "cdn77.org",
-              "cdn77.com"
-            ]
-          },
-          {
-            "process_name": [
-              "gephgui-wry.exe",
-              "geph5-client-gui.exe",
-              "geph4-client.exe",
-              "geph5-client.exe",
-              "geph5-client",
-              "geph4-client"
-            ]
-          }
-        ],
-        "type": "inline"
-      },
-      {
-        "tag": "rule-anti-ip-attribution-reject-noip",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/touhoured/sing-box-geosite/main/rule/rule-provider-reject-noip.srs",
-        "download_detour": "direct",
-        "type": "remote"
-      },
-      {
-        "tag": "rule-anti-ip-attribution-direct-noip",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/touhoured/sing-box-geosite/main/rule/rule-provider-direct-noip.srs",
-        "download_detour": "direct",
-        "type": "remote"
-      },
-      {
-        "tag": "rule-anti-ip-attribution-proxy-noip",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/touhoured/sing-box-geosite/main/rule/rule-provider-proxy-noip.srs",
-        "download_detour": "direct",
-        "type": "remote"
-      },
-      {
-        "tag": "rule-anti-ip-attribution-reject",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/touhoured/sing-box-geosite/main/rule/rule-provider-reject.srs",
-        "download_detour": "direct",
-        "type": "remote"
-      },
-      {
-        "tag": "rule-anti-ip-attribution-direct",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/touhoured/sing-box-geosite/main/rule/rule-provider-direct.srs",
-        "download_detour": "direct",
-        "type": "remote"
-      },
-      {
-        "tag": "rule-anti-ip-attribution-proxy",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/touhoured/sing-box-geosite/main/rule/rule-provider-proxy.srs",
-        "download_detour": "direct",
-        "type": "remote"
-      },
-      {
-        "tag": "rule-Cats-Team-adrules-singbox",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/Cats-Team/AdRules/main/adrules-singbox.srs",
-        "download_detour": "direct",
-        "type": "remote"
-      },
-      {
-        "tag": "rule-MeepoMaster-adg-dns",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/MeepoMaster/sing-box-ruleset/main/adg-dns.srs",
-        "download_detour": "direct",
-        "type": "remote"
-      },
-      {
-        "tag": "geosite-private",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-private.srs",
-        "download_detour": "direct",
-        "type": "remote"
-      },
-      {
-        "tag": "geosite-category-httpdns-cn",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-httpdns-cn.srs",
-        "download_detour": "direct",
-        "type": "remote"
-      },
-      {
-        "tag": "geosite-category-ads-all",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs",
-        "download_detour": "direct",
-        "type": "remote"
-      },
-      {
-        "tag": "geosite-googlefcm",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-googlefcm.srs",
-        "download_detour": "direct",
-        "type": "remote"
-      },
-      {
-        "tag": "geosite-onedrive",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-onedrive.srs",
-        "download_detour": "direct",
-        "type": "remote"
-      },
-      {
-        "tag": "geosite-geolocation-!cn",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-!cn.srs",
-        "download_detour": "direct",
-        "type": "remote"
-      },
-      {
-        "tag": "geosite-geolocation-cn",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-cn.srs",
-        "download_detour": "direct",
-        "type": "remote"
-      },
-      {
-        "tag": "geosite-tld-cn",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-tld-cn.srs",
-        "download_detour": "direct",
-        "type": "remote"
-      },
-      {
-        "tag": "geosite-cn",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs",
-        "download_detour": "direct",
-        "type": "remote"
-      },
-      {
-        "tag": "geoip-cn",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs",
-        "download_detour": "direct",
-        "type": "remote"
-      }
+      {"tag": "rule-wechat","rules": [{"domain_suffix": ["extshort.weixin.qq.com","short.weixin.qq.com"]}]},
+      {"tag":"rule-custom-block","rules":[{"domain":["black.qimo.ink","2fa.qwq2333.top","api.qwq2333.top"]}]},
+      {"tag":"rule-geph","rules":[{"domain_suffix":["cdn77.org","cdn77.com"]},{"process_name":["geph4-client.exe","gephgui-wry.exe","geph5-client-gui.exe","geph5-client.exe","geph4-client","gephgui-wry","geph5-client-gui","geph5-client"]}]},
+      {"tag": "rule-anti-ip-attribution-reject-noip","format": "binary","url": "https://ghfast.top/https://raw.githubusercontent.com/touhoured/sing-box-geosite/main/rule/rule-provider-reject-noip.srs","download_detour": "direct","type": "remote"},
+      {"tag": "rule-anti-ip-attribution-direct-noip","format": "binary","url": "https://ghfast.top/https://raw.githubusercontent.com/touhoured/sing-box-geosite/main/rule/rule-provider-direct-noip.srs","download_detour": "direct","type": "remote"},
+      {"tag": "rule-anti-ip-attribution-proxy-noip","format": "binary","url": "https://ghfast.top/https://raw.githubusercontent.com/touhoured/sing-box-geosite/main/rule/rule-provider-proxy-noip.srs","download_detour": "direct","type": "remote"},
+      {"tag": "rule-anti-ip-attribution-reject","format": "binary","url": "https://ghfast.top/https://raw.githubusercontent.com/touhoured/sing-box-geosite/main/rule/rule-provider-reject.srs","download_detour": "direct","type": "remote"},
+      {"tag": "rule-anti-ip-attribution-direct","format": "binary","url": "https://ghfast.top/https://raw.githubusercontent.com/touhoured/sing-box-geosite/main/rule/rule-provider-direct.srs","download_detour": "direct","type": "remote"},
+      {"tag": "rule-anti-ip-attribution-proxy","format": "binary","url": "https://ghfast.top/https://raw.githubusercontent.com/touhoured/sing-box-geosite/main/rule/rule-provider-proxy.srs","download_detour": "direct","type": "remote"},
+      {"tag": "rule-Cats-Team-adrules-singbox","format": "binary","url": "https://ghfast.top/https://raw.githubusercontent.com/Cats-Team/AdRules/main/adrules-singbox.srs","download_detour": "direct","type": "remote"},
+      {"tag": "rule-MeepoMaster-adg-dns","format": "binary","url": "https://ghfast.top/https://raw.githubusercontent.com/MeepoMaster/sing-box-ruleset/main/adg-dns.srs","download_detour": "direct","type": "remote"},
+      {"tag": "geosite-private","format": "binary","url": "https://ghfast.top/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-private.srs","download_detour": "direct","type": "remote"},
+      {"tag": "geosite-category-httpdns-cn","format": "binary","url": "https://ghfast.top/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-httpdns-cn.srs","download_detour": "direct","type": "remote"},
+      {"tag": "geosite-category-ads-all","format": "binary","url": "https://ghfast.top/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs","download_detour": "direct","type": "remote"},
+      {"tag": "geosite-googlefcm","format": "binary","url": "https://ghfast.top/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-googlefcm.srs","download_detour": "direct","type": "remote"},
+      {"tag": "geosite-onedrive","format": "binary","url": "https://ghfast.top/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-onedrive.srs","download_detour": "direct","type": "remote"},
+      {"tag": "geosite-geolocation-!cn","format": "binary","url": "https://ghfast.top/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-!cn.srs","download_detour": "direct","type": "remote"},
+      {"tag": "geosite-geolocation-cn","format": "binary","url": "https://ghfast.top/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-cn.srs","download_detour": "direct","type": "remote"},
+      {"tag": "geosite-tld-cn","format": "binary","url": "https://ghfast.top/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-tld-cn.srs","download_detour": "direct","type": "remote"},
+      {"tag": "geosite-cn","format": "binary","url": "https://ghfast.top/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs","download_detour": "direct","type": "remote"},
+      {"tag": "geoip-cn","format": "binary","url": "https://ghfast.top/https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs","download_detour": "direct","type": "remote"}
     ]
   },
   "dns": {
@@ -345,335 +60,182 @@
     "reverse_mapping": true,
     "independent_cache": true,
     "rules": [
-      {
-        "rule_set": "rule-geph",
-        "server": "local"
-      },
-      {
-        "domain_suffix": "ts.net",
-        "server": "tailscale"
-      },
-      {
-        "rule_set": "geosite-private",
-        "server": "local"
-      },
-      {
-        "clash_mode": "Global",
-        "server": "proxy"
-      },
-      {
-        "clash_mode": "Direct",
-        "server": "local"
-      },
-      {
-        "rule_set": [
-          "rule-anti-ip-attribution-reject-noip",
-          "rule-MeepoMaster-adg-dns",
-          "rule-Cats-Team-adrules-singbox",
-          "geosite-category-httpdns-cn",
-          "geosite-category-ads-all",
-          "rule-custom-block"
-        ],
-        "action": "reject"
-      },
-      {
-        "rule_set": "rule-custom-direct",
-        "server": "local"
-      },
-      {
-        "rule_set": "rule-anti-ip-attribution-direct-noip",
-        "server": "local"
-      },
-      {
-        "rule_set": "rule-anti-ip-attribution-proxy-noip",
-        "server": "anti-ip-attribution"
-      },
-      {
-        "rule_set": "rule-wechat",
-        "server": "wechat"
-      },
-      {
-        "rule_set": "geosite-googlefcm",
-        "server": "googlefcm"
-      },
-      {
-        "rule_set": "geosite-onedrive",
-        "server": "onedrive"
-      },
-      {
-        "rule_set": [
-          // "geosite-geolocation-cn",
-          // "geosite-tld-cn",
-          "geosite-cn"
-        ],
-        "server": "local"
-      },
-      {
-        "clash_mode": "Rule",
-        "server": "proxy"
-      },
-      {
-        "type": "logical",
-        "mode": "and",
-        "rules": [
-          {
-            "rule_set": "geosite-geolocation-!cn",
-            "invert": true
-          },
-          {
-            "rule_set": "geoip-cn"
-          }
-        ],
-        "client_subnet": "202.103.252.0/24",
-        "server": "local"
-      },
-      {
-        "query_type": [
-          "A",
-          "AAAA"
-        ],
-        "server": "fakeip"
-      }
+      {"rule_set": "rule-geph","server": "local"},
+      // {
+      //   "action": "predefined",
+      //   "domain": "engage.cloudflareclient.com",
+      //   "answer": [
+      //     "162.159.192.1"
+      //   ]
+      // },
+      {"domain_suffix": "ts.net","server": "tailscale"},
+      {"clash_mode": "Global","server": "proxy"},
+      {"clash_mode": "Direct","server": "local"},
+      {"rule_set": "geosite-private","server": "local"},
+      {"rule_set":["rule-anti-ip-attribution-reject-noip","rule-MeepoMaster-adg-dns","rule-Cats-Team-adrules-singbox","geosite-category-httpdns-cn","geosite-category-ads-all","rule-custom-block"],"action":"reject"},
+      {"rule_set": "rule-anti-ip-attribution-direct-noip","server": "local"},
+      {"rule_set": "rule-anti-ip-attribution-proxy-noip","server": "anti-ip-attribution"},
+      {"rule_set": "rule-wechat","server": "wechat"},
+      {"rule_set": "geosite-googlefcm","server": "googlefcm"},
+      {"rule_set": "geosite-onedrive","server": "onedrive"},
+      {"rule_set": "geosite-cn","server": "local"},
+      {"clash_mode": "Rule","server": "proxy"},
+      {"type":"logical","server":"local","mode":"and","rules":[{"rule_set":"geosite-geolocation-!cn","invert":true},{"rule_set":"geoip-cn"}],"client_subnet":"202.103.252.0/24"},
+      {"query_type": ["A","AAAA"],"server": "fakeip"}
     ],
     "servers": [
-      {
-        "tag": "proxy",
-        "detour": "proxy",
-        "server": "8.8.8.8",
-        "type": "https"
-      },
-      {
-        "tag": "anti-ip-attribution",
-        "detour": "anti-ip-attribution",
-        "server": "223.5.5.5",
-        "type": "tls"
-      },
-      {
-        "tag": "wechat",
-        "detour": "wechat",
-        "server": "223.5.5.5",
-        "type": "tls"
-      },
-      {
-        "tag": "googlefcm",
-        "detour": "googlefcm",
-        "server": "223.5.5.5",
-        "type": "tls"
-      },
-      {
-        "tag": "onedrive",
-        "detour": "onedrive",
-        "server": "223.5.5.5",
-        "type": "tls"
-      },
-      {
-        "tag": "direct",
-        "detour": "direct",
-        "server": "223.5.5.5",
-        "type": "tls"
-      },
-      {
-        "tag": "tailscale",
-        "endpoint": "tailscale",
-        "type": "tailscale"
-      },
-      {
-        "tag": "fakeip",
-        "inet4_range": "198.18.0.0/15",
-        "inet6_range": "fc00::/18",
-        "type": "fakeip"
-      },
-      {
-        "tag": "local",
-        "detour": "direct",
-        // "type": "dhcp"
-        "type": "local"
-      }
+      {"type": "https","tag": "proxy","detour": "proxy","server": "8.8.8.8"},
+      {"type": "https","tag": "anti-ip-attribution","detour": "anti-ip-attribution","server": "223.5.5.5"},
+      {"type": "https","tag": "wechat","detour": "wechat","server": "223.5.5.5"},
+      {"type": "https","tag": "googlefcm","detour": "googlefcm","server": "223.5.5.5"},
+      {"type": "https","tag": "onedrive","detour": "onedrive","server": "223.5.5.5"},
+      {"type": "https","tag": "direct","detour": "direct","server": "223.5.5.5"},
+      {"type": "tailscale","tag": "tailscale","endpoint": "tailscale"},
+      {"type": "fakeip","tag": "fakeip","inet4_range": "198.18.0.0/15","inet6_range": "fc00::/18"},
+      {"type": "local","tag": "local"}
     ]
   },
   "outbounds": [
     {
       "tag": "proxy",
+      "outbounds":[
+        "remote",
+        "warp",
+        "warp-direct",
+        "direct"
+      ],
+      "type": "selector"
+    },
+    {
+      "tag": "bypass",
+      "outbounds":[
+        "direct",
+        "warp-direct"
+      ],
+      "type": "selector"
+    },
+    {
+      "tag": "remote",
       "outbounds": [
         "fallback",
-        "9908",
+        "9999",
         "9909",
-        "remote9999",
-        "remote5330",
+        "9908",
+        "9907",
         "10011",
         "10012",
         "10013",
         "10014",
-        "10015",
-        "direct"
+        "10015"
+      ],
+      "type": "selector"
+    },
+    {
+      "tag": "remote-warp",
+      "outbounds": [
+        "fallback",
+        "9999",
+        "9909",
+        "9908",
+        "9907",
+        "10011",
+        "10012",
+        "10013",
+        "10014",
+        "10015"
       ],
       "type": "selector"
     },
     {
       "tag": "fallback",
       "outbounds": [
+        "9999",
+        "9909",
         "9908",
-        "9909"
+        "9907",
+        "10011",
+        "10012",
+        "10013",
+        "10014",
+        "10015"
       ],
-      "url": "http://www.apple.com/library/test/success.html",
       "interval": "30s",
       "tolerance": 9999,
       "type": "urltest"
     },
-    {
-      "type": "selector",
-      "tag": "anti-ip-attribution",
-      "outbounds": [
-        "direct",
-        "proxy"
-      ]
-    },
-    {
-      "type": "selector",
-      "tag": "wechat",
-      "outbounds": [
-        "direct",
-        "proxy"
-      ]
-    },
-    {
-      "type": "selector",
-      "tag": "googlefcm",
-      "outbounds": [
-        "direct",
-        "proxy"
-      ]
-    },
-    {
-      "type": "selector",
-      "tag": "onedrive",
-      "outbounds": [
-        "direct",
-        "proxy"
-      ]
-    },
-    {
-      "tag": "9908",
-      "server": "127.0.0.1",
-      "server_port": 9999,
-      "version": "5",
-      "type": "socks"
-    },
-    {
-      "tag": "9909",
-      "server": "127.0.0.1",
-      "server_port": 9909,
-      "version": "5",
-      "type": "socks"
-    },
-    {
-      "tag": "10011",
-      "server": "127.0.0.1",
-      "server_port": 10011,
-      "version": "5",
-      "type": "socks"
-    },
-    {
-      "tag": "10012",
-      "server": "127.0.0.1",
-      "server_port": 10012,
-      "version": "5",
-      "type": "socks"
-    },
-    {
-      "tag": "10013",
-      "server": "127.0.0.1",
-      "server_port": 10013,
-      "version": "5",
-      "type": "socks"
-    },
-    {
-      "tag": "10014",
-      "server": "127.0.0.1",
-      "server_port": 10014,
-      "version": "5",
-      "type": "socks"
-    },
-    {
-      "tag": "10015",
-      "server": "127.0.0.1",
-      "server_port": 10015,
-      "version": "5",
-      "type": "socks"
-    },
-    {
-      "tag": "remote9999",
-      "server": "192.168.9.2",
-      "server_port": 9999,
-      "version": "5",
-      "type": "socks"
-    },
-    {
-      "tag": "remote5330",
-      "server": "192.168.9.2",
-      "server_port": 5330,
-      "version": "5",
-      "type": "socks"
-    },
-    {
-      "tag": "direct",
-      "type": "direct"
-    }
+    {"type": "selector","tag": "anti-ip-attribution","outbounds": ["bypass","direct","proxy"]},
+    {"type": "selector","tag": "wechat","outbounds": ["bypass","direct","proxy"]},
+    {"type": "selector","tag": "googlefcm","outbounds": ["bypass","direct","proxy"]},
+    {"type": "selector","tag": "onedrive","outbounds": ["bypass","direct","proxy"]},
+    {"type": "socks","tag": "9907","server": "127.0.0.1","server_port": 9907,"version": "5"},
+    {"type": "socks","tag": "9908","server": "127.0.0.1","server_port": 9908,"version": "5"},
+    {"type": "socks","tag": "9909","server": "127.0.0.1","server_port": 9909,"version": "5"},
+    {"type": "socks","tag": "9999","server": "127.0.0.1","server_port": 9999,"version": "5"},
+    {"type": "socks","tag": "10011","server": "127.0.0.1","server_port": 10011,"version": "5"},
+    {"type": "socks","tag": "10012","server": "127.0.0.1","server_port": 10012,"version": "5"},
+    {"type": "socks","tag": "10013","server": "127.0.0.1","server_port": 10013,"version": "5"},
+    {"type": "socks","tag": "10014","server": "127.0.0.1","server_port": 10014,"version": "5"},
+    {"type": "socks","tag": "10015","server": "127.0.0.1","server_port": 10015,"version": "5"},
+    {"type": "direct","tag": "direct"}
   ],
   "inbounds": [
-    // {
-    //   "tag": "in-tun",
-    //   "address": [
-    //     "fd00::1/126",
-    //     "172.19.0.1/30"
-    //   ],
-    //   "auto_route": true,
-    //   "strict_route": false,
-    //   "platform": {
-    //     "http_proxy": {
-    //       "server": "127.0.0.1",
-    //       "server_port": 10000,
-    //       "enabled": true
-    //     }
-    //   },
-    //   // "route_exclude_address": "100.64.0.0/10", // Tailscale
-    //   // "route_exclude_address_set": "geoip-cn",
-    //   "stack": "system",
-    //   "type": "tun"
-    // },
-    {
-      "tag": "dns",
-      "listen": "::",
-      "listen_port": 10001,
-      "type": "direct"
-    },
-    {
-      "tag": "mixed",
-      "listen": "::",
-      "listen_port": 10000,
-      "set_system_proxy": false,
-      "type": "mixed"
-    }
+    // {"tag":"in-tun","address":["fd00::1/126","172.19.0.1/30"],"auto_route":true,"strict_route":false,"platform":{"http_proxy":{"server":"127.0.0.1","server_port":10000,"enabled":true}},"stack":"system","type":"tun"},
+    {"type": "direct","tag": "direct","listen": "::","listen_port": 10002},
+    {"type": "mixed","tag": "mixed","listen": "::","listen_port": 10000}
   ],
   "log": {
     "timestamp": false,
-    "level": "trace"
+    "level": "debug"
   },
   "endpoints": [
     {
-      "tag": "tailscale",
-      "ephemeral": false,
-      "type": "tailscale"
-    }
+      "tag": "warp",
+      "type": "wireguard",
+      "system": false,
+      "mtu": 1280,
+      "address": ["172.16.0.2/32", "2606:4700:cf1:1000::3/128"],
+      "private_key": "WLgla09NJ/TwAQJmM69qYvgspaLhmDXRHUoNbisbqlQ=",
+      "peers": [
+        {
+          "address": "162.159.192.1",
+          "port": 2408,
+          "public_key": "bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=",
+          "allowed_ips": ["0.0.0.0/0", "::/0"],
+          "persistent_keepalive_interval": 25,
+          "reserved": [231, 146, 98]
+        }
+      ],
+      "detour": "remote-warp"
+    },
+    {
+      "tag": "warp-direct",
+      "type": "wireguard",
+      "system": false,
+      "mtu": 1280,
+      "address": ["172.16.0.2/32", "2606:4700:cf1:1000::1/128"],
+      "private_key": "KMAHlCky6/zhhJHwvDyQ0aQyV2IJ0YmXE4Oqd5XxQ1E=",
+      "peers": [
+        {
+          "address": "162.159.192.255",
+          "port": 928,
+          "public_key": "bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=",
+          "allowed_ips": ["0.0.0.0/0", "::/0"],
+          "persistent_keepalive_interval": 25,
+          "reserved": [47, 97, 45]
+        }
+      ]
+    },
+    {"tag":"tailscale","ephemeral":false,"type":"tailscale"}
   ],
   "experimental": {
     "cache_file": {
+      "cache_id": "1.12",
       "enabled": true
     },
     "clash_api": {
       "default_mode": "Leak",
       "secret": "touhoured",
-      "external_controller": ":9090"
+      "external_controller": ":10001"
     }
   }
 }
