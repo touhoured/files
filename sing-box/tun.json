@@ -33,7 +33,7 @@
     "rule_set": [
       {"tag": "rule-wechat","rules": [{"domain_suffix": ["extshort.weixin.qq.com","short.weixin.qq.com"]}]},
       {"tag":"rule-custom-block","rules":[{"domain":["black.qimo.ink","2fa.qwq2333.top","api.qwq2333.top"]}]},
-      {"tag":"rule-geph","rules":[{"domain_suffix":["cdn77.org","cdn77.com"]},{"process_name":["geph4-client.exe","gephgui-wry.exe","geph5-client-gui.exe","geph5-client.exe","geph4-client","gephgui-wry","geph5-client-gui","geph5-client"]}]},
+      {"tag":"rule-geph","rules":[{"domain_suffix":["cdn77.org","cdn77.com"]},{"process_name":["mihomo","mihomo.exe","geph4-client.exe","gephgui-wry.exe","geph5-client-gui.exe","geph5-client.exe","geph4-client","gephgui-wry","geph5-client-gui","geph5-client"]}]},
       {"tag": "rule-anti-ip-attribution-reject-noip","format": "binary","url": "https://gh-proxy.com/https://raw.githubusercontent.com/touhoured/sing-box-geosite/main/rule/rule-provider-reject-noip.srs","download_detour": "direct","type": "remote"},
       {"tag": "rule-anti-ip-attribution-direct-noip","format": "binary","url": "https://gh-proxy.com/https://raw.githubusercontent.com/touhoured/sing-box-geosite/main/rule/rule-provider-direct-noip.srs","download_detour": "direct","type": "remote"},
       {"tag": "rule-anti-ip-attribution-proxy-noip","format": "binary","url": "https://gh-proxy.com/https://raw.githubusercontent.com/touhoured/sing-box-geosite/main/rule/rule-provider-proxy-noip.srs","download_detour": "direct","type": "remote"},
@@ -174,7 +174,7 @@
     {"tag": "direct","type": "direct"}
   ],
   "inbounds": [
-    // {"tag":"in-tun","address":["fd00::1/126","172.19.0.1/30"],"auto_route":true,"strict_route":false,"platform":{"http_proxy":{"server":"127.0.0.1","server_port":10000,"enabled":true}},"stack":"system","type":"tun"},
+    {"tag":"in-tun","address":["fd00::1/126","172.19.0.1/30"],"auto_route":true,"strict_route":true,"platform":{"http_proxy":{"server":"127.0.0.1","server_port":10000,"enabled":true}},"stack":"system","type":"tun"},
     {"tag": "direct","type": "direct","listen": "::","listen_port": 10002},
     {"tag": "mixed","type": "mixed","listen": "::","listen_port": 10000}
   ],
