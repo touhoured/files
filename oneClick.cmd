@@ -7,6 +7,6 @@ call copy.cmd
 git add *
 git status
 git commit -m "update"
-git push
+git push -f
 
 timeout 3
