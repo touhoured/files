@@ -174,7 +174,7 @@
     {"tag": "direct","type": "direct"}
   ],
   "inbounds": [
-    // {"tag":"in-tun","address":["fd00::1/126","172.19.0.1/30"],"auto_route":true,"strict_route":true,"platform":{"http_proxy":{"server":"127.0.0.1","server_port":10000,"enabled":true}},"stack":"system","type":"tun"},
+    // {"tag":"in-tun","address":["fd00::1/126","172.19.0.1/30"],"auto_route":true,"strict_route":false,"platform":{"http_proxy":{"server":"127.0.0.1","server_port":10000,"enabled":true}},"stack":"system","type":"tun"},
     {"tag": "direct","type": "direct","listen": "::","listen_port": 10002},
     {"tag": "mixed","type": "mixed","listen": "::","listen_port": 10000}
   ],
