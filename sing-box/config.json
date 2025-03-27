@@ -174,7 +174,7 @@
     {"tag": "direct","type": "direct"}
   ],
   "inbounds": [
-    // {"tag":"in-tun","address":["fd00::1/126","172.19.0.1/30"],"auto_route":true,"strict_route":false,"platform":{"http_proxy":{"server":"127.0.0.1","server_port":10000,"enabled":true}},"stack":"system","type":"tun"},
+    // {"tag":"in-tun","address":["fd00::1/126","172.19.0.1/30"],"auto_route":true,"strict_route":false,"auto_redirect": true,"platform":{"http_proxy":{"server":"127.0.0.1","server_port":10000,"enabled":true}},"stack":"system","type":"tun"},
     {"tag": "direct","type": "direct","listen": "::","listen_port": 10002},
     {"tag": "mixed","type": "mixed","listen": "::","listen_port": 10000}
   ],
@@ -211,8 +211,8 @@
       "private_key": "KMAHlCky6/zhhJHwvDyQ0aQyV2IJ0YmXE4Oqd5XxQ1E=",
       "peers": [
         {
-          "address": "162.159.192.255",
-          "port": 928,
+          "address": "188.114.99.255",
+          "port": 2408,
           "public_key": "bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=",
           "allowed_ips": ["0.0.0.0/0", "::/0"],
           "persistent_keepalive_interval": 25,

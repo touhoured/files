@@ -92,7 +92,7 @@
       {"tag": "direct","type": "https","detour": "direct","server": "223.5.5.5"},
       {"tag": "tailscale","type": "tailscale","endpoint": "tailscale"},
       {"tag": "fakeip","type": "fakeip","inet4_range": "198.18.0.0/15","inet6_range": "fc00::/18"},
-      {"tag": "local","type": "dhcp"}
+      {"tag": "local","type": "local"}
     ]
   },
   "outbounds": [
@@ -171,10 +171,10 @@
     {"tag": "10013","server_port": 10013,"server": "127.0.0.1","type": "socks","version": "5"},
     {"tag": "10014","server_port": 10014,"server": "127.0.0.1","type": "socks","version": "5"},
     {"tag": "10015","server_port": 10015,"server": "127.0.0.1","type": "socks","version": "5"},
-    {"tag": "direct","type": "direct"}
+    {"tag": "direct","type": "dhcp"}
   ],
   "inbounds": [
-    {"tag":"in-tun","address":["fd00::1/126","172.19.0.1/30"],"auto_route":true,"strict_route":false,"platform":{"http_proxy":{"server":"127.0.0.1","server_port":10000,"enabled":true}},"stack":"system","type":"tun"},
+    {"tag":"in-tun","address":["fd00::1/126","172.19.0.1/30"],"auto_route":true,"strict_route":false,"auto_redirect": true,"platform":{"http_proxy":{"server":"127.0.0.1","server_port":10000,"enabled":true}},"stack":"system","type":"tun"},
     {"tag": "direct","type": "direct","listen": "::","listen_port": 10002},
     {"tag": "mixed","type": "mixed","listen": "::","listen_port": 10000}
   ],
@@ -211,8 +211,8 @@
       "private_key": "KMAHlCky6/zhhJHwvDyQ0aQyV2IJ0YmXE4Oqd5XxQ1E=",
       "peers": [
         {
-          "address": "162.159.192.255",
-          "port": 928,
+          "address": "188.114.99.255",
+          "port": 2408,
           "public_key": "bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=",
           "allowed_ips": ["0.0.0.0/0", "::/0"],
           "persistent_keepalive_interval": 25,
