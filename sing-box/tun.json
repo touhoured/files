@@ -92,7 +92,7 @@
       {"tag": "direct","type": "https","detour": "direct","server": "223.5.5.5"},
       {"tag": "tailscale","type": "tailscale","endpoint": "tailscale"},
       {"tag": "fakeip","type": "fakeip","inet4_range": "198.18.0.0/15","inet6_range": "fc00::/18"},
-      {"tag": "local","type": "local"}
+      {"tag": "local","type": "dhcp"}
     ]
   },
   "outbounds": [
@@ -171,7 +171,7 @@
     {"tag": "10013","server_port": 10013,"server": "127.0.0.1","type": "socks","version": "5"},
     {"tag": "10014","server_port": 10014,"server": "127.0.0.1","type": "socks","version": "5"},
     {"tag": "10015","server_port": 10015,"server": "127.0.0.1","type": "socks","version": "5"},
-    {"tag": "direct","type": "dhcp"}
+    {"tag": "direct","type": "direct"}
   ],
   "inbounds": [
     {"tag":"in-tun","address":["fd00::1/126","172.19.0.1/30"],"auto_route":true,"strict_route":false,"auto_redirect": true,"platform":{"http_proxy":{"server":"127.0.0.1","server_port":10000,"enabled":true}},"stack":"system","type":"tun"},
