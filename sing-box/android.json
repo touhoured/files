@@ -8,8 +8,8 @@
       {"port": 53,"action": "hijack-dns"},
       {"protocol": "dns","action": "hijack-dns"},
       {"rule_set": "rule-geph","outbound": "direct"},
-      {"ip_cidr": ["fd7a:115c:a1e0::/48","100.64.0.0/10"],"outbound": "tailscale"},
-      {"domain_suffix": "ts.net","outbound": "tailscale"},
+      // {"ip_cidr": ["fd7a:115c:a1e0::/48","100.64.0.0/10"],"outbound": "tailscale"},
+      // {"domain_suffix": "ts.net","outbound": "tailscale"},
       {"ip_is_private": true,"outbound": "direct"},
       {"rule_set": "geosite-private","outbound": "direct"},
       {"clash_mode": "Direct","outbound": "direct"},
@@ -68,7 +68,7 @@
       //     "162.159.192.1"
       //   ]
       // },
-      {"domain_suffix": "ts.net","server": "tailscale"},
+      // {"domain_suffix": "ts.net","server": "tailscale"},
       {"clash_mode": "Global","server": "proxy"},
       {"clash_mode": "Direct","server": "local"},
       {"rule_set": "geosite-private","server": "local"},
@@ -89,8 +89,8 @@
       // {"tag": "wechat","type": "https","detour": "wechat","server": "223.5.5.5"},
       {"tag": "googlefcm","type": "https","detour": "googlefcm","server": "223.5.5.5"},
       {"tag": "onedrive","type": "https","detour": "onedrive","server": "223.5.5.5"},
-      {"tag": "direct","type": "https","detour": "direct","server": "223.5.5.5"},
-      {"tag": "tailscale","type": "tailscale","endpoint": "tailscale"},
+      {"tag": "direct","type": "https","server": "223.5.5.5"},
+      // {"tag": "tailscale","type": "tailscale","endpoint": "tailscale"},
       {"tag": "fakeip","type": "fakeip","inet4_range": "198.18.0.0/15","inet6_range": "fc00::/18"},
       {"tag": "local","type": "local"}
     ]
@@ -220,7 +220,7 @@
         }
       ]
     },
-    {"tag":"tailscale","ephemeral":false,"type":"tailscale"}
+    // {"tag":"tailscale","ephemeral":false,"type":"tailscale"}
   ],
   "experimental": {
     "cache_file": {
