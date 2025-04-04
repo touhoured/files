@@ -2,7 +2,7 @@
   "route": {
     "final": "proxy",
     "default_domain_resolver": "local",
-    "auto_detect_interface": true,
+    // "auto_detect_interface": true,
     "rules": [
       {"action":"sniff","sniffer":["quic","stun","dns","tls","http"],"timeout":"30ms"},
       {"port": 53,"action": "hijack-dns"},
@@ -19,7 +19,7 @@
       {"protocol":"quic","action": "reject"},
       {"network":"udp","port":443,"action": "reject"},
       {"port":853,"action": "reject"},
-      {"rule_set":["rule-anti-ip-attribution-reject-noip","rule-MeepoMaster-adg-dns","rule-Cats-Team-adrules-singbox","geosite-category-httpdns-cn","geosite-category-ads-all","rule-custom-block"],"action":"reject"},
+      {"rule_set":["rule-anti-ip-attribution-reject-noip","rule-MeepoMaster-adg-dns","rule-Cats-Team-adrules-singbox","geosite-category-httpdns-cn","geosite-category-ads-all","geosite-geolocation-cn@ads","geosite-geolocation-!cn@ads","rule-custom-block"],"action":"reject"},
       {"rule_set": "rule-anti-ip-attribution-direct","outbound": "bypass"},
       {"rule_set": "rule-anti-ip-attribution-proxy","outbound": "anti-ip-attribution"},
       // {"rule_set": "rule-wechat","outbound": "wechat"},
@@ -48,7 +48,9 @@
       {"tag": "geosite-googlefcm","format": "binary","url": "https://gh-proxy.com/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-googlefcm.srs","download_detour": "direct","type": "remote"},
       {"tag": "geosite-onedrive","format": "binary","url": "https://gh-proxy.com/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-onedrive.srs","download_detour": "direct","type": "remote"},
       {"tag": "geosite-geolocation-!cn","format": "binary","url": "https://gh-proxy.com/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-!cn.srs","download_detour": "direct","type": "remote"},
+      {"tag": "geosite-geolocation-!cn@ads","format": "binary","url": "https://gh-proxy.com/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-!cn@ads.srs","download_detour": "direct","type": "remote"},
       {"tag": "geosite-geolocation-cn","format": "binary","url": "https://gh-proxy.com/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-cn.srs","download_detour": "direct","type": "remote"},
+      {"tag": "geosite-geolocation-cn@ads","format": "binary","url": "https://gh-proxy.com/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-geolocation-cn@ads.srs","download_detour": "direct","type": "remote"},
       {"tag": "geosite-tld-cn","format": "binary","url": "https://gh-proxy.com/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-tld-cn.srs","download_detour": "direct","type": "remote"},
       {"tag": "geosite-cn","format": "binary","url": "https://gh-proxy.com/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-cn.srs","download_detour": "direct","type": "remote"},
       {"tag": "geoip-cn","format": "binary","url": "https://gh-proxy.com/https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs","download_detour": "direct","type": "remote"}
@@ -65,7 +67,7 @@
       {"clash_mode": "Global","server": "proxy"},
       {"clash_mode": "Direct","server": "local"},
       {"rule_set": "geosite-private","server": "local"},
-      {"rule_set":["rule-anti-ip-attribution-reject-noip","rule-MeepoMaster-adg-dns","rule-Cats-Team-adrules-singbox","geosite-category-httpdns-cn","geosite-category-ads-all","rule-custom-block"],"action":"reject"},
+      {"rule_set":["rule-anti-ip-attribution-reject-noip","rule-MeepoMaster-adg-dns","rule-Cats-Team-adrules-singbox","geosite-category-httpdns-cn","geosite-category-ads-all","rule-custom-block","geosite-geolocation-cn@ads","geosite-geolocation-!cn@ads"],"action":"reject"},
       {"rule_set": "rule-anti-ip-attribution-direct-noip","server": "local"},
       {"rule_set": "rule-anti-ip-attribution-proxy-noip","server": "anti-ip-attribution"},
       // {"rule_set": "rule-wechat","server": "wechat"},
@@ -85,8 +87,8 @@
       {"tag": "direct","type": "https","server": "223.5.5.5"},
       // {"tag": "tailscale","type": "tailscale","endpoint": "tailscale"},
       {"tag": "fakeip","type": "fakeip","inet4_range": "198.18.0.0/15","inet6_range": "fc00::/18"},
-      {"tag": "local","type": "dhcp"}
-      // {"tag": "local","type": "local"}
+      // {"tag": "local","type": "dhcp"}
+      {"tag": "local","type": "local"}
     ]
   },
   "outbounds": [
