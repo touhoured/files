@@ -138,7 +138,7 @@
   "experimental": {
     "cache_file": {
       "cache_id": "1.12",
-      "enabled": true
+      "enabled": false
     },
     "clash_api": {
       "default_mode": "Leak",
