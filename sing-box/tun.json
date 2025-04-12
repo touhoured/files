@@ -121,7 +121,7 @@
     {"tag": "direct","type": "direct"}
   ],
   "inbounds": [
-    {"tag":"tun","address":["fd00::1/126","172.19.0.1/30"],"auto_route":true,"strict_route":false,"auto_redirect": true,"platform":{"http_proxy":{"server":"127.0.0.1","server_port":10000,"enabled":true}},"stack":"system","type":"tun"},
+    {"tag":"tun","address":["fd00::1/126","172.19.0.1/30"],"auto_route":true,"strict_route":false,"platform":{"http_proxy":{"server":"127.0.0.1","server_port":10000,"enabled":true}},"stack":"system","type":"tun"},
     {"tag": "dns","type": "direct","listen": "127.0.0.53","listen_port": 53},
     {"tag": "direct","type": "direct","listen": "::","listen_port": 10001},
     {"tag": "mixed","type": "mixed","listen": "::","listen_port": 10000}
