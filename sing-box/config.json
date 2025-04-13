@@ -131,9 +131,9 @@
     "level": "trace"
   },
   "endpoints": [
-    // {"tag":"warp","type":"wireguard","system":false,"mtu":1280,"address":["172.16.0.2/32","2606:4700:cf1:1000::3/128"],"private_key":"WLgla09NJ/TwAQJmM69qYvgspaLhmDXRHUoNbisbqlQ=","peers":[{"address":"162.159.192.1","port":2408,"public_key":"bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=","allowed_ips":["0.0.0.0/0","::/0"],"persistent_keepalive_interval":25,"reserved":[231,146,98]}],"detour":"remote-warp"},
-    // {"tag":"warp-direct","type":"wireguard","system":false,"mtu":1280,"address":["172.16.0.2/32","2606:4700:cf1:1000::1/128"],"private_key":"KMAHlCky6/zhhJHwvDyQ0aQyV2IJ0YmXE4Oqd5XxQ1E=","peers":[{"address":"188.114.99.255","port":2506,"public_key":"bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=","allowed_ips":["0.0.0.0/0","::/0"],"persistent_keepalive_interval":25,"reserved":[47,97,45]}]},
-    // {"tag":"tailscale","ephemeral":false,"type":"tailscale"}
+    // {"tag":"warp","type":"wireguard","mtu":1280,"address":["172.16.0.2/32","2606:4700:cf1:1000::3/128"],"private_key":"WLgla09NJ/TwAQJmM69qYvgspaLhmDXRHUoNbisbqlQ=","peers":[{"address":"162.159.192.1","port":2408,"public_key":"bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=","allowed_ips":["0.0.0.0/0","::/0"],"persistent_keepalive_interval":25,"reserved":[231,146,98]}],"detour":"remote-warp"},
+    // {"tag":"warp-direct","type":"wireguard","mtu":1280,"address":["172.16.0.2/32","2606:4700:cf1:1000::1/128"],"private_key":"KMAHlCky6/zhhJHwvDyQ0aQyV2IJ0YmXE4Oqd5XxQ1E=","peers":[{"address":"188.114.99.255","port":2506,"public_key":"bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=","allowed_ips":["0.0.0.0/0","::/0"],"persistent_keepalive_interval":25,"reserved":[47,97,45]}]},
+    // {"tag":"tailscale","type":"tailscale"}
   ],
   "experimental": {
     "cache_file": {"path": "config.db","enabled": true},
