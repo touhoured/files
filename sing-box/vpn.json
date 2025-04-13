@@ -11,7 +11,7 @@
   "dns": {
     "rules": {},
     "servers": [
-      {"tag":"local","type":"local"}
+      {"tag":"local","type":"udp","server":"223.5.5.5"}
     ]
   },
   "outbounds": [

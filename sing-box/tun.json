@@ -58,7 +58,7 @@
   },
   "dns": {
     "final": "proxy",
-    // "strategy": "ipv4_only",
+    "strategy": "ipv4_only",
     "reverse_mapping": true,
     "independent_cache": true,
     "rules": [
