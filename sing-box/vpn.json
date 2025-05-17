@@ -36,7 +36,7 @@
   ],
   "log": {
     "timestamp": false,
-    "level": "trace"
+    "level": "info"
   },
   "experimental": {
     "cache_file": {"path":"vpn.db","enabled": true},
