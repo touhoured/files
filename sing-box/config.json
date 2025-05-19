@@ -51,7 +51,7 @@
       {"tag":"geosite-geolocation-cn@ads","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/nekolsd/sing-geosite/rule-set/geosite-geolocation-cn@ads.srs","download_detour":"direct","type":"remote"},
       {"tag":"geosite-tld-cn","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-tld-cn.srs","download_detour":"direct","type":"remote"},
       {"tag":"geosite-cn","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/nekolsd/sing-geosite/rule-set/geosite-cn.srs","download_detour":"direct","type":"remote"},
-      {"tag":"geoip-private","format":"binary","url":"https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/private.srs","download_detour":"direct","type":"remote"},
+      {"tag":"geoip-private","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/private.srs","download_detour":"direct","type":"remote"},
       {"tag":"geoip-telegram","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/nekolsd/geoip/release/srs/telegram.srs","download_detour":"direct","type":"remote"},
       // {"tag":"geoip-cn","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs","download_detour":"direct","type":"remote"},
       {"tag":"geoip-cn","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/nekolsd/geoip/release/srs/cn.srs","download_detour":"direct","type":"remote"}
