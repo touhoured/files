@@ -6,26 +6,36 @@
     // "auto_detect_interface":true,
     "rules":[
       {"rule_set":"geoip-telegram","outbound":"proxy"},
+
       {"port":53,"action":"hijack-dns"},
-      {"action":"sniff","sniffer":"dns","timeout":"30ms"},
-      {"protocol":"dns","action":"hijack-dns"},
+      // {"sniffer":"dns","timeout":"30ms","action":"sniff"},
+      // {"protocol":"dns","action":"hijack-dns"},
+      
       {"rule_set":"rule-process","outbound":"direct"},
-      {"rule_set":"rule-geph-broker","outbound":"direct"},
+      
       // {"ip_cidr":["fd7a:115c:a1e0::/48","100.64.0.0/10"],"outbound":"tailscale"},
-      // {"domain_suffix":"ts.net","outbound":"tailscale"},
+      {"domain_suffix":"ts.net","sniffer":["tls","http"],"timeout":"30ms","action":"sniff"},
+      {"domain_suffix":"ts.net","outbound":"direct"},
       {"ip_is_private":true,"outbound":"direct"},
-      {"rule_set":"geosite-private","outbound":"direct"},
+      
       {"clash_mode":"Direct","outbound":"direct"},
       {"clash_mode":"Global","outbound":"proxy"},
-      {"action":"sniff","sniffer":["tls","http"],"timeout":"30ms"},
+      
+      {"sniffer":["tls","http"],"timeout":"30ms","action":"sniff"},
+      
+      {"rule_set":"rule-geph-broker","outbound":"direct"},
+      {"rule_set":"geosite-private","outbound":"direct"},
+
       {"network":"udp","port":443,"action":"reject"},
       {"port":853,"action":"reject"},
-      {"action":"sniff","sniffer":["quic","stun"],"timeout":"30ms"},
+      {"sniffer":["quic","stun"],"timeout":"30ms","action":"sniff"},
       {"protocol":"stun","action":"reject"},
       {"protocol":"quic","action":"reject"},
       {"rule_set":["rule-MeepoMaster-adg-dns","rule-Cats-Team-adrules-singbox","geosite-category-httpdns-cn","geosite-category-ads-all","geosite-geolocation-cn@ads","geosite-geolocation-!cn@ads","rule-custom-block"],"action":"reject"},
+      
       {"rule_set":"geosite-googlefcm","outbound":"googlefcm"},
       {"rule_set":"geosite-onedrive","outbound":"onedrive"},
+      
       {"rule_set":"geosite-geolocation-cn","outbound":"bypass"},
       // {"rule_set":"geosite-geolocation-!cn","outbound":"proxy"}
       {"clash_mode":"fakeip","invert":true,"action":"resolve"},
@@ -48,6 +58,7 @@
       {"tag":"geosite-geolocation-cn@ads","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/nekolsd/sing-geosite/rule-set/geosite-geolocation-cn@ads.srs","download_detour":"direct","type":"remote"},
       {"tag":"geosite-tld-cn","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-tld-cn.srs","download_detour":"direct","type":"remote"},
       {"tag":"geosite-cn","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/nekolsd/sing-geosite/rule-set/geosite-cn.srs","download_detour":"direct","type":"remote"},
+      {"tag":"geoip-private","format":"binary","url":"https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/private.srs","download_detour":"direct","type":"remote"},
       {"tag":"geoip-telegram","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/nekolsd/geoip/release/srs/telegram.srs","download_detour":"direct","type":"remote"},
       // {"tag":"geoip-cn","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs","download_detour":"direct","type":"remote"},
       {"tag":"geoip-cn","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/nekolsd/geoip/release/srs/cn.srs","download_detour":"direct","type":"remote"}
@@ -62,14 +73,20 @@
     "rules":[
       {"rule_set":"rule-process","server":"local"},
       {"rule_set":"rule-geph-broker","server":"local"},
+      
       // {"domain_suffix":"ts.net","server":"tailscale"},
+      
       {"clash_mode":"Direct","server":"local"},
       {"clash_mode":"Global","server":"proxy"},
       // {"clash_mode":"fakeip","query_type":["A","AAAA"],"server":"fakeip"},
+      
       {"rule_set":"geosite-private","server":"local"},
+      
       {"rule_set":["rule-MeepoMaster-adg-dns","rule-Cats-Team-adrules-singbox","geosite-category-httpdns-cn","geosite-category-ads-all","rule-custom-block","geosite-geolocation-cn@ads","geosite-geolocation-!cn@ads"],"action":"reject"},
+      
       {"rule_set":"geosite-googlefcm","server":"googlefcm"},
       {"rule_set":"geosite-onedrive","server":"onedrive"},
+      
       {"rule_set":"geosite-cn","server":"local"},
       // {"rule_set":"geosite-geolocation-!cn","server":"proxy"}
       {"type":"logical","server":"local","mode":"and","rules":[{"clash_mode":"Leak"},{"rule_set":"geosite-geolocation-!cn","invert":true},{"rule_set":"geoip-cn"}],"client_subnet":"202.103.252.0/24"}
@@ -98,7 +115,7 @@
     // {"tag":"bypass","outbounds":["direct","warp-direct"],"type":"selector"},
     {"tag":"remote","outbounds":["urltest","urltest-vpn","urltest-airplane","9909","10010","10011","10012","10013","10014","10015","10016","10017","10018","10019"],"type":"selector"},
     // {"tag":"remote-warp","outbounds":["urltest-airplane","urltest","9909","10010","10011","10012","10013","10014","10015","10016","10017","10018","10019"],"type":"selector"},
-    {"tag":"urltest","outbounds":["10010","10011","10012","10013","10014","10015","9909"],"interval":"10s","tolerance":100,"type":"urltest"},
+    {"tag":"urltest","outbounds":["urltest-airplane","urltest-vpn"],"interval":"10s","tolerance":100,"type":"urltest"},
     {"tag":"urltest-vpn","outbounds":["10010","10011","10012","10013","10014","9909"],"interval":"10s","tolerance":100,"type":"urltest"},
     {"tag":"urltest-airplane","outbounds":["10015"],"interval":"10s","tolerance":100,"type":"urltest"},
     {"tag":"googlefcm","type":"selector","outbounds":["bypass","direct","proxy"]},
@@ -117,25 +134,23 @@
     {"tag":"direct","type":"direct"}
   ],
   "inbounds":[
-    // {
-    //   "tag":"tun",
-    //   "address":["fd00::1/126","172.19.0.1/30"],
-    //   "auto_route":true,
-    //   // "auto_redirect":true,
-    //   "strict_route":false,
-    //   "exclude_interface":[
-    //     // "tun-geph",
-    //     // "pppoe-wan",
-    //     "tailscale0"
-    //   ],
-    //   // "include_uid":[1000],
-    //   // "route_exclude_address":["0.0.0.0/8","10.0.0.0/8","100.64.0.0/10","127.0.0.0/8","169.254.0.0/16","172.16.0.0/12","192.0.0.0/24","192.0.2.0/24","192.88.99.0/24","192.168.0.0/16","198.18.0.0/15","198.51.100.0/24","203.0.113.0/24","224.0.0.0/3","::/127","fc00::/7","fe80::/10","ff00::/8"],
-    //   "route_exclude_address_set":"geoip-cn",
-    //   "interface_name":"sing-tun",
-    //   "platform":{"http_proxy":{"server":"127.0.0.1","server_port":10000,"enabled":true}},
-    //   "stack":"system",
-    //   "type":"tun"
-    // },
+    {
+      "tag":"tun",
+      "address":["fd00::1/126","172.19.0.1/30"],
+      "auto_route":true,
+      // "auto_redirect":true,
+      "strict_route":false,
+      "exclude_interface":["tun-geph","pppoe-wan","tailscale0"],
+      // "include_uid":1000,
+      "route_exclude_address_set":[
+        // "geoip-private",
+        "geoip-cn"
+      ],
+      "interface_name":"sing-tun",
+      "platform":{"http_proxy":{"server":"127.0.0.1","server_port":10000,"enabled":true}},
+      "stack":"system",
+      "type":"tun"
+    },
 
     // {"tag":"dns","type":"direct","listen":"127.0.0.53","listen_port":53},
     // {"tag":"direct","type":"direct","listen":"::","listen_port":10001},
