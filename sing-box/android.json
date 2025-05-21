@@ -5,12 +5,10 @@
     "default_domain_resolver":"local",
     "auto_detect_interface":true,
     "rules":[
-      {"inbound":"tun","port":53,"ip_cidr":["fd00::1/126","172.19.0.1/30"],"action":"hijack-dns"},
-      {"ip_is_private":true,"outbound":"direct"},
+      {"inbound":"tun","port":53,"ip_cidr":["fd00::1/126","172.19.0.1/30"],"action":"hijack-dns"},{"ip_is_private":true,"outbound":"direct"},
       {"rule_set":"rule-process","outbound":"direct"},
       // {"ip_cidr":["fd7a:115c:a1e0::/48","100.64.0.0/10"],"outbound":"tailscale"},
-      {"clash_mode":"Direct","outbound":"direct"},
-      {"clash_mode":"Global","outbound":"proxy"},
+      {"clash_mode":"Direct","outbound":"direct"},{"clash_mode":"Global","outbound":"proxy"},
       {"rule_set":"geoip-telegram","outbound":"proxy"},
       {
         "type": "logical",
@@ -35,21 +33,18 @@
       // {"domain_suffix":".ts.net","outbound":"tailscale"},
       {"rule_set":"rule-geph-broker","outbound":"direct"},
       {"rule_set":"geosite-private","outbound":"direct"},
-      {"port":853,"action":"reject"},
-      {"network":"udp","port":443,"action":"reject"},
-      {"protocol":"quic","action":"reject"},
-      {"protocol":"stun","action":"reject"},
+      {"port":853,"action":"reject"},{"network":"udp","port":443,"action":"reject"},{"protocol":"quic","action":"reject"},{"protocol":"stun","action":"reject"},
       {"rule_set":["geosite-ad-MeepoMaster","geosite-ad-cat","geosite-category-httpdns-cn","geosite-category-ads-all","rule-custom-block"],"action":"reject"},
-      {"rule_set":"geosite-googlefcm","outbound":"googlefcm"},
-      {"rule_set":"geosite-onedrive","outbound":"onedrive"},
+      {"rule_set":"geosite-googlefcm","outbound":"googlefcm"},{"rule_set":"geosite-onedrive","outbound":"onedrive"},
 
+      // {"rule_set":"geosite-gfw","outbound":"proxy"},
+      // {"rule_set":"geosite-geolocation-!cn","outbound":"proxy"},
       
-      // {"rule_set":"geosite-gfw","outbound":"proxy"}
-      // {"rule_set":"geosite-geolocation-!cn","outbound":"proxy"}
       {"rule_set":["geosite-category-games@cn","geosite-steam@cn","geosite-microsoft@cn","geosite-apple@cn","geosite-apple-cn"],"outbound":"bypass"},
       {"rule_set":"geosite-cn","outbound":"bypass"},
       {"action":"resolve"},
-      {"type":"logical","mode":"and","rules":[{"rule_set":"geoip-cn"},{"rule_set":"geosite-geolocation-!cn","invert":true}],"outbound":"bypass"}
+      {"type":"logical","mode":"and","rules":[{"rule_set":"geoip-cn"},{"rule_set":"geosite-geolocation-!cn","invert":true}],"outbound":"bypass"},
+      {"rule_set":"geoip-twitter","outbound":"proxy"},{"rule_set":"geoip-netflix","outbound":"proxy"},{"rule_set":"geoip-google","outbound":"proxy"},{"rule_set":"geoip-fastly","outbound":"proxy"},{"rule_set":"geoip-facebook","outbound":"proxy"},{"rule_set":"geoip-cloudfront","outbound":"proxy"},{"rule_set":"geoip-cloudflare","outbound":"proxy"}
     ],
     "rule_set":[
       {"tag":"rule-geph-broker","rules":[{"domain_suffix":["vuejs.org","www.cdn77.com"]}]},
@@ -72,9 +67,16 @@
       // {"tag":"geosite-geolocation-cn","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/nekolsd/sing-geosite/rule-set/geosite-geolocation-cn.srs","download_detour":"direct","type":"remote"},
       // {"tag":"geosite-tld-cn","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/nekolsd/sing-geosite/rule-set/geosite-tld-cn.srs","download_detour":"direct","type":"remote"},
       {"tag":"geosite-cn","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/nekolsd/sing-geosite/rule-set/geosite-cn.srs","download_detour":"direct","type":"remote"},
-      {"tag":"geoip-private","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/private.srs","download_detour":"direct","type":"remote"},
       {"tag":"geoip-telegram","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/nekolsd/geoip/release/srs/telegram.srs","download_detour":"direct","type":"remote"},
-      {"tag":"geoip-cn","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/nekolsd/geoip/release/srs/cn.srs","download_detour":"direct","type":"remote"}
+      {"tag":"geoip-cn","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/nekolsd/geoip/release/srs/cn.srs","download_detour":"direct","type":"remote"},
+      {"tag":"geoip-twitter","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/twitter.srs","download_detour":"direct","type":"remote"},
+      {"tag":"geoip-netflix","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/netflix.srs","download_detour":"direct","type":"remote"},
+      {"tag":"geoip-google","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/nekolsd/geoip/release/srs/google.srs","download_detour":"direct","type":"remote"},
+      {"tag":"geoip-fastly","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/nekolsd/geoip/release/srs/fastly.srs","download_detour":"direct","type":"remote"},
+      {"tag":"geoip-facebook","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/facebook.srs","download_detour":"direct","type":"remote"},
+      {"tag":"geoip-cloudfront","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/cloudfront.srs","download_detour":"direct","type":"remote"},
+      {"tag":"geoip-cloudflare","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/nekolsd/geoip/release/srs/cloudflare.srs","download_detour":"direct","type":"remote"},
+      {"tag":"geoip-private","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/private.srs","download_detour":"direct","type":"remote"}
       // {"tag":"geoip-cn","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs","download_detour":"direct","type":"remote"}
     ]
   },
@@ -88,24 +90,18 @@
       {"rule_set":"rule-process","server":"local"},
       {"rule_set":"rule-geph-broker","server":"local"},
       // {"domain_suffix":"ts.net","server":"tailscale"},
-      {"clash_mode":"Direct","server":"local"},
-      {"clash_mode":"Global","server":"proxy"},
+      {"clash_mode":"Direct","server":"local"},{"clash_mode":"Global","server":"proxy"},
       {"clash_mode":"fakeip","query_type":["A","AAAA"],"server":"fakeip"},
       {"rule_set":"geosite-private","server":"local"},
       {"rule_set":["geosite-ad-MeepoMaster","geosite-ad-cat","geosite-category-httpdns-cn","geosite-category-ads-all","rule-custom-block"],"action":"reject"},
-      {"rule_set":"geosite-googlefcm","server":"googlefcm"},
-      {"rule_set":"geosite-onedrive","server":"onedrive"},
+      {"rule_set":"geosite-googlefcm","server":"googlefcm"},{"rule_set":"geosite-onedrive","server":"onedrive"},
       
-      // {"rule_set":"geosite-gfw","query_type":"AAAA","action":"reject"},
-      // {"rule_set":"geosite-gfw","server":"proxy"}
-      // {"rule_set":"geosite-geolocation-!cn","query_type":"AAAA","action":"reject"},
-      // {"rule_set":"geosite-geolocation-!cn","server":"proxy"}
+      // {"rule_set":"geosite-gfw","query_type":"AAAA","action":"reject"},{"rule_set":"geosite-gfw","server":"proxy"}
+      // {"rule_set":"geosite-geolocation-!cn","query_type":"AAAA","action":"reject"},{"rule_set":"geosite-geolocation-!cn","server":"proxy"}
+      
       {"rule_set":["geosite-category-games@cn","geosite-steam@cn","geosite-microsoft@cn","geosite-apple@cn","geosite-apple-cn"],"server":"local"},
       {"rule_set":"geosite-cn","server":"local"},
-      {"type":"logical","mode":"and","rules":[{"clash_mode":"Rule","query_type":"AAAA"},{"rule_set":"geoip-cn","invert":true}],"action":"reject"},
-      {"type":"logical","mode":"and","rules":[{"clash_mode":"Rule"},{"rule_set":"geosite-geolocation-!cn","invert":true},{"rule_set":"geoip-cn"}],"client_subnet":"202.103.252.0/24","server":"proxy"},
-      {"type":"logical","mode":"and","rules":[{"clash_mode":"Leak","query_type":"AAAA"},{"rule_set":"geoip-cn","invert":true}],"action":"reject"},
-      {"type":"logical","mode":"and","rules":[{"clash_mode":"Leak"},{"rule_set":"geosite-geolocation-!cn","invert":true},{"rule_set":"geoip-cn"}],"client_subnet":"202.103.252.0/24","server":"local"}
+      {"type":"logical","mode":"and","rules":[{"clash_mode":"Rule","query_type":"AAAA"},{"rule_set":"geoip-cn","invert":true}],"action":"reject"},{"type":"logical","mode":"and","rules":[{"clash_mode":"Rule"},{"rule_set":"geosite-geolocation-!cn","invert":true},{"rule_set":"geoip-cn"}],"client_subnet":"202.103.252.0/24","server":"proxy"},{"type":"logical","mode":"and","rules":[{"clash_mode":"Leak","query_type":"AAAA"},{"rule_set":"geoip-cn","invert":true}],"action":"reject"},{"type":"logical","mode":"and","rules":[{"clash_mode":"Leak"},{"rule_set":"geosite-geolocation-!cn","invert":true},{"rule_set":"geoip-cn"}],"client_subnet":"202.103.252.0/24","server":"local"}
     ],
     "servers":[
       {"tag":"proxy","type":"https","detour":"proxy","server":"1.1.1.1"},
