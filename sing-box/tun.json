@@ -81,7 +81,7 @@
       {"type":"logical","mode":"and","rules":[{"clash_mode":"Leak","query_type":"AAAA"},{"rule_set":"geoip-cn","invert":true}],"action":"reject"}
     ],
     "servers":[
-      {"tag":"proxy","type":"https","detour":"proxy","server":"1.1.1.1"},
+      {"tag":"proxy","type":"https","detour":"proxy","server":"8.8.8.8"},
       // {"tag":"proxy","type":"tcp","detour":"proxy","server":"8.8.8.8"},
       {"tag":"googlefcm","type":"https","detour":"googlefcm","server":"223.5.5.5"},
       {"tag":"onedrive","type":"https","detour":"onedrive","server":"223.5.5.5"},
@@ -145,6 +145,11 @@
     // {"tag":"direct","type":"direct","listen":"::","listen_port":10001},
     {"tag":"mixed","type":"mixed","listen":"::","listen_port":10000}
   ],
+  "ntp": {
+    "enabled": true,
+    "server": "time.apple.com",
+    "server_port": 123
+  },
   "log":{
     "timestamp":false,
     "level":"info"
