@@ -57,7 +57,7 @@
   "dns":{
     // "final":"direct",
     "final":"proxy",
-    // "strategy":"ipv4_only",
+    // "strategy":"prefer_ipv4",
     "reverse_mapping":true,
     "independent_cache":true,
     "rules":[
@@ -72,6 +72,7 @@
       {"rule_set":"geosite-googlefcm","server":"googlefcm"},
       {"rule_set":"geosite-onedrive","server":"onedrive"},
       
+      // {"rule_set":"geosite-geolocation-!cn","query_type":"AAAA","action":"reject"},
       // {"rule_set":"geosite-geolocation-!cn","server":"proxy"}
       {"rule_set":"geosite-cn","server":"local"},
       {"type":"logical","mode":"and","rules":[{"clash_mode":"Rule","query_type":"AAAA"},{"rule_set":"geoip-cn","invert":true}],"action":"reject"},
@@ -89,8 +90,8 @@
       {"tag":"fakeip","type":"fakeip","inet4_range":"198.18.0.0/15","inet6_range":"fc00::/18"},
       {
         "tag":"local",
-        // "type":"local"
-        "type":"dhcp"
+        "type":"local"
+        // "type":"dhcp"
         // "type":"udp",
         // "server":"223.5.5.5"
       }

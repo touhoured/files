@@ -57,7 +57,7 @@
   "dns":{
     // "final":"direct",
     "final":"proxy",
-    // "strategy":"ipv4_only",
+    // "strategy":"prefer_ipv4",
     "reverse_mapping":true,
     "independent_cache":true,
     "rules":[
@@ -72,6 +72,7 @@
       {"rule_set":"geosite-googlefcm","server":"googlefcm"},
       {"rule_set":"geosite-onedrive","server":"onedrive"},
       
+      // {"rule_set":"geosite-geolocation-!cn","query_type":"AAAA","action":"reject"},
       // {"rule_set":"geosite-geolocation-!cn","server":"proxy"}
       {"rule_set":"geosite-cn","server":"local"},
       {"type":"logical","mode":"and","rules":[{"clash_mode":"Rule"},{"rule_set":"geosite-geolocation-!cn","invert":true},{"rule_set":"geoip-cn"}],"client_subnet":"202.103.252.0/24","server":"proxy"},
