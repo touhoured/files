@@ -7,11 +7,11 @@
     "rules":[
       {"inbound":"tun","port":53,"ip_cidr":["fd00::1/126","172.19.0.1/30"],"action":"hijack-dns"},
       {"ip_is_private":true,"outbound":"direct"},
-      {"rule_set":"geoip-telegram","outbound":"proxy"},
       {"rule_set":"rule-process","outbound":"direct"},
       // {"ip_cidr":["fd7a:115c:a1e0::/48","100.64.0.0/10"],"outbound":"tailscale"},
       {"clash_mode":"Direct","outbound":"direct"},
       {"clash_mode":"Global","outbound":"proxy"},
+      {"rule_set":"geoip-telegram","outbound":"proxy"},
       {
         "type": "logical",
         "mode": "and",
