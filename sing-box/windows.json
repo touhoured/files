@@ -97,6 +97,7 @@
       {"clash_mode":"Direct","server":"local"},{"clash_mode":"Global","server":"proxy"},
       {"clash_mode":"fakeip","query_type":["A","AAAA"],"server":"fakeip"},
       {"rule_set":"geosite-private","server":"local"},
+      // {"query_type":"HTTPS","action":"reject"},
       {"rule_set":["geosite-ad-MeepoMaster","geosite-ad-cat","geosite-category-httpdns-cn","geosite-category-ads-all","rule-custom-block"],"action":"reject"},
       {"rule_set":"geosite-googlefcm","server":"googlefcm"},{"rule_set":"geosite-onedrive","server":"onedrive"},
       
@@ -118,18 +119,7 @@
       {"tag":"fakeip","inet4_range":"198.18.0.0/15","inet6_range":"fc00::/18","type":"fakeip"},
       // {"tag":"local","type":"local"},
       {"tag":"local","type":"dhcp"},
-      {
-        "tag":"hosts",
-        "predefined":{
-          "dns.pub":["1.12.12.21","120.53.53.53"],
-          "dns.alidns.com":["223.5.5.5","223.6.6.6"],
-          "dns.google":["8.8.8.8","8.8.4.4"],
-          "dns.cloudflare.com":["104.16.132.229","104.16.133.229"],
-          "cloudflare-dns.com":["104.16.248.249","104.16.249.249"],
-          "localhost":["127.0.0.1","::1"]
-        },
-        "type":"hosts"
-      }
+      {"tag":"hosts","predefined":{"dns.pub":["1.12.12.21","120.53.53.53"],"dns.alidns.com":["223.5.5.5","223.6.6.6"],"dns.google":["8.8.8.8","8.8.4.4"],"dns.cloudflare.com":["104.16.132.229","104.16.133.229"],"cloudflare-dns.com":["104.16.248.249","104.16.249.249"],"localhost":["127.0.0.1","::1"]},"type":"hosts"}
     ]
   },
   "outbounds":[
