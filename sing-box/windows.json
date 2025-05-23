@@ -9,12 +9,11 @@
       // {"rule_set":"rule-process","outbound":"direct"},
       // {"ip_cidr":["fd7a:115c:a1e0::/48","100.64.0.0/10"],"outbound":"tailscale"},
       {"clash_mode":"Direct","outbound":"direct"},{"clash_mode":"Global","outbound":"proxy"},
-      {"rule_set":"geoip-telegram","outbound":"proxy"},
       {
         "type":"logical",
         "mode":"and",
         "rules":[
-          // {"rule_set":"geoip-telegram","invert":true},
+          {"rule_set":"geoip-telegram","invert":true},
           {"port":[80,443,853,8080,8443]},
           {"inbound":"tun"}
         ],
@@ -48,7 +47,8 @@
       {"rule_set":"geosite-cn","outbound":"bypass"},
       {"action":"resolve"},
       {"type":"logical","mode":"and","rules":[{"rule_set":"geoip-cn"},{"rule_set":"geosite-geolocation-!cn","invert":true}],"outbound":"bypass"},
-      {"rule_set":"geoip-twitter","outbound":"proxy"},{"rule_set":"geoip-netflix","outbound":"proxy"},{"rule_set":"geoip-google","outbound":"proxy"},{"rule_set":"geoip-fastly","outbound":"proxy"},{"rule_set":"geoip-facebook","outbound":"proxy"},{"rule_set":"geoip-cloudfront","outbound":"proxy"},{"rule_set":"geoip-cloudflare","outbound":"proxy"}
+      // {"rule_set":"geoip-twitter","outbound":"proxy"},{"rule_set":"geoip-netflix","outbound":"proxy"},{"rule_set":"geoip-google","outbound":"proxy"},{"rule_set":"geoip-fastly","outbound":"proxy"},{"rule_set":"geoip-facebook","outbound":"proxy"},{"rule_set":"geoip-cloudfront","outbound":"proxy"},{"rule_set":"geoip-cloudflare","outbound":"proxy"}
+      {"rule_set":"geoip-telegram","outbound":"proxy"}
     ],
     "rule_set":[
       {"tag":"rule-geph-broker","rules":[{"domain_suffix":["vuejs.org","www.cdn77.com"]}]},
@@ -117,8 +117,8 @@
       {"tag":"direct","server":"dns.alidns.com","domain_resolver":"hosts","type":"https"},
       // {"tag":"tailscale","endpoint":"tailscale","type":"tailscale"},
       {"tag":"fakeip","inet4_range":"198.18.0.0/15","inet6_range":"fc00::/18","type":"fakeip"},
-      // {"tag":"local","type":"local"},
-      {"tag":"local","type":"dhcp"},
+      {"tag":"local","type":"local"},
+      // {"tag":"local","type":"dhcp"},
       {"tag":"hosts","predefined":{"dns.pub":["1.12.12.21","120.53.53.53"],"dns.alidns.com":["223.5.5.5","223.6.6.6"],"dns.google":["8.8.8.8","8.8.4.4"],"dns.cloudflare.com":["104.16.132.229","104.16.133.229"],"cloudflare-dns.com":["104.16.248.249","104.16.249.249"],"localhost":["127.0.0.1","::1"]},"type":"hosts"}
     ]
   },
@@ -147,11 +147,7 @@
       // "auto_redirect":true,
       // "strict_route":true,
       "exclude_interface":["tun-geph","pppoe-wan","tailscale0"],
-      // "include_uid":1000,
-      // "route_exclude_address_set":[
-      //   // "geoip-private",
-      //   "geoip-cn"
-      // ],
+      // "route_exclude_address_set":["geoip-cn"],
       "interface_name":"sing-tun",
       "platform":{"http_proxy":{"server":"127.0.0.1","server_port":10000,"enabled":true}},
       "stack":"system",

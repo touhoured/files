@@ -9,12 +9,11 @@
       // {"rule_set":"rule-process","outbound":"direct"},
       // {"ip_cidr":["fd7a:115c:a1e0::/48","100.64.0.0/10"],"outbound":"tailscale"},
       {"clash_mode":"Direct","outbound":"direct"},{"clash_mode":"Global","outbound":"proxy"},
-      {"rule_set":"geoip-telegram","outbound":"proxy"},
       {
         "type":"logical",
         "mode":"and",
         "rules":[
-          // {"rule_set":"geoip-telegram","invert":true},
+          {"rule_set":"geoip-telegram","invert":true},
           {"port":[80,443,853,8080,8443]},
           {"inbound":"tun"}
         ],
@@ -48,7 +47,8 @@
       {"rule_set":"geosite-cn","outbound":"bypass"},
       {"action":"resolve"},
       {"type":"logical","mode":"and","rules":[{"rule_set":"geoip-cn"},{"rule_set":"geosite-geolocation-!cn","invert":true}],"outbound":"bypass"},
-      {"rule_set":"geoip-twitter","outbound":"proxy"},{"rule_set":"geoip-netflix","outbound":"proxy"},{"rule_set":"geoip-google","outbound":"proxy"},{"rule_set":"geoip-fastly","outbound":"proxy"},{"rule_set":"geoip-facebook","outbound":"proxy"},{"rule_set":"geoip-cloudfront","outbound":"proxy"},{"rule_set":"geoip-cloudflare","outbound":"proxy"}
+      // {"rule_set":"geoip-twitter","outbound":"proxy"},{"rule_set":"geoip-netflix","outbound":"proxy"},{"rule_set":"geoip-google","outbound":"proxy"},{"rule_set":"geoip-fastly","outbound":"proxy"},{"rule_set":"geoip-facebook","outbound":"proxy"},{"rule_set":"geoip-cloudfront","outbound":"proxy"},{"rule_set":"geoip-cloudflare","outbound":"proxy"}
+      {"rule_set":"geoip-telegram","outbound":"proxy"}
     ],
     "rule_set":[
       {"tag":"rule-geph-broker","rules":[{"domain_suffix":["vuejs.org","www.cdn77.com"]}]},
@@ -147,11 +147,7 @@
     //   // "auto_redirect":true,
     //   // "strict_route":true,
     //   "exclude_interface":["tun-geph","pppoe-wan","tailscale0"],
-    //   // "include_uid":1000,
-    //   // "route_exclude_address_set":[
-    //   //   // "geoip-private",
-    //   //   "geoip-cn"
-    //   // ],
+    //   "route_exclude_address_set":["geoip-cn"],
     //   "interface_name":"sing-tun",
     //   "platform":{"http_proxy":{"server":"127.0.0.1","server_port":10000,"enabled":true}},
     //   "stack":"system",
