@@ -6,11 +6,11 @@
     "auto_detect_interface":true,
     "rules":[
       {"inbound":"tun","port":53,"ip_cidr":["fd00::1/126","172.19.0.1/30"],"action":"hijack-dns"},{"ip_is_private":true,"outbound":"direct"},
-      // {"rule_set":"rule-process","outbound":"direct"},
+      {"rule_set":"rule-process","outbound":"direct"},
       // {"ip_cidr":["fd7a:115c:a1e0::/48","100.64.0.0/10"],"outbound":"tailscale"},
       {"clash_mode":"Direct","outbound":"direct"},{"clash_mode":"Global","outbound":"proxy"},
-      // {"type":"logical","mode":"and","rules":[{"rule_set":"geoip-telegram","invert":true},{"port":[80,443,853,8080,8443]},{"inbound":"tun"}],"sniffer":["dns","stun","http","tls","quic"],"timeout":"30ms","action":"sniff"},{"protocol":"dns","action":"hijack-dns"},
-      {"type":"logical","mode":"and","rules":[{"rule_set":"geoip-telegram","invert":true},{"port":[80,443,853,8080,8443]},{"inbound":"tun"}],"sniffer":["stun","http","tls","quic"],"timeout":"30ms","action":"sniff"},
+      {"type":"logical","mode":"and","rules":[{"rule_set":"geoip-telegram","invert":true}],"sniffer":["dns","stun","http","tls","quic"],"timeout":"30ms","action":"sniff"},{"protocol":"dns","action":"hijack-dns"},
+      // {"type":"logical","mode":"and","rules":[{"rule_set":"geoip-telegram","invert":true},{"port":[80,443,853,8080,8443]},{"inbound":"tun"}],"sniffer":["stun","http","tls","quic"],"timeout":"30ms","action":"sniff"},
       {"port":53,"action":"hijack-dns"},
       // {"domain_suffix":".ts.net","outbound":"tailscale"},
       {"rule_set":"rule-geph-broker","outbound":"direct"},
@@ -36,7 +36,7 @@
     "rule_set":[
       {"tag":"rule-geph-broker","rules":[{"domain_suffix":["vuejs.org","www.cdn77.com"]}]},
       {"tag":"rule-custom-block","rules":[{"domain":["2fa.qwq2333.top","api.qwq2333.top"]}]},
-      // {"tag":"rule-process","rules":[{"process_name":["tailscaled","tailscaled.exe","mihomo","mihomo.exe","geph4-client","geph4-client.exe","gephgui-wry","gephgui-wry.exe","geph5-client-gui","geph5-client-gui.exe","geph5-client","geph5-client.exe"]}]},
+      {"tag":"rule-process","rules":[{"process_name":["tailscaled","tailscaled.exe","mihomo","mihomo.exe","geph4-client","geph4-client.exe","gephgui-wry","gephgui-wry.exe","geph5-client-gui","geph5-client-gui.exe","geph5-client","geph5-client.exe"]}]},
       {"tag":"geosite-private","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/nekolsd/sing-geosite/rule-set/geosite-private.srs","download_detour":"direct","type":"remote"},
       {"tag":"geosite-ad-cat","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/Cats-Team/AdRules/main/adrules-singbox.srs","download_detour":"direct","type":"remote"},
       {"tag":"geosite-ad-MeepoMaster","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/MeepoMaster/sing-box-ruleset/main/adg-dns.srs","download_detour":"direct","type":"remote"},
@@ -66,7 +66,7 @@
       {"tag":"geoip-private","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/private.srs","download_detour":"direct","type":"remote"}
       // {"tag":"geoip-cn","format":"binary","url":"https://gh-proxy.com/https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs","download_detour":"direct","type":"remote"}
     ]
-  },
+  }, 
   "dns":{
     // "final":"direct",
     "final":"proxy",
@@ -74,7 +74,7 @@
     "reverse_mapping":true,
     "independent_cache":true,
     "rules":[
-      // {"rule_set":"rule-process","server":"local"},
+      {"rule_set":"rule-process","server":"local"},
       {"rule_set":"rule-geph-broker","server":"local"},
       // {"domain_suffix":"ts.net","server":"tailscale"},
       {"clash_mode":"Direct","server":"local"},{"clash_mode":"Global","server":"proxy"},
@@ -100,8 +100,8 @@
       {"tag":"direct","server":"dns.alidns.com","domain_resolver":"hosts","type":"https"},
       // {"tag":"tailscale","endpoint":"tailscale","type":"tailscale"},
       {"tag":"fakeip","inet4_range":"198.18.0.0/15","inet6_range":"fc00::/18","type":"fakeip"},
-      {"tag":"local","type":"local"},
-      // {"tag":"local","type":"dhcp"},
+      // {"tag":"local","type":"local"},
+      {"tag":"local","type":"dhcp"},
       {"tag":"hosts","predefined":{"dns.pub":["1.12.12.21","120.53.53.53"],"dns.alidns.com":["223.5.5.5","223.6.6.6"],"dns.google":["8.8.8.8","8.8.4.4"],"dns.cloudflare.com":["104.16.132.229","104.16.133.229"],"cloudflare-dns.com":["104.16.248.249","104.16.249.249"],"localhost":["127.0.0.1","::1"]},"type":"hosts"}
     ]
   },
