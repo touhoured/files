@@ -101,8 +101,7 @@
     ]
   },
   "outbounds":[
-    {"tag":"proxy","outbounds":["remote"],"type":"selector"},
-    {"tag":"remote","outbounds":["urltest","urltest-vpn","urltest-airplane","9909","10010","10011","10012","10013","10014","10015","10016","10017","10018","10019"],"type":"selector"},
+    {"tag":"proxy","outbounds":["urltest","urltest-vpn","urltest-airplane","9909","10010","10011","10012","10013","10014","10015","10016","10017","10018","10019"],"type":"selector"},
     {"tag":"urltest","outbounds":["urltest-vpn","urltest-airplane"],"interval":"10s","tolerance":100,"type":"urltest"},
     {"tag":"urltest-vpn","outbounds":["10010","10011","10012","10013","10014","9909"],"interval":"10s","tolerance":100,"type":"urltest"},
     {"tag":"urltest-airplane","outbounds":["10015"],"interval":"10s","tolerance":100,"type":"urltest"},
